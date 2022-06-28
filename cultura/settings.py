@@ -36,6 +36,7 @@ RECAPTCHA_PRIVATE_KEY = env[8]
 # Application definition
 
 INSTALLED_APPS = [
+    'cadastros',
     #APPS DE TERCEIROS
     'bootstrap5',
     'django.contrib.admin',
