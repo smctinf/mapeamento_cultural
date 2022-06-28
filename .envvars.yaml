@@ -1,0 +1,13 @@
+db_name: 'cultura'
+db_user: 'cultura'
+db_pw: 'cultura123' #senha
+django_secret_key: 'turismo@sme.novafriburgo.rj.gov.br123456'
+debug_mode: True
+email_sistema: 'senhas_turismo@sme.novafriburgo.rj.gov.br'
+email_pw: 'nU2Ke=u%45621'
+hCAPTCHA_Public_Key: '2d229b45-8441-401a-9ee9-8cec74319ff3'
+hCAPTCHA_Secret_Key: '0x83eE0d7d855633562B0333b715839DA6600c0952'
+GOOGLE_OAUTH2_PUBLIC_KEY: '745294971401-qso3hr2ioa2pgqd45t6ab4dvi4ip2297.apps.googleusercontent.com'
+GOOGLE_OAUTH2_SECRET_KEY: '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'
+FACEBOOK_DEVELOPER_PUBLIC_KEY: '1840522456142106'
+FACEBOOK_DEVELOPER_SECRET_KEY: '388ee4b6d1089ead679ff65cb6307b3'
