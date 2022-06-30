@@ -12,4 +12,5 @@ urlpatterns = [
     path('mapeamento-cultural/cadastrar', views.cadastro_etapa_1, name='cad_cult_etapa1'),
     path('mapeamento-cultural/cadastrar/artista', views.cadastro_etapa_1_artista, name='cad_cult_etapa1_artista'),
     path('mapeamento-cultural/get_form_cpf', views.get_form_cpf, name='get_form_cpf'),
+    path('mapeamento-cultural/get_form_cnpj', views.get_form_cnpj, name='get_form_cpf'),
 ]

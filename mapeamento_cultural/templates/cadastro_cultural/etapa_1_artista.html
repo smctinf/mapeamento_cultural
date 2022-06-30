@@ -1,7 +1,7 @@
 {% extends 'cadastro_cultural/base.html' %}
 {% load bootstrap5 %}
 {% block etapa %}
-<h2>CADASTRO CULTURAL DO ARTISTA</h2>
+<h2 class="d-flex">CADASTRO CULTURAL DO ARTISTA <a href="{% url 'cad_cult_etapa1' %}" class=" ms-auto btn btn-outline-dark">Voltar</a></h2>
 <div class="row">
     <div class="col d-flex flex-column">
         <b class="text-danger">[ AVISO IMPORTANTE ]</b>
@@ -20,7 +20,7 @@
     </div>
     <div id="divForm" class="col d-flex flex-column pt-5">
         {% if messages %}
-        <ul class="messages">
+        <ul class="messages mb-4">
             {% for message in messages %}
             <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
             {% endfor %}
@@ -39,12 +39,19 @@
         list-style: none;
         text-align: center;
     }
+    .resize{
+        width: 88.88889% !important;
+    }
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script>
     function get_form(form){
-        $.get("/mapeamento-cultural/get_form_"+form, function( data ) {
-            $( "#divForm" ).html( data );            
+        url="/mapeamento-cultural/get_form_"+form
+        console.log(url)
+        $.get(url, function( data ) {
+            $( "#divForm" ).html( data );  
+            $( "#divForm" ).removeClass('col')          
+            $( "#divForm" ).addClass('col-8')                      
         });
     }
 </script>

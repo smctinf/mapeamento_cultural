@@ -2,10 +2,11 @@ from multiprocessing import context
 from urllib import request
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from mapeamento_cultural.forms import Form_Artista, Form_Usuario
+from mapeamento_cultural.forms import Form_Artista, Form_ArtistaCNPJ, Form_Usuario
 from django.contrib import messages
 import os
 from cultura.settings import BASE_DIR
+from mapeamento_cultural.models import TiposContratação
 
 # Create your views here.
 def index(request):
@@ -42,25 +43,41 @@ def cadastro_etapa_1(request):
     return render(request, 'cadastro_cultural/etapa_1.html')
 
 @login_required
-def cadastro_etapa_1_artista(request):
-    print(os.path.join(BASE_DIR, 'cultura/media'))
-    form=Form_Artista()
-    if request.method=='POST':
-        form=Form_Artista(request.POST, request.FILES)
+def cadastro_etapa_1_artista(request):  
+    if request.method=='POST':        
+        forms={
+            'cnpj': Form_ArtistaCNPJ,
+            'cpf': Form_Artista
+        }
+        key=request.POST['tipo_form']        
+        form=forms[key](request.POST, request.FILES)
         if form.is_valid():
             try:
-                form.save()
-                messages.add_message(request, messages.SUCCESS, 'Cadastro realizado com sucesso. <br>Aguarde nosso email validando seus dados.')
+                obj=form.save()
+                obj.tipo_contratacao=TiposContratação.objects.get(nome='Contratação por '+key)
+                obj.user_responsavel=request.user
+                obj.save()
+                messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso. <br>Aguarde nosso email validando seus dados.</b>")
             except Exception as E:
                 print(E)
-    context={
-        'form': form
-    }
+                messages.add_message(request, messages.ERROR, form.errors)
+        else:
+            messages.add_message(request, messages.ERROR, form.errors)
+    context={}
     return render(request, 'cadastro_cultural/etapa_1_artista.html', context)
 
 @login_required
 def get_form_cpf(request):
     context={
-        'form': Form_Artista()
+        'form': Form_Artista(),
+        'tipo_form':'cpf'
+    }
+    return render(request, 'cadastro_cultural/form.html', context)
+
+@login_required
+def get_form_cnpj(request):
+    context={
+        'form': Form_ArtistaCNPJ(),
+        'tipo_form':'cnpj'
     }
     return render(request, 'cadastro_cultural/form.html', context)

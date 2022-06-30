@@ -23,9 +23,18 @@ class Form_Usuario(ModelForm):
 
 class Form_Artista(ModelForm):
     class Meta:
-        model = ArtistaContrato
+        model = ArtistaContratoCPF
         widgets = {
             # 'nome_artistico': forms.EmailInput(attrs={'placeholder':''}),
             'cpf': forms.TextInput(attrs={'placeholder':''}),                        
+        }        
+        exclude = ['cnpj', 'tipo_contratacao', 'dt_inclusao', 'user_responsavel']
+
+class Form_ArtistaCNPJ(ModelForm):
+    class Meta:
+        model = ArtistaContratoCNPJ
+        widgets = {
+            # 'nome_artistico': forms.EmailInput(attrs={'placeholder':''}),
+            'cnpj': forms.TextInput(attrs={'placeholder':''}),                        
         }        
         exclude = ['tipo_contratacao', 'dt_inclusao', 'user_responsavel']

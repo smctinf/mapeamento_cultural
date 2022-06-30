@@ -24,21 +24,31 @@ class TiposContratação(models.Model):
 #     telefone_contato=models.CharField(max_length=11)
 #     endereco=models.CharField(max_length=350)
     
-class ArtistaContrato(models.Model):
+class ArtistaContratoCPF(models.Model):
 
     tipo_contratacao=models.ForeignKey(TiposContratação, verbose_name='Tipo de contratação:', on_delete=models.PROTECT, blank=True, null=True)    
-    cpf=models.CharField(max_length=11, verbose_name='CPF do artista:')
-    file_cpf=models.FileField(upload_to='file_cpf', verbose_name='CPF - Documento scaneado:')
+    cpf=models.CharField(max_length=11, verbose_name='CPF do proponente:')
+    file_cpf=models.FileField(upload_to='file_cpf', verbose_name='CPF - Documento scaneado:')   
     file_comprovante_residencia=models.FileField(upload_to='file_comprovantes_residencia', verbose_name='Comprovante de residência - Documento scaneado:')
     pis=models.CharField(max_length=80, verbose_name='PIS/PASEP/NIT')
-    file_pis=models.FileField(upload_to='file_pis', verbose_name='PIS - Documento scaneado:')
-    banco=models.CharField(max_length=80, verbose_name='Banco (Conta Corrente):')
-    agencia=models.CharField(max_length=80, verbose_name='Agência:')
-    n_conta=models.CharField(max_length=80, verbose_name='Número da conta')
-    declaracao_n_viculo=models.FileField(upload_to='file_declaracao_n_vinculo', verbose_name='Declaração de não vínculo com a Administração Federal, Estadual e Municipal:')
+    file_pis=models.FileField(upload_to='file_pis', verbose_name='PIS/PASEP/NIT - Documento scaneado:')
+    banco=models.CharField(max_length=80, verbose_name='Banco (Conta Corrente):', default='')
+    agencia=models.CharField(max_length=80, verbose_name='Agência:', default='')
+    n_conta=models.CharField(max_length=80, verbose_name='Número da conta', default='')
+    comprovante_de_cc=models.FileField(upload_to='file_comprovante_cc', verbose_name='Comprovante de número de conta corrente (banco, agência e nº da conta):')
+    declaracao_n_viculo=models.FileField(upload_to='file_declaracao_n_vinculo', verbose_name='Declaração de não vínculo com a Administração Federal, Estadual e Municipal:')    
     comprovante_iss=models.FileField(upload_to='file_comprovante_iss', verbose_name='Comprovante de inscrição do ISS Municipal:')
     comprovante_recibos=models.FileField(upload_to='file_comprovante_recibos', verbose_name='Recibos, contratos ou notas que comprovem cachê:')
     user_responsavel=models.ForeignKey(User, on_delete=models.CASCADE, null=True)    
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')
 
-
+class ArtistaContratoCNPJ(ArtistaContratoCPF):
+    cnpj=models.CharField(max_length=11, verbose_name='CNPJ do proponente:')    
+    file_cnpj=models.FileField(upload_to='file_cnpj', verbose_name='CNPJ - Documento scaneado evidenciando cadastro em atividades da àrea cultural:')
+    prova_inscricao_PJ_nacional=models.FileField(upload_to='prova_inscricao_PJ_nacional', verbose_name='Prova de inscrição no Cadastro Nacional de Pessoa Jurídica:')
+    certidao_negativa_debitos_relativos=models.FileField(upload_to='certidao_negativa_debitos_relativos', verbose_name='Certidão Negativa de Débitos Relativos a TRibunais Federais e à Divida Ativa da União:')
+    certidao_regularidade_icms=models.FileField(upload_to='certidao_regularidade_icms', verbose_name='Certidão de Regularidade de Tribunais Estaduais (ICMS):')
+    certidao_regularidade_iss=models.FileField(upload_to='certidao_regularidade_iss', verbose_name='Certidão de Regularidade de Tribunais Municipais (ISS):')
+    certidao_negativa_debitos=models.FileField(upload_to='certidao_negativa_debitos', verbose_name='Certidão Negativa de Débitos:')
+    certidao_regularidade_situacao=models.FileField(upload_to='certidao_de_regularidade_de_situacao', verbose_name='Certidão de REgularidade de Situação:')
+    certidao_negativa_debitos_trabalhistas=models.FileField(upload_to='certidao_debitos_trabalhistas_cndt', verbose_name='Certidão de Negativa de Débitos Trabalhistas - CDNT:')
