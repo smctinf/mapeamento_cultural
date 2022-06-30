@@ -3,15 +3,35 @@
 <h2>CADASTRO CULTURAL</h2>
 <div class="row">
     <div class="col d-flex flex-column">
-        <p class="text-center mt-5">Você é o artista ou o empresario?</p>
-        <div class="m-auto">
-            <a href="{% url 'cad_cult_etapa1_artista' %}" class="btn border bg-main text-white mx-1" style="width: 130px">
-                Artista
+        <p class="text-center mt-5">Você é quem?</p>
+        <div class="div-quem m-auto">
+            <a href="{% url 'cad_cult_etapa1_artista' %}" class="quem btn border bg-main text-white mx-1 py-4">
+                FAZEDOR DE CULTURA
             </a>
-            <a href="{% url 'cad_cult_etapa1_artista' %}" class="btn border bg-main text-white mx-1" style="width: 130px">
-                Empresario
+            <a href="{% url 'cad_cult_etapa1_artista' %}" class="quem btn border bg-main text-white mx-1 py-4">
+                PRESTADORA DE SERVIÇOS CULTURAIS
             </a>
         </div>
     </div>
 </div>
+<style>
+    .quem{
+        width: 380px;
+    }    
+    @media (max-width: 992px){
+        .div-quem{            
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+        .quem{
+            margin: auto;
+        }
+    }
+    @media (max-width: 470px){
+        .quem{
+            width: 100%;
+        }
+    }
+</style>
 {% endblock %}
