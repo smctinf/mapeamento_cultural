@@ -7,7 +7,7 @@ except ImportError:
 
 def load_envars(BASE_DIR):
     try:
-        yaml_file=open("./.envvars.yaml", "r")        
+        yaml_file=open(".envvars.yaml", "r")        
     except:
         yaml_file=open(str(BASE_DIR.parent) + "/.envvars.yaml", "r")
         

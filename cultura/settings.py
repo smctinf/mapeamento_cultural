@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from . import envvars
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,34 +11,49 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-env_vars = open(str(BASE_DIR.parent) + "/.balcao-envvar", "r")
+env_vars = envvars.load_envars(BASE_DIR)
 
 env = []
 for linha in env_vars:
     env.append(linha.rstrip())
 
-db_name = env[0]
-db_user = env[1]
-db_passwd = env[2]
-SECRET_KEY = env[3]
-debug = env[4]
-email_user = env[5]
-email_pass = env[6]
+db_name = env_vars['db_name']
+db_user = env_vars['db_user']
+db_passwd = env_vars['db_pw']
+SECRET_KEY = env_vars['django_secret_key']
+debug_mode = env_vars['debug_mode']
+email_user = env_vars['email_sistema']
+email_pass = env_vars['email_pw']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = eval(debug)
+DEBUG = debug_mode
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+try:
+    hCAPTCHA_PUBLIC_KEY = env_vars['hCAPTCHA_Public_Key']
+    hCAPTCHA_PRIVATE_KEY = env_vars['hCAPTCHA_Secret_Key']
+except:
+    RECAPTCHA_PUBLIC_KEY = ''
+    RECAPTCHA_PRIVATE_KEY = ''
 
-RECAPTCHA_PUBLIC_KEY = env[7]
-RECAPTCHA_PRIVATE_KEY = env[8]
+try:
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env_vars['GOOGLE_OAUTH2_PUBLIC_KEY']
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env_vars['GOOGLE_OAUTH2_SECRET_KEY']
 
-# Application definition
+    SOCIAL_AUTH_FACEBOOK_KEY = env_vars['FACEBOOK_DEVELOPER_PUBLIC_KEY']
+    SOCIAL_AUTH_FACEBOOK_SECRET = env_vars['FACEBOOK_DEVELOPER_SECRET_KEY']
+except:
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
+
+    SOCIAL_AUTH_FACEBOOK_KEY = ''
+    SOCIAL_AUTH_FACEBOOK_SECRET = ''
 
 INSTALLED_APPS = [
-    'cadastros',
+    'mapeamento_cultural',
     #APPS DE TERCEIROS
+    'fontawesomefree',
     'bootstrap5',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -133,12 +149,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 # STATIC_ROOT = '/home/turismo/site/turismo/equipamentos/static'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'cultura/media')
 
-LOGIN_URL='/login'
+LOGIN_URL='/admin/login'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/login'
+LOGOUT_REDIRECT_URL = '/'
 
 
 # Default primary key field type

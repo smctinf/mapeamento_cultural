@@ -1,0 +1,6 @@
+{% load bootstrap5 %}
+<form method="POST" enctype="multipart/form-data" class="col px-5" style="overflow-y: scroll; max-height: 500px;">
+{% csrf_token %}
+{% bootstrap_form form %} 
+<button class="btn bg-main text-white px-4">Enviar</button>
+</form>

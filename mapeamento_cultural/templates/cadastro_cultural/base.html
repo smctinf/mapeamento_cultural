@@ -1,0 +1,23 @@
+{% extends 'template.html' %}
+{% load static%}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/mapeamento.css' %}">
+{% endblock %}
+{% block mapeamento %}active{% endblock %}
+{% block main %}
+<div id="banner" class="row">
+    <div class="col d-flex">
+        <div class="container my-5 pb-5">
+            <h1 class="display-4 d-flex mt-3 p-4 mb-3 text-center" style="background-color: #547DCD;">
+                <span class="my-auto mx-auto">MAPEAMENTO CULTURAL</span>
+            </h1>
+            <div class="row">
+                <div class="col text-dark">                    
+                    {% block etapa %}
+                    {% endblock %}
+                </div>                
+            </div>
+        </div>        
+    </div>
+</div>
+{% endblock %}

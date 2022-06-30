@@ -1,0 +1,17 @@
+{% extends 'cadastro_cultural/base.html' %}
+{% block etapa %}
+<h2>CADASTRO CULTURAL</h2>
+<div class="row">
+    <div class="col d-flex flex-column">
+        <p class="text-center mt-5">Você é o artista ou o empresario?</p>
+        <div class="m-auto">
+            <a href="{% url 'cad_cult_etapa1_artista' %}" class="btn border bg-main text-white mx-1" style="width: 130px">
+                Artista
+            </a>
+            <a href="{% url 'cad_cult_etapa1_artista' %}" class="btn border bg-main text-white mx-1" style="width: 130px">
+                Empresario
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
