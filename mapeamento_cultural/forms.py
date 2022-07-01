@@ -38,3 +38,12 @@ class Form_ArtistaCNPJ(ModelForm):
             'cnpj': forms.TextInput(attrs={'placeholder':''}),                        
         }        
         exclude = ['tipo_contratacao', 'dt_inclusao', 'user_responsavel']
+
+class Form_ArtistaEmpresa(ModelForm):
+    class Meta:
+        model = ArtistaContratoEmpresario
+        widgets = {
+            # 'nome_artistico': forms.EmailInput(attrs={'placeholder':''}),
+            'cnpj': forms.TextInput(attrs={'placeholder':''}),                        
+        }        
+        exclude = ['tipo_contratacao', 'dt_inclusao', 'user_responsavel']

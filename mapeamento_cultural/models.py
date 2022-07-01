@@ -25,7 +25,8 @@ class TiposContratação(models.Model):
 #     endereco=models.CharField(max_length=350)
     
 class ArtistaContratoCPF(models.Model):
-
+    
+    fazedor_cultura=models.CharField(max_length=100, verbose_name='Nome artístico do Fazedor de Cultura:')
     tipo_contratacao=models.ForeignKey(TiposContratação, verbose_name='Tipo de contratação:', on_delete=models.PROTECT, blank=True, null=True)    
     cpf=models.CharField(max_length=11, verbose_name='CPF do proponente:')
     file_cpf=models.FileField(upload_to='file_cpf', verbose_name='CPF - Documento scaneado:')   
@@ -52,3 +53,6 @@ class ArtistaContratoCNPJ(ArtistaContratoCPF):
     certidao_negativa_debitos=models.FileField(upload_to='certidao_negativa_debitos', verbose_name='Certidão Negativa de Débitos:')
     certidao_regularidade_situacao=models.FileField(upload_to='certidao_de_regularidade_de_situacao', verbose_name='Certidão de REgularidade de Situação:')
     certidao_negativa_debitos_trabalhistas=models.FileField(upload_to='certidao_debitos_trabalhistas_cndt', verbose_name='Certidão de Negativa de Débitos Trabalhistas - CDNT:')
+
+class ArtistaContratoEmpresario(ArtistaContratoCNPJ):
+    documento_empresario_exclusivo=models.FileField(upload_to='documento_empresario_exclusivo', verbose_name="Documento que comprove que o prestador é exclusivo do 'fazedor de cultura' em questão.*:")

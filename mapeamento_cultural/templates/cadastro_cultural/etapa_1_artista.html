@@ -1,9 +1,9 @@
 {% extends 'cadastro_cultural/base.html' %}
 {% load bootstrap5 %}
 {% block etapa %}
-<h2 class="d-flex">CADASTRO CULTURAL DO ARTISTA <a href="{% url 'cad_cult_etapa1' %}" class=" ms-auto btn btn-outline-dark">Voltar</a></h2>
+<h2 class="d-flex px-3">CADASTRO DE FAZERDOR DE CULTURA <a href="{% url 'cad_cult_etapa1' %}" class="ms-auto btn btn-outline-dark">Voltar</a></h2>
 <div class="row">
-    <div class="col d-flex flex-column">
+    <div class="col d-flex flex-column px-4">
         <b class="text-danger">[ AVISO IMPORTANTE ]</b>
         <p class="mt-4" style="text-align: justify; text-indent: 30px;">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula risus a tristique bibendum. Aenean pretium hendrerit fringilla. Nunc convallis sollicitudin lorem et fringilla. Nunc bibendum urna in odio mattis, ac malesuada justo mattis.        
@@ -26,10 +26,10 @@
             {% endfor %}
         </ul>
         {% endif %}
-        <button onclick="get_form('cpf')" class="btn bg-main text-white mx-auto" style="width: 300px;">
+        <button onclick="get_form('cpf')" class="btn bg-main text-white mx-auto mt-auto" style="width: 300px;">
             Contratação por CPF
         </button>
-        <button onclick="get_form('cnpj')" class="btn bg-main text-white mx-auto mt-3" style="width: 300px;">
+        <button onclick="get_form('cnpj')" class="btn bg-main text-white mx-auto mt-3 mb-auto" style="width: 300px;">
             Contratação por CNPJ
         </button>
     </div>    

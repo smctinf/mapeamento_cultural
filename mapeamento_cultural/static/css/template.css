@@ -69,3 +69,12 @@ h1{
 .bg-main{
     background-color: #547DCD;
 }
+
+#dropdownMenuPerfil:focus{
+    box-shadow:none !important;
+}
+#menu-perfil{
+    width: 200px;
+    padding: 8px 10px;
+}
+
