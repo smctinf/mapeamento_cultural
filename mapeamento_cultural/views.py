@@ -70,6 +70,24 @@ def cadastro_etapa_1_artista(request):
     context={}
     return render(request, 'cadastro_cultural/etapa_1_artista.html', context)
 
+@login_required
+def editar_cpf_artista(request, id):  
+    dados=ArtistaContratoCPF(id=id)
+    form=Form_Artista(instance=dados)
+    if request.method=='POST':                
+        form=Form_Artista(request.POST, request.FILES, instance=dados)
+        if form.is_valid():
+            try:
+                obj=form.save()                
+                messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso. <br>Aguarde nosso email validando seus dados.</b>")                
+                return redirect('acc_meus_cadastros_map_cpf', id=obj.id)
+            except Exception as E:
+                print(E)
+                messages.add_message(request, messages.ERROR, form.errors)
+        else:
+            messages.add_message(request, messages.ERROR, form.errors)
+    context={}
+    return render(request, 'cadastro_cultural/etapa_1_artista.html', context)
 
 @login_required
 def cadastro_etapa_1_empresa(request):  

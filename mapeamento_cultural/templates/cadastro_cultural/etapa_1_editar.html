@@ -1,0 +1,80 @@
+{% extends 'cadastro_cultural/base.html' %}
+{% load bootstrap5 %}
+{% block etapa %}
+<h2 class="d-flex px-3">EDITAR<a href="{% url 'cad_cult_etapa1' %}" class="ms-auto btn btn-outline-dark">Voltar</a></h2>
+<div class="row">
+    <div class="col d-flex flex-column px-4">
+        <b class="text-danger">[ AVISO IMPORTANTE ]</b>
+        <p class="mt-4" style="text-align: justify; text-indent: 30px;">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula risus a tristique bibendum. Aenean pretium hendrerit fringilla. Nunc convallis sollicitudin lorem et fringilla. Nunc bibendum urna in odio mattis, ac malesuada justo mattis.        
+        </p>
+        <ul class="mx-auto">
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+        </ul>
+        <p style="text-align: justify; text-indent: 30px;">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula risus a tristique bibendum. Aenean pretium hendrerit fringilla.
+        </p>
+    </div>
+    <div id="divForm" class="col-8 d-flex flex-column pt-5">
+        {% if messages %}
+        <ul class="messages mb-4">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}        
+        <form method="POST" enctype="multipart/form-data" class="col px-5" style="overflow-y: scroll; max-height: 500px;">
+        {% csrf_token %}
+        <input type="hidden" name="tipo_form" value="{{tipo_form}}">
+        {% bootstrap_form form %} 
+        <label for="id_coletivo" class="mb-3">
+            O cadastro é de banda e/ou grupo e/ou companhia?
+        </label>
+<div class="form-check form-switch mb-4">
+    <input onclick="coletivo(this)" class="form-check-input me-2 rounded-pill" type="checkbox" role="switch" name="" id="id_coletivo">
+    <span id="coletivo_resposta" class="form-check-label">Não</span>
+    <script>
+        function coletivo(e){
+            resposta=document.getElementById('coletivo_resposta')
+            if(e.checked){
+                resposta.style.color='blue'
+                resposta.innerText='Sim'
+                document.getElementById('msg').style.display='block'
+            }else{
+                resposta.style.color='gray'
+                resposta.innerText='Não'
+                document.getElementById('msg').style.display='none'
+            }
+        }
+    </script>
+</div>
+<div id="msg" class="mt-4">
+    <span class="text-danger">Atenção!</span><br>
+    <p class="text-justify">
+    No caso de contratação de banda e/ou grupo e/ou companhia deverá ser prenchido uma procuração (a ser fornecida pela Secretaria Municipal de Cultura) em que os demais integrantes elegerão um responsável pelo processo no ato da contratação. Esse integrante será o responsável pelo recebimento do valor contratado, ao final da execução do serviço e mediante expedição de nota fiscal de serviço. Todos os integrantes deverão preencher a procuração autorizando o integrante escolhido a responder pelo processo de contratação e acostar cópia legível de seu documento de identificação.
+    </p>        
+</div>
+        <button class="btn bg-main text-white px-4">Enviar</button>
+        </form>
+    </div>    
+</div>
+<style>
+    #msg{
+        display: none;
+    }
+    .messages li{
+        list-style: none;
+        text-align: center;
+    }
+    .resize{
+        width: 88.88889% !important;
+    }
+    label{
+        font-weight: bold;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+{% endblock %}
