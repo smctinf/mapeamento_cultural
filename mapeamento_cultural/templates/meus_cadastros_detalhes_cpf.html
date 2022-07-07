@@ -1,0 +1,163 @@
+{% extends 'template.html' %}
+{% load static%}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/mapeamento.css' %}">
+{% endblock %}
+{% block mapeamento %}active{% endblock %}
+{% block main %}
+<div id="banner" class="row">
+    <div class="col d-flex">
+        <div class="container my-5 pb-5">
+            <h1 class="display-4 d-flex mt-3 p-4 mb-3 text-center" style="background-color: #547DCD;">
+                <span class="my-auto mx-auto">MEUS CADASTROS</span>
+            </h1>
+            <div class="row">
+                <div class="col text-dark">                                        
+                      <h4 class="px-3">Bem vindo, {{request.user.first_name}}!</h4>
+                      <div class="px-3 mt-5">
+                        <h3 class="px-5 text-uppercase d-flex ">DETALHES DO CADASTRO
+                          <span class="ms-2 my-auto" style="font-size: 14pt; text-transform: lowercase;">(id: {{cadastro.id}})</span>
+                          <a href="{% url 'acc_meus_cadastros' %}" class="btn btn-outline-dark  ms-auto">Voltar</a>
+                        </h3>
+                        <div class="py-4 px-5">
+                            <table class="table">                                
+                                <tbody>                                    
+                                  <tr>
+                                    <td scope="row">
+                                      <b>Fazedor de Cultura:</b><br>
+                                      {{cadastro.fazedor_cultura}}
+                                    </td>
+                                    <td>
+                                      <b>Tipo de contratação:</b><br>
+                                      {{cadastro.tipo_contratacao}}</td>                                    
+                                    <td>
+                                      <b>CPF do proponente:</b><br>
+                                      {{cadastro.cpf}}
+                                    </td>
+                                    <td>
+                                      <b>PIS/PASEP/NIT:</b><br>
+                                      {{cadastro.pis}}
+                                    </td>
+                                  </tr>   
+                                  <tr>
+                                    <td>
+                                      <b>Foto-Imagem do CPF:</b><br>
+                                      <a target="_blank" href="/media/{{cadastro.file_cpf}}">
+                                        <img src="/media/{{cadastro.file_cpf}}" alt="">
+                                      </a>
+                                    </td>
+                                    <td>
+                                      <b>Comprovante de residência:</b><br>
+                                      <img src="/media/{{cadastro.file_comprovante_residencia}}" alt="">
+                                      
+                                    </td>
+                                    <td>
+                                      <b>Foto-Imagem do PIS:</b><br>
+                                      <img src="/media/{{cadastro.file_pis}}" alt="">                                      
+                                    </td>
+                                    <td>
+                                      <b>Comprovante de CC:</b><br>
+                                      <img src="/media/{{cadastro.comprovante_de_cc}}" alt="">                                      
+                                    </td>
+                                  </tr>  
+                                  <tr>
+                                    <td>
+                                      <b>Banco:</b><br>
+                                      {{cadastro.banco}}
+                                    </td>
+                                    <td>
+                                      <b>Agência:</b><br>
+                                      {{cadastro.agencia}}
+                                    </td>
+                                    <td>
+                                      <b>Número da conta:</b><br>
+                                      {{cadastro.n_conta}}
+                                    </td>
+                                    <td>
+                                      <b>Data do cadastro:</b><br>
+                                      {{cadastro.dt_inclusao}}
+                                    </td>
+                                  </tr> 
+                                  <tr>
+                                    <td colspan="2">
+                                      <b>Área de atuação</b><br>
+                                      {% for i in info.area.all %}
+                                      {{i}} <br>
+                                      {% endfor %}
+                                    </td>
+                                    <td colspan="2">
+                                      <b>Público</b><br>
+                                      {% for i in info.publico.all %}
+                                      {{i}} <br>
+                                      {% endfor %}
+                                    </td>                                   
+                                  </tr>  
+                                  <tr>
+                                    <td colspan="2">
+                                      <b>Enquadramento do fazedor de cultura</b><br>
+                                      {% for i in info.enquadramento.all %}
+                                      {{i}} <br>
+                                      {% endfor %}
+                                    </td>
+                                    <td colspan="2">
+                                      <b>Forma de inserção da atiidade</b><br>
+                                      {% for i in info.forma_atuacao.all %}
+                                      {{i}} <br>
+                                      {% endfor %}
+                                    </td>
+                                  </tr>  
+                                  <tr>
+                                    <td colspan="4">
+                                      <b>Quantas pessoas fazer parte da instituição/entidade/coletivo/grupo:</b> {{info.qnt}}
+                                      <br>                    
+                                    </td>
+                                  </tr>           
+                                  <tr>
+                                    <td>
+                                      <b>Status da atividade</b><br>
+                                      {{info.status}}
+                                    </td>
+                                    <td>
+                                      <b>Instagram</b><br>
+                                      {{info.instagram}}
+                                    </td>
+                                    <td>
+                                      <b>Facebook</b><br>
+                                      {{info.facebook}}
+                                    </td>
+                                    <td>
+                                      <b>Youtube</b><br>
+                                      {{info.Youtube}}
+                                    </td>
+                                  </tr>            
+                                </tbody>
+                              </table>  
+                              <style>
+                                table img{
+                                  max-height: 150px;
+                                  margin-top: 10px;
+                                }
+                                table tr td{
+                                  border-color: white;
+                                  padding-bottom: 20px !important;
+                                }
+                              </style>
+                        </div>
+                      </div>
+                </div>
+                <!-- <div class="col  mx-3">
+                    <div class="mx-5 mt-5 d-flex flex-column h-100">
+                        <p class="text-justify text-dark" style="text-indent: 20px;">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula risus a tristique bibendum. Aenean pretium hendrerit fringilla. Nunc convallis sollicitudin lorem et fringilla. Nunc bibendum urna in odio mattis, ac malesuada justo mattis. Donec lacinia, sapien sed molestie ultrices, est velit faucibus diam, sit amet tristique ex felis vitae arcu.
+                            <a href="{% url 'lei866' %}" target="_blank" class="ms-3">Lei 866/93 art. 25</a>
+                        </p>
+                        <a href="{% url 'cad_cult_etapa1' %}" class="btn btn-primary mx-auto mt-4 px-5 py-3">
+                            CADASTRAR
+                        </a>
+                        </div>                                            
+                </div> -->
+            </div>
+        </div>        
+    </div>
+</div>
+{% endblock %}

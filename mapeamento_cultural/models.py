@@ -27,6 +27,7 @@ class TiposContratação(models.Model):
 class ArtistaContratoCPF(models.Model):
     
     fazedor_cultura=models.CharField(max_length=100, verbose_name='Nome artístico do Fazedor de Cultura:')
+    descricao=models.TextField(verbose_name='Descrição resumida da atividade artística/culturais desenvolvidas:')
     tipo_contratacao=models.ForeignKey(TiposContratação, verbose_name='Tipo de contratação:', on_delete=models.PROTECT, blank=True, null=True)    
     cpf=models.CharField(max_length=11, verbose_name='CPF do proponente:')
     file_cpf=models.FileField(upload_to='file_cpf', verbose_name='CPF - Documento scaneado:')   
@@ -44,6 +45,7 @@ class ArtistaContratoCPF(models.Model):
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')
 
 class ArtistaContratoCNPJ(ArtistaContratoCPF):
+
     cnpj=models.CharField(max_length=11, verbose_name='CNPJ do proponente:')    
     file_cnpj=models.FileField(upload_to='file_cnpj', verbose_name='CNPJ - Documento scaneado evidenciando cadastro em atividades da àrea cultural:')
     prova_inscricao_PJ_nacional=models.FileField(upload_to='prova_inscricao_PJ_nacional', verbose_name='Prova de inscrição no Cadastro Nacional de Pessoa Jurídica:')
@@ -55,4 +57,66 @@ class ArtistaContratoCNPJ(ArtistaContratoCPF):
     certidao_negativa_debitos_trabalhistas=models.FileField(upload_to='certidao_debitos_trabalhistas_cndt', verbose_name='Certidão de Negativa de Débitos Trabalhistas - CDNT:')
 
 class ArtistaContratoEmpresario(ArtistaContratoCNPJ):
-    documento_empresario_exclusivo=models.FileField(upload_to='documento_empresario_exclusivo', verbose_name="Documento que comprove que o prestador é exclusivo do 'fazedor de cultura' em questão.*:")
+
+    documento_empresario_exclusivo=models.FileField(upload_to='documento_empresario_exclusivo', verbose_name="Documento que comprove que o prestador é exclusivo do 'fazedor de cultura' em questão.*:")    
+
+
+class Area_Atuacao(models.Model):
+    
+    area=models.CharField(max_length=150)
+    def __str__(self):
+        return '%s' % (self.area)
+
+class Publico_Atuacao(models.Model):
+    
+    publico=models.CharField(max_length=150)
+    def __str__(self):
+        return '%s' % (self.publico)
+
+class Enquadramento_Atuacao(models.Model):    
+
+    enquadramento=models.CharField(max_length=150)
+    def __str__(self):
+        return '%s' % (self.enquadramento)
+
+
+class Forma_insercao_Atuacao(models.Model):
+    
+    forma=models.CharField(max_length=150)
+    def __str__(self):
+        return '%s' % (self.forma)
+
+
+
+class InformacoesExtras(models.Model):
+    
+    STATUS_CHOICES=[
+        ('p', 'Principal (maior fonte de renda/profissão)'),
+        ('s', 'secundaria (renda extra, ou prática sem fins lucrativos como lazer)')
+    ]
+
+    QNT_CHOICES=[
+        ('0', '0 a 10'),
+        ('1', '11 a 20'),
+        ('2', '21 a 30'),
+        ('3', '31 a 40'),
+        ('4', '41 a 50'),
+        ('5', 'Mais de 50'),
+    ]
+    
+    TIPO_CHOICES=[
+        ('cpf', 'CPF'),
+        ('cnpj', 'CNPJ'),                
+    ]    
+
+    tipo=models.CharField(max_length=6, choices=TIPO_CHOICES)
+    id_artista=models.CharField(max_length=20)
+    area=models.ManyToManyField(Area_Atuacao)
+    publico=models.ManyToManyField(Publico_Atuacao)
+    enquadramento=models.ManyToManyField(Enquadramento_Atuacao)
+    forma_atuacao=models.ManyToManyField(Forma_insercao_Atuacao)
+    qnt=models.CharField(max_length=1, choices=QNT_CHOICES)
+    status=models.CharField(max_length=1, choices=STATUS_CHOICES)
+    instagram=models.CharField(max_length=150, blank=True)
+    facebook=models.CharField(max_length=150, blank=True)
+    youtube=models.CharField(max_length=150, blank=True)

@@ -1,12 +1,15 @@
 from multiprocessing import context
 from urllib import request
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from mapeamento_cultural.forms import Form_Artista, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_Usuario
+from mapeamento_cultural.forms import Form_Artista, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra, Form_Usuario
 from django.contrib import messages
 import os
 from cultura.settings import BASE_DIR
-from mapeamento_cultural.models import ArtistaContratoCNPJ, ArtistaContratoCPF, TiposContratação
+from mapeamento_cultural.models import ArtistaContratoCNPJ, ArtistaContratoCPF, InformacoesExtras, TiposContratação
+from qr_code.qrcode.utils import QRCodeOptions
 
 # Create your views here.
 def index(request):
@@ -38,7 +41,7 @@ def cadastro_usuario(request):
     }
     return render(request, 'admin/cadastrar-se.html', context)
 
-@login_required(login_url='/admin/login')
+@login_required
 def cadastro_etapa_1(request):
     return render(request, 'cadastro_cultural/etapa_1.html')
 
@@ -56,8 +59,9 @@ def cadastro_etapa_1_artista(request):
                 obj=form.save()
                 obj.tipo_contratacao=TiposContratação.objects.get(nome='Contratação por '+key.upper())
                 obj.user_responsavel=request.user
-                obj.save()
-                messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso. <br>Aguarde nosso email validando seus dados.</b>")
+                obj.save()                
+                messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso. <br>Aguarde nosso email validando seus dados.</b>")                
+                return redirect('cad_cult_etapa2', tipo=request.POST['tipo_form'], id=obj.id )
             except Exception as E:
                 print(E)
                 messages.add_message(request, messages.ERROR, form.errors)
@@ -79,6 +83,7 @@ def cadastro_etapa_1_empresa(request):
                 obj.user_responsavel=request.user
                 obj.save()
                 messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso. <br>Aguarde nosso email validando seus dados.</b>")
+                return redirect('cad_cult_etapa2', tipo='cnpj_e', id=obj.id )
             except Exception as E:
                 print(E)
                 messages.add_message(request, messages.ERROR, form.errors)
@@ -112,3 +117,74 @@ def meus_cadastros(request):
         'cadastros_map_cultural_cnpj': ArtistaContratoCNPJ.objects.filter(user_responsavel=request.user)
     }
     return render(request, 'meus_cadastros.html', context)
+
+@login_required
+def cadastro_map_cultural_cpf(request, id):
+
+    artista=ArtistaContratoCPF.objects.get(id=id)
+    tipo=artista.tipo_contratacao.nome.split()[-1]
+    try:
+        info=InformacoesExtras.objects.get(tipo=tipo.lower(), id_artista=id)    
+    except:
+        info=[]
+    context={
+        'cadastro': artista,       
+        'info': info 
+    }
+    return render(request, 'meus_cadastros_detalhes_cpf.html', context)
+
+@login_required
+def cadastro_map_cultural_cnpj(request, id):
+    artista=ArtistaContratoCNPJ.objects.get(id=id)
+    tipo=artista.tipo_contratacao.nome.split()[-1]
+    try:
+        info=InformacoesExtras.objects.get(tipo=tipo.lower(), id_artista=id)    
+    except:
+        info=[]
+    context={
+        'cadastro': artista,       
+        'info': info 
+    }
+    return render(request, 'meus_cadastros_detalhes_cnpj.html', context)
+
+@login_required
+def logout(request):
+    if request.user.is_authenticated:
+        logout(request)
+        return redirect('/logout')
+    else:
+        return redirect('/login')
+
+def login_view(request):
+    context={}
+    if request.user.is_authenticated:
+        return redirect('/')
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)            
+            if "next" in request.GET:
+                return redirect(request.GET.get('next'))
+            return redirect('/')
+        else:                
+            context={
+                'error': True,    
+            }
+    
+    return render(request, 'admin/login.html', context)
+
+@login_required
+def cadastro_etapa_2(request, id, tipo):
+    form=Form_InfoExtra(initial={'tipo': tipo, 'id_artista': id})
+    if request.method=='POST':
+        form=Form_InfoExtra(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('cad_cult_etapa1')
+    context={
+        'form': form
+
+    }
+    return render(request, 'cadastro_cultural/etapa_2.html', context)

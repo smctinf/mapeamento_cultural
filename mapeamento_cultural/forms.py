@@ -27,6 +27,12 @@ class Form_Artista(ModelForm):
         widgets = {
             # 'nome_artistico': forms.EmailInput(attrs={'placeholder':''}),
             'cpf': forms.TextInput(attrs={'placeholder':''}),                        
+            'fazedor_cultura': forms.TextInput(attrs={'placeholder':''}),                        
+            'descricao': forms.TextInput(attrs={'placeholder':''}),                        
+            'pis': forms.TextInput(attrs={'placeholder':''}),                        
+            'banco': forms.TextInput(attrs={'placeholder':''}),                      
+            'agencia': forms.TextInput(attrs={'placeholder':''}),                        
+            'n_conta': forms.TextInput(attrs={'placeholder':''}),                        
         }        
         exclude = ['cnpj', 'tipo_contratacao', 'dt_inclusao', 'user_responsavel']
 
@@ -35,7 +41,14 @@ class Form_ArtistaCNPJ(ModelForm):
         model = ArtistaContratoCNPJ
         widgets = {
             # 'nome_artistico': forms.EmailInput(attrs={'placeholder':''}),
-            'cnpj': forms.TextInput(attrs={'placeholder':''}),                        
+            'cnpj': forms.TextInput(attrs={'placeholder':''}), 
+            'cpf': forms.TextInput(attrs={'placeholder':''}),                        
+            'fazedor_cultura': forms.TextInput(attrs={'placeholder':''}),                        
+            'descricao': forms.TextInput(attrs={'placeholder':''}),                        
+            'pis': forms.TextInput(attrs={'placeholder':''}),                        
+            'banco': forms.TextInput(attrs={'placeholder':''}),                      
+            'agencia': forms.TextInput(attrs={'placeholder':''}),                        
+            'n_conta': forms.TextInput(attrs={'placeholder':''}),                           
         }        
         exclude = ['tipo_contratacao', 'dt_inclusao', 'user_responsavel']
 
@@ -44,6 +57,32 @@ class Form_ArtistaEmpresa(ModelForm):
         model = ArtistaContratoEmpresario
         widgets = {
             # 'nome_artistico': forms.EmailInput(attrs={'placeholder':''}),
-            'cnpj': forms.TextInput(attrs={'placeholder':''}),                        
+            'cnpj': forms.TextInput(attrs={'placeholder':''}),   
+            'cpf': forms.TextInput(attrs={'placeholder':''}),                        
+            'fazedor_cultura': forms.TextInput(attrs={'placeholder':''}),                        
+            'descricao': forms.TextInput(attrs={'placeholder':''}),                        
+            'pis': forms.TextInput(attrs={'placeholder':''}),                        
+            'banco': forms.TextInput(attrs={'placeholder':''}),                      
+            'agencia': forms.TextInput(attrs={'placeholder':''}),                        
+            'n_conta': forms.TextInput(attrs={'placeholder':''}),                         
         }        
         exclude = ['tipo_contratacao', 'dt_inclusao', 'user_responsavel']
+
+
+class Form_InfoExtra(ModelForm):
+    class Meta:
+        model = InformacoesExtras
+        widgets = {
+            'tipo': forms.HiddenInput(),
+            'id_artista': forms.HiddenInput(attrs={'class': 'mb-3'}),
+            'area': forms.CheckboxSelectMultiple(attrs={'class': 'mb-3'}),
+            'publico': forms.CheckboxSelectMultiple(attrs={'class': 'mb-3'}),
+            'enquadramento': forms.CheckboxSelectMultiple(attrs={'class': 'mb-3'}),
+            'forma_atuacao': forms.CheckboxSelectMultiple(attrs={'class': 'mb-3'}),
+            'qnt': forms.Select(attrs={'class': 'form-control mb-3'}),
+            'status': forms.Select(attrs={'class': 'form-control mb-3'}),
+            'instagram': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
+            'facebook': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
+            'youtube': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
+        }        
+        exclude = ['']

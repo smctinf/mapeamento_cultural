@@ -52,6 +52,7 @@ except:
 
 INSTALLED_APPS = [
     'mapeamento_cultural',
+    'qr_code',
     #APPS DE TERCEIROS
     'fontawesomefree',
     'bootstrap5',
@@ -62,6 +63,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+SERVE_QR_CODE_IMAGE_PATH = 'qr-code-image/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -154,7 +157,7 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'cultura/media')
 
-LOGIN_URL='/admin/login'
+LOGIN_URL='/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 

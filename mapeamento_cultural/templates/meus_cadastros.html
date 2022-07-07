@@ -32,9 +32,9 @@
                                   <tr>
                                     <th scope="row">{{i.id}}</th>
                                     <td>{{i.tipo_contratacao}}</td>                                    
-                                    <td>Eduardo Salarini</td>
+                                    <td>{{i.fazedor_cultura}}</td>
                                     <td>
-                                        <a href="#">
+                                        <a href="{% url 'acc_meus_cadastros_map_cpf' i.id %}">
                                             <i class="fa-solid fa-eye"></i>
                                         </a>
                                     </td>

@@ -74,7 +74,21 @@ h1{
     box-shadow:none !important;
 }
 #menu-perfil{
+    border-radius: 0;
     width: 200px;
     padding: 8px 10px;
 }
 
+#menu-perfil:before{    
+        content: '';
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        right: 13px;
+        top: -8px;
+        background: #ffffff;
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        border-color: rgba(0,0,0,.15);
+        -webkit-transform: rotate(45deg);    
+}
