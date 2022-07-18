@@ -1,5 +1,6 @@
 {% extends 'template.html' %}
 {% load static%}
+{% block title %}Mapeamento Cultural{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/mapeamento.css' %}">
 {% endblock %}
@@ -32,9 +33,15 @@
                                   <tr>
                                     <th scope="row">{{i.id}}</th>
                                     <td>{{i.tipo_contratacao}}</td>                                    
-                                    <td>{{i.fazedor_cultura}}</td>
                                     <td>
-                                        <a href="{% url 'acc_meus_cadastros_map_cpf' i.id %}">
+                                        {% if i.fazedor_cultura %}
+                                        {{i.fazedor_cultura}}
+                                        {% else %}
+                                        {{i.fazedor_cultura_cnpj}}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'acc_meus_cadastros_map' i.id %}">
                                             <i class="fa-solid fa-eye"></i>
                                         </a>
                                     </td>

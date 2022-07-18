@@ -1,0 +1,215 @@
+{% extends 'template.html' %}
+{% load static%}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/mapeamento.css' %}">
+{% endblock %}
+{% block mapeamento %}active{% endblock %}
+{% block main %}
+<div id="banner" class="row">
+    <div class="col d-flex">
+        <div class="container my-5 pb-5">
+            <h1 class="display-4 d-flex mt-3 p-4 mb-3 text-center" style="background-color: #547DCD;">
+                <span class="my-auto mx-auto">MEUS CADASTROS</span>
+            </h1>
+            <div class="row">
+                <div class="col text-dark">                                        
+                      <h4 class="px-3">Bem vindo, {{request.user.first_name}}!</h4>
+                      <div class="px-3 mt-5">
+                        <h3 class="px-5 text-uppercase d-flex ">DETALHES DO CADASTRO
+                          <span class="ms-2 my-auto" style="font-size: 14pt; text-transform: lowercase;">(id: {{cadastro.id}})</span>
+                          <a href="{% url 'acc_editar_map_cpf' cadastro.id %}" class="btn btn-outline-dark  ms-auto">Editar</a>
+                          <a href="{% url 'acc_meus_cadastros' %}" class="btn btn-outline-dark  ms-3">Voltar</a>
+                        </h3>
+                        <div class="py-4 px-5">
+                            <table class="table">                                
+                                <tbody>                                                                     
+                                  <tr>
+                                    <td colspan="2">
+                                      <b>Área de atuação</b><br>
+                                      {% for i in cadastro.area.all %}
+                                      {{i}} <br>
+                                      {% endfor %}
+                                    </td>
+                                    {% if segunda_etapa %}     
+                                    <td colspan="2">
+                                      <b>Público</b><br>
+                                      {% for i in info.publico.all %}
+                                      {{i}} <br>
+                                      {% endfor %}
+                                    </td>    
+                                    {% endif %}                                                
+                                  </tr>  
+                                  {% if segunda_etapa %}                                  
+                                  <tr>
+                                    <td>
+                                      <b>Banco:</b><br>
+                                      {{cadastro.banco}}
+                                    </td>
+                                    <td>
+                                      <b>Agência:</b><br>
+                                      {{cadastro.agencia}}
+                                    </td>
+                                    <td>
+                                      <b>Número da conta:</b><br>
+                                      {{cadastro.n_conta}}
+                                    </td>
+                                    <td>
+                                      <b>PIS/PASEP/NIT:</b><br>
+                                      {{cadastro.pis}}
+                                    </td>  
+                                  </tr>                                   
+                                  <tr>
+                                    <td colspan="2">
+                                      <b>Enquadramento do fazedor de cultura</b><br>
+                                      {% for i in info.enquadramento.all %}
+                                      {{i}} <br>
+                                      {% endfor %}
+                                    </td>
+                                    <td colspan="2">
+                                      <b>Forma de inserção da atividade</b><br>
+                                      {% for i in info.forma_atuacao.all %}
+                                      {{i}} <br>
+                                      {% endfor %}
+                                    </td>
+                                  </tr>                                    
+                                  <tr>
+                                    <td colspan="2">
+                                      <b>Status da atividade</b><br>
+                                      {{info.get_status_display}}
+                                    </td>
+                                    <td colspan="2">
+                                      <b>Facebook</b><br>
+                                      {{info.facebook}}
+                                    </td>
+                                  </tr>        
+                                  <tr>
+                                    
+                                    <td colspan="2">
+                                      <b>Instagram</b><br>
+                                      {{info.instagram}}
+                                    </td>
+                                    
+                                    <td colspan="2">
+                                      <b>Youtube</b><br>
+                                      {{info.Youtube}}
+                                    </td>
+                                  </tr> 
+                                  <tr>
+                                    <td colspan="4">
+                                      <b>Quantas pessoas fazer parte da instituição/entidade/coletivo/grupo:</b> {{info.qnt}}
+                                      <br>                    
+                                    </td>
+                                  </tr>    
+                                  <tr>
+                                    <td>
+                                      <b>Foto-Imagem do CPF:</b><br>
+                                      <a target="_blank" href="/media/{{cadastro.file_cpf}}">
+                                        <img src="/media/{{cadastro.file_cpf}}" alt="">
+                                      </a>
+                                    </td>
+                                    <td>
+                                      <b>Comprovante de residência:</b><br>
+                                      <a target="_blank" href="/media/{{cadastro.file_comprovante_residencia}}">
+                                        <img src="/media/{{cadastro.file_comprovante_residencia}}" alt="">
+                                      </a>
+                                    </td>
+                                    <td>
+                                      <b>Foto-Imagem do PIS:</b><br>
+                                      <a target="_blank" href="/media/{{cadastro.file_pis}}">
+                                      <img src="/media/{{cadastro.file_pis}}" alt="">                                      
+                                      </a>
+                                    </td>
+                                    <td>
+                                      <b>Comprovante de CC:</b><br>
+                                      <a target="_blank" href="/media/{{cadastro.comprovante_de_cc}}">
+                                      <img src="/media/{{cadastro.comprovante_de_cc}}" alt="">                                      
+                                      </a>
+                                    </td>
+                                  </tr>     
+                                  <tr>
+                                    <td colspan="2">
+                                      <b>Declaração de não vínculo com a Administração Federal, Estadual e Municipal:</b><br>
+                                      <a target="_blank" href="/media/{{cadastro.declaracao_n_viculo}}">
+                                        <img src="/media/{{cadastro.declaracao_n_viculo}}" alt="">
+                                      </a>
+                                    </td>
+                                    <td>
+                                      <b>Comprovante de inscrição do ISS Municipal</b><br>
+                                      <a target="_blank" href="/media/{{cadastro.comprovante_iss}}">
+                                      <img src="/media/{{cadastro.comprovante_iss}}" alt="">
+                                      </a>                                      
+                                    </td>
+                                    <td>
+                                      <b>Recibos, contratos ou notas que comprovem cachê</b><br>
+                                      <a target="_blank" href="/media/{{cadastro.comprovante_recibos}}">
+                                      <img src="/media/{{cadastro.comprovante_recibos}}" alt="">                                      
+                                      </a>
+                                    </td>
+                                  </tr>                                    
+                                  {% endif %}      
+                                </tbody>
+                              </table>  
+                              {% if segunda_etapa %}
+                              {% else %}
+                              <div class="row">
+                                <div class="col d-flex">
+                                  <a class="btn btn-primary mx-auto">
+                                    Completar Cadastro
+                                  </a>
+                                </div>
+                              </div>
+                              {% endif %}
+                              <style>
+                                table img{
+                                  max-height: 150px;
+                                  max-width: 150px;
+                                  margin-top: 10px;
+                                }
+                                table tr td{
+                                  border-color: white;
+                                  padding-bottom: 20px !important;
+                                }
+                              </style>
+                        </div>
+                      </div>
+                </div>
+                <!-- <div class="col  mx-3">
+                    <div class="mx-5 mt-5 d-flex flex-column h-100">
+                        <p class="text-justify text-dark" style="text-indent: 20px;">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula risus a tristique bibendum. Aenean pretium hendrerit fringilla. Nunc convallis sollicitudin lorem et fringilla. Nunc bibendum urna in odio mattis, ac malesuada justo mattis. Donec lacinia, sapien sed molestie ultrices, est velit faucibus diam, sit amet tristique ex felis vitae arcu.
+                            <a href="{% url 'lei866' %}" target="_blank" class="ms-3">Lei 866/93 art. 25</a>
+                        </p>
+                        <a href="{% url 'cad_cult_etapa1' %}" class="btn btn-primary mx-auto mt-4 px-5 py-3">
+                            CADASTRAR
+                        </a>
+                        </div>                                            
+                </div> -->
+            </div>
+        </div>        
+    </div>
+</div>
+<script>
+  function icpf(v){
+    v=v.replace(/\D/g,"")                   //Remove tudo o que nao e digito
+    v=v.replace(/(\d{3})(\d)/,"$1.$2")      //Coloca um ponto entre o terceiro e o quarto digitos
+    v=v.replace(/(\d{3})(\d)/,"$1.$2")      //Coloca um ponto entre o terceiro e o quarto digitos
+                                            //de novo (para o segundo bloco de numeros)
+    v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2")//Coloca um hifen entre o terceiro e o quarto digitos
+    return v
+  }
+
+  function mascara(o,f){
+    v_obj=o
+    v_fun=f
+    setTimeout("execmascara()",1)
+  }
+
+  function execmascara(){
+    v_obj.value=v_fun(v_obj.value)
+  }
+  window.onload = function() {
+                        cpf=document.getElementById('cpf').innerText                                 
+                        document.getElementById('cpf').innerText=cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/g, "$1.$2.$3-$4");              
+                    };
+</script>
+{% endblock %}

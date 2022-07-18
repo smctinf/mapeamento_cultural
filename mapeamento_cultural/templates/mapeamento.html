@@ -1,5 +1,6 @@
 {% extends 'template.html' %}
 {% load static%}
+{% block title %}Mapeamento Cultural{% endblock %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/mapeamento.css' %}">
 {% endblock %}
@@ -11,6 +12,14 @@
             <h1 class="display-4 d-flex mt-3 p-4 mb-3 text-center" style="background-color: #547DCD;">
                 <span class="my-auto mx-auto">MAPEAMENTO CULTURAL</span>
             </h1>
+            {% if request.user.is_staff %}
+            <div class="row">
+                <div class="col text-dark px-4 d-flex">
+                    ADMIN
+                    <a href="{% url 'admin_cadastros' %}" class="btn btn-outline-dark ms-auto px-5">Cadastros</a>
+                </div>
+            </div>
+            {% endif %}
             <div class="row">
                 <div class="col">                                        
                         <img class="img-fluid" src="/static/images/mapeamento/botao_cadastro.png" alt="">                    
@@ -21,7 +30,7 @@
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula risus a tristique bibendum. Aenean pretium hendrerit fringilla. Nunc convallis sollicitudin lorem et fringilla. Nunc bibendum urna in odio mattis, ac malesuada justo mattis. Donec lacinia, sapien sed molestie ultrices, est velit faucibus diam, sit amet tristique ex felis vitae arcu.
                             <a href="{% url 'lei866' %}" target="_blank" class="ms-3">Lei 866/93 art. 25</a>
                         </p>
-                        <a href="{% url 'cad_cult_etapa1' %}" class="btn btn-primary mx-auto mt-4 px-5 py-3">
+                        <a href="{% url 'cad_cult_etapa1_artista' %}" class="btn btn-primary mx-auto mt-4 px-5 py-3">
                             CADASTRAR
                         </a>
                         </div>                                            

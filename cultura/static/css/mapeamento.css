@@ -1,0 +1,7 @@
+#banner{
+    min-height: 500px;
+}
+#banner .container{
+    background-color: white;
+    color: white;
+}

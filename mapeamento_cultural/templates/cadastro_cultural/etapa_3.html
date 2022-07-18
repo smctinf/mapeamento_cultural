@@ -1,0 +1,56 @@
+{% extends 'cadastro_cultural/base.html' %}
+{% load bootstrap5 %}
+{% block etapa %}
+<div class="row">
+    <div class="col d-flex">
+        <h2 style="display: inline;">CADASTRO CULTURAL</h2> 
+        <a href="{% url 'acc_meus_cadastros_map' id %}" class="btn btn-outline-dark ms-auto my-auto">               
+            Voltar
+            <i class="fa-solid fa-arrow-rotate-left ms-2"></i> 
+        </a>
+    </div>
+</div>
+<h4 class="mb-5">Informações opcionais</h4>
+<div class="row">
+    <div class="col d-flex flex-column pb-5">    
+        <div class="div-quem m-auto">
+          <form method="POST" class="d-flex flex-column">
+            {% csrf_token %}
+            {% bootstrap_form form %} 
+            <button class="btn btn-primary">
+                Finalizar cadastro
+            </button>
+          </form>
+        </div>
+    </div>
+</div>
+<style>
+    .quem{
+        width: 380px;
+    }    
+    @media (max-width: 992px){
+        .div-quem{            
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+        .quem{
+            margin: auto;
+        }
+    }
+    @media (max-width: 470px){
+        .quem{
+            width: 100%;
+        }
+    }
+    label{
+        font-weight: bold;
+    }
+    ul li{
+        list-style: none;
+    }
+    ul li label{
+        font-weight: 400;
+    }
+</style>
+{% endblock %}

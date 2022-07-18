@@ -1,0 +1,16 @@
+-----------------------------
+Nome artistico
+Area de Atuação (com outros)
+CPF do proponente
+Data de nascimento
+Email
+Telefone
+----------------------------
+Nome fantasia
+Area de Atuação (com outros)
+Email
+Telefone
+CNPJ
+Nome do responsavel
+CPF do responsavel
+----------------------------

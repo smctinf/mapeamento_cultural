@@ -1,5 +1,6 @@
 db_name: 'cultura'
 db_user: 'cultura'
+db_host: 'localhost'
 db_pw: 'cultura123' #senha
 django_secret_key: 'turismo@sme.novafriburgo.rj.gov.br123456'
 debug_mode: True

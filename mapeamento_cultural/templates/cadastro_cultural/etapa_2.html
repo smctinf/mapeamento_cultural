@@ -1,7 +1,14 @@
 {% extends 'cadastro_cultural/base.html' %}
 {% block etapa %}
 <h2>CADASTRO CULTURAL</h2>
-<h4 class="mb-5">Informações adicionais</h4>
+<h4 class="mb-5">Informações complementares/adicionais/opcionais</h4>
+    {% if messages %}
+        <ul class="messages mb-4 mt-4">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}   
 <div class="row">
     <div class="col d-flex flex-column pb-5">    
         <div class="div-quem m-auto">
