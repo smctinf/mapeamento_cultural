@@ -75,7 +75,7 @@
                                     <td>
                                       {% if cadastro.fazedor_cultura %}
                                       <b>Data de nascimento:</b><br>
-                                      {{cadastro.data_nascimento}}
+                                      {{cadastro.data_nascimento|date:"SHORT_DATE_FORMAT"}}
                                       {% else %}
                                       <b>CPF do responsável:</b><br>
                                       <span id="cpf">{{cadastro.cpf_responsavel}}</span>                                      
@@ -105,7 +105,7 @@
                                     </td>                                    
                                     <td>
                                       <b>Data do cadastro:</b><br>
-                                      {{cadastro.dt_inclusao}}
+                                      {{cadastro.dt_inclusao|date:"SHORT_DATE_FORMAT"}}
                                     </td>                   
                                   </tr> 
     

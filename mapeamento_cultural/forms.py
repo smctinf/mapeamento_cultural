@@ -117,7 +117,7 @@ class Form_ArtistaCNPJ(ModelForm):
         widgets = {
             # 'nome_artistico': forms.EmailInput(attrs={'placeholder':''}),
             'cnpj': forms.TextInput(attrs={'onkeydown': 'mascara(this,icnpj)'}), 
-            'cpf': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,icpf)'}),                        
+            'cpf_responsavel': forms.TextInput(attrs={'onkeydown': 'mascara(this,icpf)'}),                        
             'fazedor_cultura': forms.TextInput(attrs={'placeholder':''}),                        
             'descricao': forms.TextInput(attrs={'placeholder':''}),                        
             'pis': forms.TextInput(attrs={'placeholder':''}),                        
@@ -157,7 +157,20 @@ class Form_ArtistaCNPJ(ModelForm):
             'dt_inclusao',
             'user_responsavel']
     field_order=['fazedor_cultura_cnpj', 'cnpj', 'area', 'data_nascimento', 'email', 'telefone', 'cpf_responsavel']
+    
+    def clean_cnpj(self):
+        cnpj = validate_CNPJ(self.cleaned_data["cnpj"])
+        cnpj = cnpj.replace('.', '')
+        cnpj = cnpj.replace('/', '')
+        cnpj = cnpj.replace('-', '')
+        return cnpj
 
+
+    def clean_cpf_responsavel(self):
+        cpf = validate_CPF(self.cleaned_data["cpf_responsavel"])
+        cpf = cpf.replace('.', '')
+        cpf = cpf.replace('-', '')
+        return cpf
 class Form_ArtistaEmpresa(ModelForm):
     class Meta:
         model = Artista
@@ -210,15 +223,16 @@ class Form_InfoExtra(ModelForm):
         model = InformacoesExtras
         widgets = {
             'tipo': forms.HiddenInput(),
-            'id_artista': forms.HiddenInput(attrs={'class': 'mb-3'}),
+            'id_artista': forms.HiddenInput(attrs={'class': 'mb-3'}),            
             'area': forms.CheckboxSelectMultiple(attrs={'class': 'mb-3'}),
             'publico': forms.CheckboxSelectMultiple(attrs={'class': 'mb-3'}),
             'enquadramento': forms.CheckboxSelectMultiple(attrs={'class': 'mb-3'}),
             'forma_atuacao': forms.CheckboxSelectMultiple(attrs={'class': 'mb-3'}),
+            'endereco': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
             'qnt': forms.Select(attrs={'class': 'form-control mb-3'}),
             'status': forms.Select(attrs={'class': 'form-control mb-3'}),
             'instagram': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
             'facebook': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
             'youtube': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
         }        
-        exclude = ['']
+        exclude = ['complete']

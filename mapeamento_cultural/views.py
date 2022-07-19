@@ -70,7 +70,7 @@ def cadastro_etapa_1_artista(request):
                 obj.tipo_contratacao=TiposContratação.objects.get(id=key)
                 obj.user_responsavel=request.user
                 obj.save()                
-                messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso. <br>Aguarde nosso email validando seus dados.</b>")                
+                messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso.</b>")                
                 return redirect('cad_cult_etapa2', tipo=request.POST['tipo_form'], id=obj.id )
             except Exception as E:
                 print(E)
@@ -249,8 +249,8 @@ def cadastro_etapa_2(request, id):
             obj.save()
             return redirect('acc_meus_cadastros_map', id)
     context={
-        'form': form
-
+        'form': form,
+        'id': id
     }
     return render(request, 'cadastro_cultural/etapa_2.html', context)
 

@@ -14,3 +14,7 @@ CNPJ
 Nome do responsavel
 CPF do responsavel
 ----------------------------
+Comprovante de Atuaçõ/Notoriedade
+Comprovante de PAgamento
+
+add Endereço no complementar
