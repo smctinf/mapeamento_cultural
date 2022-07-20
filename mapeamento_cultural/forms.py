@@ -108,9 +108,7 @@ class Form_Anexo_Artista_CNPJ(ModelForm):
             'certidao_regularidade_situacao',
              'certidao_negativa_debitos_trabalhistas',
              'documento_empresario_exclusivo'
-
         ]
-
 class Form_ArtistaCNPJ(ModelForm):
     class Meta:
         model = Artista

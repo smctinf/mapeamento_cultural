@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col d-flex">
         <h2 style="display: inline;">CADASTRO CULTURAL</h2> 
-        <a href="{% url 'acc_meus_cadastros_map' id %}" class="btn btn-outline-dark ms-auto my-auto">               
+        <a href="{% url 'acc_meus_cadastros_map' %}" class="btn btn-outline-dark ms-auto my-auto">               
             Voltar
             <i class="fa-solid fa-arrow-rotate-left ms-2"></i> 
         </a>
@@ -13,7 +13,7 @@
 <h4 class="mb-5">ANEXOS</h4>
 <div class="row">
     <div class="col d-flex flex-column pb-5">    
-        <div class="div-quem m-auto">
+        <div class="">
           <form method="POST" class="d-flex flex-column"  enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
@@ -21,25 +21,30 @@
                     {{success.1}}
                 </div>
             </div>
-            <select class="form-select mb-3" onchange="showInput(this.value)">
-                <option value="">Escolha um arquivo para anexar</option>                
-                {% for f in form %}
-                <option value="{{f.name}}">{{f.label}}</option>                
-                {% endfor %}
-            </select>
-            <div id='inputs'>
-                {% for f in form %}
-                    <div id="{{f.name}}" class="row">
-                        <div class="col d-flex flex-column">
-                            {{f.label}}
-                            {{f}}
-                        </div>
+            <div class="row">
+                <div class="col-3 d-flex flex-column flex-wrap">
+                    {% for i in form %}                  
+                    <a onclick="showInput('{{i.name}}')" class="btn {% for l in lista %}{% if i.name == l.0 %}{% if l.1 %}btn-primary{% else %}btn-secondary{% endif %}{% else %}{% endif %}{% endfor %} my-1 w-100">                    
+                        {{i.label}}                       
+                    </a>
+                    {% endfor %}
+                </div>
+                <div class="col d-flex flex-column">
+                    <div id='inputs' class="m-auto">
+                        {% for f in form %}
+                            <div id="{{f.name}}" class="row">
+                                <div class="col d-flex flex-column">
+                                    {{f.label}}
+                                    {{f}}
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
-            </div>
-            <button class="btn btn-primary mt-3">
-                Enviar anexo
-            </button>
+                    <button class="btn btn-primary mt-3">
+                        Enviar anexo
+                    </button>
+                </div>
+            </div>           
           </form>
         </div>
     </div>

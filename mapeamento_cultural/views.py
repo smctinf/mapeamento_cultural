@@ -17,6 +17,14 @@ def index(request):
     return render(request, 'index.html')
 
 def mapeamento_cultural(request):
+    try:
+        artista=Artista.objects.get(user_responsavel=request.user)
+        print(artista)
+    except:
+        artista=None
+        print(artista)
+    if artista:
+        return redirect('acc_meus_cadastros_map')
     return render(request, 'mapeamento.html')
 
 def lei866(request):
@@ -71,7 +79,7 @@ def cadastro_etapa_1_artista(request):
                 obj.user_responsavel=request.user
                 obj.save()                
                 messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso.</b>")                
-                return redirect('cad_cult_etapa2', tipo=request.POST['tipo_form'], id=obj.id )
+                return redirect('cad_cult_etapa2')
             except Exception as E:
                 print(E)
                 messages.add_message(request, messages.ERROR, form.errors)
@@ -81,8 +89,8 @@ def cadastro_etapa_1_artista(request):
     return render(request, 'cadastro_cultural/etapa_1_artista.html', context)
 
 @login_required
-def editar_artista_b(request, id):  
-    dados=Artista.objects.get(id=id)
+def editar_artista_b(request):  
+    dados=Artista.objects.get(user_responsavel=request.user)
     if dados.tipo_contratacao.id==1:
         form=Form_Artista(instance=dados)
     else:
@@ -96,7 +104,7 @@ def editar_artista_b(request, id):
             try:
                 obj=form.save()                
                 messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso.</b>")                
-                return redirect('acc_meus_cadastros_map', id=id)
+                return redirect('acc_meus_cadastros_map')
             except Exception as E:
                 print(E)
                 messages.add_message(request, messages.ERROR, form.errors)
@@ -104,13 +112,12 @@ def editar_artista_b(request, id):
             messages.add_message(request, messages.ERROR, form.errors)
     context={
         'form': form,
-        'id': id
     }
     return render(request, 'cadastro_cultural/etapa_1_editar.html', context)
 
 @login_required
-def editar_artista_c(request, id):  
-    dados=Artista.objects.get(id=id)
+def editar_artista_c(request):  
+    dados=Artista.objects.get(user_responsavel=request.user)
     form=Form_Artista2(instance=dados)
     if request.method=='POST':                
         form=Form_Artista(request.POST, request.FILES, instance=dados)
@@ -118,15 +125,15 @@ def editar_artista_c(request, id):
             try:
                 obj=form.save()                
                 messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso.</b>")                
-                return redirect('acc_meus_cadastros_map', id=id)
+                return redirect('acc_meus_cadastros_map')
             except Exception as E:
                 print(E)
                 messages.add_message(request, messages.ERROR, form.errors)
         else:
+            form=Form_Artista2(instance=dados)
             messages.add_message(request, messages.ERROR, form.errors)
     context={
         'form': form,
-        'id': id        
     }
     return render(request, 'cadastro_cultural/etapa_3_editar.html', context)
 
@@ -178,12 +185,12 @@ def meus_cadastros(request):
     return render(request, 'meus_cadastros.html', context)
 
 @login_required
-def cadastro_map_cultural_cpf(request, id):
+def cadastro_map_cultural_cpf(request):
 
-    artista=Artista.objects.get(id=id)
+    artista=Artista.objects.get(user_responsavel=request.user)
     tipo=artista.tipo_contratacao.nome.split()[-1]
     try:
-        info=InformacoesExtras.objects.get(id_artista=id)    
+        info=InformacoesExtras.objects.get(id_artista=artista.id)    
         complemento=True
     except:
         info=[]
@@ -238,7 +245,8 @@ def login_view(request):
     return render(request, 'admin/login.html', context)
 
 @login_required
-def cadastro_etapa_2(request, id):
+def cadastro_etapa_2(request):
+    id=Artista.objects.get(user_responsavel=request.user).id
     form=Form_InfoExtra(initial={'id_artista': id})
     if request.method=='POST':
         form=Form_InfoExtra(request.POST)
@@ -247,10 +255,9 @@ def cadastro_etapa_2(request, id):
             obj.id_artista=id
             obj.complete=True
             obj.save()
-            return redirect('acc_meus_cadastros_map', id)
+            return redirect('acc_meus_cadastros_map')
     context={
         'form': form,
-        'id': id
     }
     return render(request, 'cadastro_cultural/etapa_2.html', context)
 
@@ -263,9 +270,8 @@ def admin_cadastros(request):
     return render(request, 'cadastros.html', context)
 
 @login_required
-def cadastro_etapa_3(request, id, tipo):
-    print(tipo)
-    instance=Artista.objects.get(id=id)
+def cadastro_etapa_3(request):
+    instance=Artista.objects.get(user_responsavel=request.user)
     form=Form_Artista2(instance=instance)
     if request.method=='POST':
         form=Form_Artista2(request.POST, request.FILES, instance=instance)
@@ -274,53 +280,80 @@ def cadastro_etapa_3(request, id, tipo):
             instance.cadastro_completo=True
             form.save()
 
-            return redirect('acc_meus_cadastros_map', id)
+            return redirect('acc_meus_cadastros_map')
     context={
         'form': form,
-        'id': id
     }
     return render(request, 'cadastro_cultural/etapa_3.html', context)
 
 
 @login_required
-def cadastro_anexo(request, id, tipo):
-    print(tipo)
-    instance=Artista.objects.get(id=id)
+def cadastro_anexo(request):
+    instance=Artista.objects.get(user_responsavel=request.user)
     if instance.tipo_contratacao.id==1:
         form=Form_Anexo_Artista_CPF(instance=instance)
+        anexos=[
+            'file_cpf',
+            'file_comprovante_residencia',
+            'file_pis',
+            'comprovante_de_cc',
+            'declaracao_n_viculo',
+            'comprovante_iss',
+            'comprovante_recibos',
+        ]
     else:
         form=Form_Anexo_Artista_CNPJ(instance=instance)
+        anexos=[
+            'prova_inscricao_PJ_nacional',
+            'file_comprovante_residencia',
+            'file_pis',
+            'comprovante_de_cc',
+            'declaracao_n_viculo',            
+            'comprovante_iss',
+            'comprovante_recibos',
+            'certidao_negativa_debitos_relativos',
+            'certidao_regularidade_icms',
+            'certidao_regularidade_iss',
+            'certidao_negativa_debitos',
+            'certidao_regularidade_situacao',
+            'certidao_negativa_debitos_trabalhistas',
+            'documento_empresario_exclusivo'
+        ]
+    lista=[]
+
     if request.method=='POST':
         form=Form_Anexo_Artista_CPF(request.POST, request.FILES, instance=instance)
         if form.is_valid():
-            isntance=form.save()
+            instance=form.save()
             form=Form_Anexo_Artista_CPF(instance=instance)
+            for a in anexos:
+                lista.append([a, instance.__dict__[a].name!=''])
             context={
                 'form': form,
-                'id': id,
+                'lista': lista,
                 'success': ['bg-success', 'Anexo enviado com sucesso!']
             }
             return render(request, 'cadastro_cultural/anexos.html', context)
+    for a in anexos:
+        lista.append([a, instance.__dict__[a].name!=''])
     context={
         'form': form,
-        'id': id,
+        'lista': lista,
         'success': ['', '']
     }
     return render(request, 'cadastro_cultural/anexos.html', context)
 
 @login_required
-def editar_etapa_2(request, id):
-    instance=InformacoesExtras.objects.get(id_artista=id)
+def editar_etapa_2(request):
+    artista=Artista.objects.get(user_responsavel=request.user)
+    instance=InformacoesExtras.objects.get(id_artista=artista.id)
     form=Form_InfoExtra(instance=instance)
     if request.method=='POST':
         form=Form_InfoExtra(request.POST, instance=instance)
         if form.is_valid():
-            obj=form.save()            
-            obj.save()
-            return redirect('acc_meus_cadastros_map', id)
+            obj=form.save()                        
+            return redirect('acc_meus_cadastros_map')
     context={
-        'form': form,
-        'id': id
-
+        'form': form,        
     }
     return render(request, 'cadastro_cultural/etapa_2.html', context)

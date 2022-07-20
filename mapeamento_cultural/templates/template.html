@@ -47,15 +47,16 @@
                           <li><a class="dropdown-item" href="#">A Secretaria</a></li>
                           <li><a class="dropdown-item" href="#">Estrutura</a></li>                      
                         </ul>
-                      </li>
-                      <li class="nav-item dropdown">
+                      </li>-->
+                      <!-- <li class="nav-item dropdown">
                         <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                           Nossos espaços
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          
+                          <li><a class="dropdown-item" href="#">A Secretaria</a></li>
+                          <li><a class="dropdown-item" href="#">Estrutura</a></li>           
                         </ul>
-                      </li> -->
+                      </li>  -->
                       <li class="nav-item">
                         <a class="nav-link {% block mapeamento %}{% endblock %}" href="{% url 'mapeamento' %}">
                           Mapeamento Cultural
@@ -68,11 +69,12 @@
                       {% else %}
                       <div class="dropdown">
                         <button class="btn" type="button" id="dropdownMenuPerfil" data-bs-toggle="dropdown" aria-expanded="false">
-                          <i class="fa-solid fa-user-large"></i>
+                          <i class="fa-solid fa-user-large me-2"></i>
+                          {{ request.user.first_name }}
                         </button>
                         <ul id="menu-perfil" class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                          <li><a class="dropdown-item py-2" href="#">Meu perfil</a></li>
-                          <li><a class="dropdown-item py-2" href="{% url 'acc_meus_cadastros' %}">Meus Cadastros</a></li>
+                          <li><a class="dropdown-item py-2 text-center" href="{% url 'acc_meus_cadastros' %}">Meu perfil</a></li>
+                          <!-- <li><a class="dropdown-item py-2" href="{% url 'acc_meus_cadastros' %}">Meu perfil</a></li> -->
                           <li>
                             <a class="dropdown-item text-center py-2" href="/admin/logout">
                               <i class="fa-solid fa-arrow-right-from-bracket me-2"></i></i> Logout                            

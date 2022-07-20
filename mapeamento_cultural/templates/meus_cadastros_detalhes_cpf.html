@@ -9,7 +9,7 @@
     <div class="col d-flex">
         <div class="container my-5 pb-5">
             <h1 class="display-4 d-flex mt-3 p-4 mb-3 text-center" style="background-color: #547DCD;">
-                <span class="my-auto mx-auto">MEUS CADASTROS</span>
+                <span class="my-auto mx-auto">MAPEAMENTO CULTURAL</span>
             </h1>
             <div class="row">
                 <div class="col text-dark">                                        
@@ -22,16 +22,12 @@
                             {% endfor %}
                         </ul>
                         {% endif %}   
-                        <h3 class="px-5 text-uppercase d-flex ">DETALHES DO CADASTRO
-                          <span class="ms-2 my-auto" style="font-size: 14pt; text-transform: lowercase;">(id: {{cadastro.id}})</span>                          
-                          <a href="{% url 'cad_cult_anexo' id=cadastro.id tipo=1 %}" class="btn btn-dark  ms-auto">
+                        <h3 class="px-5 text-uppercase d-flex ">SEU CADASTRO
+                          <!-- <span class="ms-2 my-auto" style="font-size: 14pt; text-transform: lowercase;">(id: {{cadastro.id}})</span>                                                     -->
+                          <a href="{% url 'cad_cult_anexo' %}" class="btn btn-dark  ms-auto">
                             <i class="fa-solid fa-paperclip me-2"></i>
                             Anexos
-                          </a>
-                          <a href="{% url 'acc_meus_cadastros' %}" class="btn btn-outline-dark  ms-2">
-                            <i class="fa-solid fa-arrow-rotate-left me-2"></i> 
-                            Voltar
-                          </a>
+                          </a>                       
                         </h3>
                         <div class="py-4 px-5">
                             <table class="table">                                
@@ -41,7 +37,7 @@
                                       <div class="row py-0">
                                         <div class="col d-flex py-0">
                                           <h5 class="text-uppercase my-auto pt-2 px-3">Dados Básicos</h5>
-                                          <a href="{% url 'acc_editar_map_b' cadastro.id %}" class="btn btn-light ms-auto me-3 mt-2">
+                                          <a href="{% url 'acc_editar_map_b' %}" class="btn btn-light ms-auto me-3 mt-2">
                                             <i class="fa-solid fa-pen-to-square me-2"></i>
                                             Editar
                                           </a>
@@ -119,7 +115,7 @@
                                       <div class="row py-0">
                                         <div class="col d-flex py-0">
                                           <h5 class="text-uppercase my-auto pt-2 px-3">Dados para contratação</h5>
-                                          <a href="{% url 'acc_editar_map_c' cadastro.id %}" class="btn btn-light ms-auto me-3 mt-2">
+                                          <a href="{% url 'acc_editar_map_c' %}" class="btn btn-light ms-auto me-3 mt-2">
                                             <i class="fa-solid fa-pen-to-square me-2"></i>
                                             Editar
                                           </a>
@@ -136,19 +132,35 @@
                                     </tr>                                                         
                                     <td scope="row">
                                       <b>PIS:</b><br>
+                                      {% if cadastro.pis %}
                                       {{cadastro.pis}}
+                                      {% else %}
+                                      <i>Complete seu cadastro</i>
+                                      {% endif %}
                                     </td>
                                     <td>
                                       <b>Banco</b><br>
-                                      {{cadastro.banco}}                                      
+                                      {% if cadastro.banco %}
+                                      {{cadastro.banco}}   
+                                      {% else %}
+                                      <i>Complete seu cadastro</i>
+                                      {% endif %}                                   
                                     </td>                                    
                                     <td>
-                                      <b>Agência:</b><br>                                      
-                                        {{cadastro.agencia}}                                      
+                                      <b>Agência:</b><br> 
+                                      {% if cadastro.agencia %}                                     
+                                      {{cadastro.agencia}}
+                                      {% else %}
+                                      <i>Complete seu cadastro</i>
+                                      {% endif %}                                      
                                     </td>
                                     <td>
                                       <b>Conta:</b><br>
+                                      {% if cadastro.n_conta %}
                                       {{cadastro.n_conta}}
+                                      {% else %}
+                                      <i>Complete seu cadastro</i>
+                                      {% endif %}
                                     </td>                                    
                                   </tr>                                                                      
                                   </tbody>
@@ -156,7 +168,7 @@
                               {% else %}
                               <div class="row">
                                 <div class="col d-flex pt-5">
-                                  <a href="{% url 'cad_cult_etapa3' id=cadastro.id tipo=1 %}" class="btn btn-primary mx-auto" style="width: 400px;">
+                                  <a href="{% url 'cad_cult_etapa3' %}" class="btn btn-primary mx-auto" style="width: 400px;">
                                     <i class="fa-solid fa-clipboard-list me-2"></i>
                                     Cadastrar dados para contratação
                                   </a>
@@ -164,14 +176,14 @@
                               </div>
                               {% endif %}
                               {% if complemento %}
-                              <table class="table">                                
+                              <table class="table mt-5">                                
                                 <tbody>   
                                   <tr>
                                     <td colspan='4' class="bg-dark text-white">
                                       <div class="row py-0">
                                         <div class="col d-flex py-0">
                                           <h5 class="text-uppercase my-auto pt-2 px-3">Dados complementares</h5>
-                                          <a href="{% url 'acc_editar_map_cmp' id=cadastro.id %}" class="btn btn-light ms-auto me-3 mt-2">
+                                          <a href="{% url 'acc_editar_map_cmp' %}" class="btn btn-light ms-auto me-3 mt-2">
                                             <i class="fa-solid fa-pen-to-square me-2"></i>
                                             Editar
                                           </a>
@@ -229,7 +241,7 @@
                               
                               <div class="row">
                                 <div class="col d-flex pt-5">
-                                  <a href="{% url 'cad_cult_etapa2' id=cadastro.id %}" class="btn btn-primary mx-auto" style="width: 400px;">
+                                  <a href="{% url 'cad_cult_etapa2' %}" class="btn btn-primary mx-auto" style="width: 400px;">
                                     <i class="fa-solid fa-server me-2"></i>
                                     Cadastrar dados complementares
                                   </a>
