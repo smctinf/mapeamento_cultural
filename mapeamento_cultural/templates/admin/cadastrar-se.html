@@ -29,6 +29,13 @@
                 <img class="mb-5 mt-5" src="{% static 'images/logo_cultura.png' %}" alt="">
             </a>
             <h2 class="text-center">NOVO CADASTRO</h2>
+            {% if messages %}
+        <div class="messages my-4">
+            {% for message in messages %}
+            <div{% if message.tags %} class="{{ message.tags }} p-2 text-center"{% endif %}>{{ message|safe }}</div>
+            {% endfor %}
+        </div>
+        {% endif %} 
             <form class="pt-3" method="POST">
                 {% csrf_token %}
                 <div class="mb-3">
@@ -64,6 +71,12 @@
         </div>
     </div>
 </div>
+<style>    
+    .error{
+        background-color: red;
+        color: white;
+    }
+</style>
 <script>
     function apenasNumeros(v){
                 v=v.replace(/\D/g,"") 
