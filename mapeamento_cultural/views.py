@@ -43,13 +43,17 @@ def cadastro_usuario(request):
             elif request.POST['password']!=request.POST['password2']:
                 senhas=[True, ' As senhas abaixo não coincidem.']
             else:
-                user = User.objects.create_user(request.POST['email'], request.POST['email'], request.POST['password'])
-                user.save()
-                user.first_name = request.POST['nome']                    
-                user.save()
-                usuario=form.save()
-                usuario.user=user
-                usuario.save()
+                try:
+                    user = User.objects.create_user(request.POST['email'], request.POST['email'], request.POST['password'])
+                    user.save()
+                    user.first_name = request.POST['nome']                    
+                    user.save()
+                    usuario=form.save()
+                    usuario.user=user
+                    usuario.save()
+                except Exception as e:
+                    print(e)
+                
         else:
             print(form.errors)
     context={
@@ -64,7 +68,15 @@ def cadastro_etapa_1(request):
     return render(request, 'cadastro_cultural/etapa_1.html')
 
 @login_required
-def cadastro_etapa_1_artista(request):  
+def cadastro_etapa_1_artista(request): 
+    try:
+        artista=Artista.objects.get(user_responsavel=request.user)
+        print(artista)
+    except:
+        artista=None
+        print(artista)
+    if artista:
+        return redirect('acc_meus_cadastros_map') 
     if request.method=='POST':        
         forms={
             '2': Form_ArtistaCNPJ,
@@ -120,18 +132,21 @@ def editar_artista_c(request):
     dados=Artista.objects.get(user_responsavel=request.user)
     form=Form_Artista2(instance=dados)
     if request.method=='POST':                
-        form=Form_Artista(request.POST, request.FILES, instance=dados)
+        form=Form_Artista2(request.POST, request.FILES, instance=dados)
         if form.is_valid():
             try:
-                obj=form.save()                
-                messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso.</b>")                
+                dados=form.save()                
+                messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro alterado com sucesso.</b>")                
                 return redirect('acc_meus_cadastros_map')
             except Exception as E:
                 print(E)
                 messages.add_message(request, messages.ERROR, form.errors)
         else:
+            print(form.errors)
             form=Form_Artista2(instance=dados)
+            print('error2')
             messages.add_message(request, messages.ERROR, form.errors)
+            print('error3')
     context={
         'form': form,
     }

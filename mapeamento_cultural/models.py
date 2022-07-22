@@ -7,8 +7,9 @@ class Usuario(models.Model):
     
     user=models.ForeignKey(User, on_delete=models.CASCADE, null=True)    
     # rg=models.CharField(max_length=40, verbose_name='RG:')
-    cpf=models.CharField(max_length=14, verbose_name='CPF:', validators=[validate_CPF])
-    email=models.EmailField(verbose_name='Email:')
+    cpf=models.CharField(max_length=14, verbose_name='CPF:', validators=[validate_CPF], unique=True)
+    data_nascimento = models.DateField(verbose_name='Data Nascimento')
+    email=models.EmailField(verbose_name='Email:', unique=True)
     endereco=models.CharField(max_length=40, verbose_name='Endereço:')
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')
 
@@ -34,9 +35,8 @@ class Area_Atuacao(models.Model):
 class Artista(models.Model):
     
     fazedor_cultura=models.CharField(max_length=100, verbose_name='Nome artístico', blank=True, null=True)    
-    area=models.ManyToManyField(Area_Atuacao, verbose_name='Principal área de atuação')
-    cpf=models.CharField(max_length=14, verbose_name='CPF', validators=[validate_CPF], null=True)
-    data_nascimento = models.DateTimeField(verbose_name='Data Nascimento', null=True)
+    area=models.ManyToManyField(Area_Atuacao, verbose_name='Principal área de atuação', blank=True, null=True)
+    
     email=models.EmailField()
     telefone=models.CharField(max_length=11)
     descricao=models.TextField(verbose_name='Descrição resumida da atividade artística/culturais desenvolvidas', blank=True, null=True)

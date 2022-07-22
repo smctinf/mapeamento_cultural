@@ -27,7 +27,7 @@ class Form_Artista(ModelForm):
         model = Artista
         widgets = {
             # 'nome_artistico': forms.EmailInput(attrs={'placeholder':''}),
-            'cpf': forms.TextInput(attrs={'onkeydown': 'mascara(this,icpf)'}),                        
+            # 'cpf': forms.TextInput(attrs={'onkeydown': 'mascara(this,icpf)'}),                        
             
             'descricao': forms.TextInput(attrs={'placeholder':''}),                        
             'pis': forms.TextInput(attrs={'placeholder':''}),                        
@@ -35,22 +35,25 @@ class Form_Artista(ModelForm):
             'agencia': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),                        
             'n_conta': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),                        
         }        
-        fields=['fazedor_cultura', 'cpf', 'data_nascimento', 'area', 'email', 'telefone']
+        fields=['fazedor_cultura', 'area', 'email', 'telefone']
 
-    field_order=['fazedor_cultura', 'cpf', 'data_nascimento', 'area', 'email', 'telefone']
+    field_order=['fazedor_cultura', 'area', 'email', 'telefone']
 
-    def clean_cpf(self):
-        cpf = validate_CPF(self.cleaned_data["cpf"])
-        cpf = cpf.replace('.', '')
-        cpf = cpf.replace('-', '')
-        return cpf
+    # def clean_cpf(self):
+    #     cpf = validate_CPF(self.cleaned_data["cpf"])
+    #     cpf = cpf.replace('.', '')
+    #     cpf = cpf.replace('-', '')
+    #     return cpf
 
 class Form_Artista2(ModelForm):
 
     class Meta:        
         model = Artista
         widgets = {
-            # 'nome_artistico': forms.EmailInput(attrs={'placeholder':''}),
+            # 'cpf': forms.HiddenInput(),
+            # 'data_nascimento': forms.HiddenInput(),
+            # 'email': forms.HiddenInput(),
+            # 'telefone': forms.HiddenInput(),
             'descricao': forms.Textarea(attrs={'placeholder':'', 'rows':'3'}),
             'pis': forms.TextInput(attrs={'placeholder':'',}),                  
             'banco': forms.TextInput(attrs={'placeholder':'',}),
@@ -58,6 +61,10 @@ class Form_Artista2(ModelForm):
             'n_conta': forms.TextInput(attrs={'placeholder':'',}),
         }        
         fields = [
+            # 'cpf',
+            # 'data_nascimento',            
+            # 'email',
+            # 'telefone',
             'descricao',           
             'pis',            
             'banco',
@@ -65,13 +72,13 @@ class Form_Artista2(ModelForm):
             'n_conta',             
             ]               
     
-    field_order=['fazedor_cultura', 'cpf', 'data_nascimento', 'area', 'email', 'telefone']
+    field_order=['fazedor_cultura', 'area', 'email', 'telefone']
 
-    def clean_cpf(self):
-        cpf = validate_CPF(self.cleaned_data["cpf"])
-        cpf = cpf.replace('.', '')
-        cpf = cpf.replace('-', '')
-        return cpf
+    # def clean_cpf(self):
+    #     cpf = validate_CPF(self.cleaned_data["cpf"])
+    #     cpf = cpf.replace('.', '')
+    #     cpf = cpf.replace('-', '')
+    #     return cpf
 
 class Form_Anexo_Artista_CPF(ModelForm):
 
@@ -125,9 +132,9 @@ class Form_ArtistaCNPJ(ModelForm):
         }        
         exclude = [
             'fazedor_cultura',
-            'data_nascimento',
+            # 'data_nascimento',
             'descricao',
-            'cpf',
+            # 'cpf',
             'file_cpf',
             'file_comprovante_residencia',
             'pis',
@@ -154,7 +161,7 @@ class Form_ArtistaCNPJ(ModelForm):
             'cadastro_completo',
             'dt_inclusao',
             'user_responsavel']
-    field_order=['fazedor_cultura_cnpj', 'cnpj', 'area', 'data_nascimento', 'email', 'telefone', 'cpf_responsavel']
+    field_order=['fazedor_cultura_cnpj', 'cnpj', 'area', 'email', 'telefone', 'cpf_responsavel']
     
     def clean_cnpj(self):
         cnpj = validate_CNPJ(self.cleaned_data["cnpj"])
@@ -175,7 +182,7 @@ class Form_ArtistaEmpresa(ModelForm):
         widgets = {
             # 'nome_artistico': forms.EmailInput(attrs={'placeholder':''}),
             'cnpj': forms.TextInput(attrs={'placeholder':''}),   
-            'cpf': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,icpf)'}),                        
+            #'cpf': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,icpf)'}),                        
             'fazedor_cultura': forms.TextInput(attrs={'placeholder':''}),                        
             'descricao': forms.TextInput(attrs={'placeholder':''}),                        
             'pis': forms.TextInput(attrs={'placeholder':''}),                        
@@ -185,8 +192,8 @@ class Form_ArtistaEmpresa(ModelForm):
         }        
         exclude = [
             'fazedor_cultura',
-            'cpf',
-            'data_nascimento',
+            #'cpf',
+            # 'data_nascimento',
             'descricao',
             'file_cpf',
             'file_comprovante_residencia',
@@ -214,7 +221,7 @@ class Form_ArtistaEmpresa(ModelForm):
             'dt_inclusao',
             'user_responsavel']
 
-    field_order=['fazedor_cultura_cnpj', 'cnpj', 'area', 'data_nascimento', 'email', 'telefone', 'cpf_responsavel']
+    field_order=['fazedor_cultura_cnpj', 'cnpj', 'area', 'email', 'telefone', 'cpf_responsavel']
 
 class Form_InfoExtra(ModelForm):
     class Meta:
