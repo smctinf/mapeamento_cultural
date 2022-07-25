@@ -4,11 +4,22 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.template.loader import render_to_string
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse
+
+from .models import Usuario
 from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra, Form_Usuario
+
 from django.contrib import messages
 import os
 from cultura.settings import BASE_DIR
-from django.contrib.auth.models import User
 from mapeamento_cultural.models import Artista, InformacoesExtras, TiposContratação
 from qr_code.qrcode.utils import QRCodeOptions
 
@@ -200,6 +211,13 @@ def meus_cadastros(request):
     return render(request, 'meus_cadastros.html', context)
 
 @login_required
+def meu_perfil(request):
+    context={
+        'usuario': Usuario.objects.get(user=request.user),
+    }
+    return render(request, 'meu_perfil.html', context)
+
+@login_required
 def cadastro_map_cultural_cpf(request):
 
     artista=Artista.objects.get(user_responsavel=request.user)
@@ -214,6 +232,7 @@ def cadastro_map_cultural_cpf(request):
         'cadastro': artista,       
         'info': info,
         'complemento': complemento,
+        'usuario': Usuario.objects.get(user=request.user),
     }
     return render(request, 'meus_cadastros_detalhes_cpf.html', context)
 
@@ -372,3 +391,23 @@ def editar_etapa_2(request):
         'form': form,        
     }
     return render(request, 'cadastro_cultural/etapa_2.html', context)
+
+@login_required
+def change_password(request):
+    status=['', '']
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Importante!
+            status=['bg-success text-white py-1 text-center','Senha alterada.']   
+            form = PasswordChangeForm(request.user)         
+        else:
+            status=['bg-danger text-white','Você deve cumprir todos os requisitos para alterar sua senha.']
+    else:
+        form = PasswordChangeForm(request.user)
+    context={ 
+        'form': form,
+        'status': status
+         }
+    return render(request, 'change_password.html', context)

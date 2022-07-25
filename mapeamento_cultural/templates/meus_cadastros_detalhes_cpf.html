@@ -59,7 +59,7 @@
                                       {% if cadastro.fazedor_cultura %}
                                       <b>CPF do proponente:</b><br>
                                       <span id="cpf">
-                                        {{cadastro.cpf}}
+                                        {{usuario.cpf}}
                                       </span>
                                       {% else %}
                                       <b>CNPJ do proponente:</b><br>
@@ -71,7 +71,7 @@
                                     <td>
                                       {% if cadastro.fazedor_cultura %}
                                       <b>Data de nascimento:</b><br>
-                                      {{cadastro.data_nascimento|date:"SHORT_DATE_FORMAT"}}
+                                      {{usuario.data_nascimento|date:"SHORT_DATE_FORMAT"}}
                                       {% else %}
                                       <b>CPF do responsável:</b><br>
                                       <span id="cpf">{{cadastro.cpf_responsavel}}</span>                                      
@@ -234,7 +234,44 @@
                                         {{i}} <br>
                                       {% endfor %}
                                     </td>                                                                                    
-                                  </tr>                                                                 
+                                  </tr>     
+                                  <tr>    
+                                    <td>
+                                      <b>Redes sociais:</b><br>                                      
+                                      <div class="d-flex">
+                                        {% if info.instagram != ''%}
+                                        <div>
+                                          <div>
+                                            <i>Instagram:</i>
+                                          </div>
+                                          <div>
+                                            <a href="{{info.instagram}}">{{info.instagram}}</a>
+                                          </div>
+                                        </div>
+                                        {% endif %}
+                                        {% if info.facebook != '' %}
+                                        <div class="mx-auto">
+                                          <div>
+                                            <i>Facebook:</i>
+                                          </div>
+                                          <div>
+                                            <a href="{{info.facebook}}">{{info.facebook}}</a>
+                                          </div>
+                                        </div>
+                                        {% endif %}
+                                        {% if info.youtube != ''%}
+                                        <div class="mx-auto">
+                                          <div>
+                                            <i>Youtube:</i>
+                                          </div>
+                                          <div>
+                                            <a href="{{info.youtube}}">{{info.youtube}}</a>
+                                          </div>
+                                        </div>
+                                        {% endif %}
+                                      </div>
+                                    </td>                                                                                    
+                                  </tr>                                                             
                                   </tbody>
                                   </table>
                               {% else %}
