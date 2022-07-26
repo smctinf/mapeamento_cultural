@@ -411,3 +411,23 @@ def change_password(request):
         'status': status
          }
     return render(request, 'change_password.html', context)
+
+@login_required
+def alterar_meus_dados(request):
+    usuario=Usuario.objects.get(user=request.user)
+    context={
+        'usuario': usuario,
+        'form': Form_Usuario(instance=usuario),
+    }
+    if request.method=='POST':
+        form=Form_Usuario(request.POST, instance=usuario)
+        if form.is_valid():
+            form.save()            
+            messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Dados alterado com sucesso.</b>")                
+            usuario=Usuario.objects.get(user=request.user)
+            context={
+                'usuario': usuario,
+                'form': Form_Usuario(instance=usuario),
+            }
+            
+    return render(request, 'alterar_meus_dados.html', context)
