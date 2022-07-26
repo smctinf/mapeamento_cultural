@@ -19,8 +19,7 @@ class Form_Usuario(ModelForm):
         cpf = cpf.replace('.', '')
         cpf = cpf.replace('-', '')
         return cpf
-
-
+    
 class Form_Artista(ModelForm):
 
     class Meta:
@@ -35,9 +34,9 @@ class Form_Artista(ModelForm):
             'agencia': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),                        
             'n_conta': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),                        
         }        
-        fields=['fazedor_cultura', 'area', 'email', 'telefone']
+        fields=['fazedor_cultura', 'area', 'telefone']
 
-    field_order=['fazedor_cultura', 'area', 'email', 'telefone']
+    field_order=['fazedor_cultura', 'area', 'telefone']
 
     # def clean_cpf(self):
     #     cpf = validate_CPF(self.cleaned_data["cpf"])
@@ -72,7 +71,7 @@ class Form_Artista2(ModelForm):
             'n_conta',             
             ]               
     
-    field_order=['fazedor_cultura', 'area', 'email', 'telefone']
+    field_order=['fazedor_cultura', 'area', 'telefone']
 
     # def clean_cpf(self):
     #     cpf = validate_CPF(self.cleaned_data["cpf"])
@@ -161,7 +160,7 @@ class Form_ArtistaCNPJ(ModelForm):
             'cadastro_completo',
             'dt_inclusao',
             'user_responsavel']
-    field_order=['fazedor_cultura_cnpj', 'cnpj', 'area', 'email', 'telefone', 'cpf_responsavel']
+    field_order=['fazedor_cultura_cnpj', 'cnpj', 'area', 'telefone', 'cpf_responsavel']
     
     def clean_cnpj(self):
         cnpj = validate_CNPJ(self.cleaned_data["cnpj"])
@@ -221,7 +220,7 @@ class Form_ArtistaEmpresa(ModelForm):
             'dt_inclusao',
             'user_responsavel']
 
-    field_order=['fazedor_cultura_cnpj', 'cnpj', 'area', 'email', 'telefone', 'cpf_responsavel']
+    field_order=['fazedor_cultura_cnpj', 'cnpj', 'area', 'telefone', 'cpf_responsavel']
 
 class Form_InfoExtra(ModelForm):
     class Meta:

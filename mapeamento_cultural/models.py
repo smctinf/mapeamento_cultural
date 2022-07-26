@@ -13,6 +13,17 @@ class Usuario(models.Model):
     endereco=models.CharField(max_length=40, verbose_name='Endereço:')
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')
 
+    __original_email = None
+    
+    def save(self, force_insert=False, force_update=False, *args, **kwargs):
+        if self.email != self.__original_email:
+            self.user.username = self.email
+            self.user.email = self.email
+            self.user.save()
+
+        super().save(force_insert, force_update, *args, **kwargs)
+        self.__original_email = self.email
+
 class TiposContratação(models.Model):
 
     nome=models.CharField(max_length=50)
@@ -37,7 +48,7 @@ class Artista(models.Model):
     fazedor_cultura=models.CharField(max_length=100, verbose_name='Nome artístico', blank=True, null=True)    
     area=models.ManyToManyField(Area_Atuacao, verbose_name='Principal área de atuação', blank=True, null=True)
     
-    email=models.EmailField()
+    # email=models.EmailField()
     telefone=models.CharField(max_length=11)
     descricao=models.TextField(verbose_name='Descrição resumida da atividade artística/culturais desenvolvidas', blank=True, null=True)
     tipo_contratacao=models.ForeignKey(TiposContratação, verbose_name='Tipo de contratação', on_delete=models.PROTECT, blank=True, null=True)        

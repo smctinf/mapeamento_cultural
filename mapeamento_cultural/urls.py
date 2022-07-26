@@ -12,6 +12,7 @@ urlpatterns = [
     path('adm/cadastros', views.admin_cadastros, name='admin_cadastros'),
     path('acc/meu-perfil', views.meu_perfil, name='acc_meu_perfil'),
     path('acc/meu-perfil/mudar-senha', views.change_password, name='acc_mudar_senha'),
+    path('acc/meu-perfil/alterar-dados-pessoais', views.alterar_meus_dados, name='acc_alterar_meus_dados'),
     path('acc/meus_cadastros', views.meus_cadastros, name='acc_meus_cadastros'),
     path('acc/meus_cadastros/detalhes/', views.cadastro_map_cultural_cpf, name='acc_meus_cadastros_map'),
     path('acc/meus_cadastros/detalhes/editar/b', views.editar_artista_b, name='acc_editar_map_b'),
