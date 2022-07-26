@@ -24,6 +24,7 @@ urlpatterns = [
     path('mapeamento-cultural/lei-866-93-art-25', views.lei866, name='lei866'),
     path('mapeamento-cultural/cadastrar', views.cadastro_etapa_1, name='cad_cult_etapa1'),
     path('mapeamento-cultural/cadastrar/fazedor-de-cultura', views.cadastro_etapa_1_artista, name='cad_cult_etapa1_artista'),
+    path('mapeamento-cultural/cadastrar/fazedor-de-cultura2', views.cadastro_etapa_1_artista2, name='cad_cult_etapa1_artista2'),
     path('mapeamento-cultural/cadastrar/prestador-de-servico-cultural', views.cadastro_etapa_1_empresa, name='cad_cult_etapa1_empresa'),
     path('mapeamento-cultural/cadastrar/etapa-2/', views.cadastro_etapa_2, name='cad_cult_etapa2'),    
     path('mapeamento-cultural/get_form_cpf', views.get_form_cpf, name='get_form_cpf'),

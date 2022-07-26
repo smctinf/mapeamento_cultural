@@ -12,14 +12,6 @@
             <h1 class="display-4 d-flex mt-3 p-4 mb-3 text-center" style="background-color: #547DCD;">
                 <span class="my-auto mx-auto">MAPEAMENTO CULTURAL</span>
             </h1>
-            {% if request.user.is_staff %}
-            <div class="row">
-                <div class="col text-dark px-4 d-flex">
-                    ADMIN
-                    <a href="{% url 'admin_cadastros' %}" class="btn btn-outline-dark ms-auto px-5">Cadastros</a>
-                </div>
-            </div>
-            {% endif %}
             <div class="row">
                 <div class="col">                                        
                         <img class="img-fluid" src="/static/images/mapeamento/botao_cadastro.png" alt="">                    
