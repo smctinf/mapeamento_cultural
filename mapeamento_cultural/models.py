@@ -5,7 +5,7 @@ from .validations import *
 
 class Usuario(models.Model):
     
-    user=models.ForeignKey(User, on_delete=models.CASCADE, null=True)    
+    user=models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)    
     # rg=models.CharField(max_length=40, verbose_name='RG:')
     cpf=models.CharField(max_length=14, verbose_name='CPF:', validators=[validate_CPF], unique=True)
     data_nascimento = models.DateField(verbose_name='Data Nascimento')
@@ -16,10 +16,11 @@ class Usuario(models.Model):
     __original_email = None
     
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
-        if self.email != self.__original_email:
-            self.user.username = self.email
-            self.user.email = self.email
-            self.user.save()
+        if self.user is not None:
+            if self.email != self.__original_email:
+                self.user.username = self.email
+                self.user.email = self.email
+                self.user.save()
 
         super().save(force_insert, force_update, *args, **kwargs)
         self.__original_email = self.email

@@ -29,6 +29,13 @@
             <a href="/">
                 <img class="mb-5" src="{% static 'images/logo_cultura.png' %}" alt="">                
             </a>
+            {% if messages %}
+            <ul class="messages mb-4">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
             {% if error %}
             <p class="bg-danger text-white py-2 text-center">Usuário ou senha não conferem.</p>
             {% endif %}

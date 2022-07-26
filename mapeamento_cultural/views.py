@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, UserManager
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
@@ -55,14 +55,17 @@ def cadastro_usuario(request):
                 senhas=[True, ' As senhas abaixo não coincidem.']
             else:
                 try:
-                    user = User.objects.create_user(request.POST['email'], request.POST['email'], request.POST['password'])
-                    user.save()
-                    user.first_name = request.POST['nome']                    
+                    user = User.objects.create_user(username=request.POST['email'], email=request.POST['email'], password=request.POST['password'])                                        
+                    user.first_name = request.POST['nome'] 
+                    print(request.POST['password'])                   
+                    user.set_password(request.POST['password'])
                     user.save()
                     usuario=form.save()
                     usuario.user=user
                     usuario.save()
-                except Exception as e:
+                    messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Usuário cadastrado com sucesso</b>")                
+                    return redirect('login')
+                except Exception as e:                    
                     print(e)
                 
         else:
@@ -283,7 +286,7 @@ def cadastro_map_cultural_cnpj(request, id):
     }
     return render(request, 'meus_cadastros_detalhes_cnpj.html', context)
 
-@login_required
+
 def logout(request):
     if request.user.is_authenticated:
         logout(request)
