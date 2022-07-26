@@ -1,0 +1,61 @@
+{% extends 'cadastro_cultural/base.html' %}
+{% load bootstrap5 %}
+{% block etapa %}
+<h2 class="d-flex px-3">CADASTRO DOS FAZEDORES DE CULTURA <a href="{% url 'mapeamento' %}" class="ms-auto btn btn-outline-dark">Voltar</a></h2>
+<div class="row">
+    <div class="col d-flex flex-column px-4">
+        <b class="text-danger">[ AVISO IMPORTANTE ]</b>
+        <p class="mt-4" style="text-align: justify; text-indent: 30px;">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula risus a tristique bibendum. Aenean pretium hendrerit fringilla. Nunc convallis sollicitudin lorem et fringilla. Nunc bibendum urna in odio mattis, ac malesuada justo mattis.        
+        </p>
+        <ul class="mx-auto">
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+        </ul>
+        <p style="text-align: justify; text-indent: 30px;">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula risus a tristique bibendum. Aenean pretium hendrerit fringilla.
+        </p>
+    </div>    
+</div>
+<div class="row">
+    <div id="divForm" class="col d-flex flex-column pt-5">
+        {% if messages %}
+        <ul class="messages mb-4">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <button onclick="get_form('cpf')" class="btn bg-main text-white mx-auto mt-auto" style="width: 300px;">
+            Contratação por CPF
+        </button>
+        <button onclick="get_form('cnpj')" class="btn bg-main text-white mx-auto mt-3 mb-auto" style="width: 300px;">
+            Contratação por CNPJ
+        </button>
+    </div>    
+</div>
+<style>
+    .messages li{
+        list-style: none;
+        text-align: center;
+    }
+    .resize{
+        width: 88.88889% !important;
+    }
+    label{
+        font-weight: bold;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+    function get_form(form){
+        url="/mapeamento-cultural/get_form_"+form
+        console.log(url)
+        $.get(url, function( data ) {
+            $( "#divForm" ).html( data );                      
+        });
+    }
+</script>
+{% endblock %}

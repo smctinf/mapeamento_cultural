@@ -112,6 +112,39 @@ def cadastro_etapa_1_artista(request):
     return render(request, 'cadastro_cultural/etapa_1_artista.html', context)
 
 @login_required
+def cadastro_etapa_1_artista2(request): 
+    try:
+        artista=Artista.objects.get(user_responsavel=request.user)
+        print(artista)
+    except:
+        artista=None
+        print(artista)
+    if artista:
+        return redirect('acc_meus_cadastros_map') 
+    if request.method=='POST':        
+        forms={
+            '2': Form_ArtistaCNPJ,
+            '1': Form_Artista
+        }
+        key=request.POST['tipo_form']        
+        form=forms[key](request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                obj=form.save()
+                obj.tipo_contratacao=TiposContratação.objects.get(id=key)
+                obj.user_responsavel=request.user
+                obj.save()                
+                messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso.</b>")                
+                return redirect('cad_cult_etapa2')
+            except Exception as E:
+                print(E)
+                messages.add_message(request, messages.ERROR, form.errors)
+        else:
+            messages.add_message(request, messages.ERROR, form.errors)
+    context={}
+    return render(request, 'cadastro_cultural/etapa_1_artista2.html', context)
+
+@login_required
 def editar_artista_b(request):  
     dados=Artista.objects.get(user_responsavel=request.user)
     if dados.tipo_contratacao.id==1:
