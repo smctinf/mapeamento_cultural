@@ -8,7 +8,7 @@ class Form_Usuario(ModelForm):
         model = Usuario
         widgets = {
             'email': forms.EmailInput(attrs={'placeholder':''}),
-            # 'rg': forms.TextInput(attrs={'placeholder':''}),            
+            'data_nascimento': forms.DateInput(attrs={'placeholder':'', 'type':'date'}),            
             'cpf': forms.TextInput(attrs={'placeholder':'', 'onkeydown':'mascara(this,icpf)'}),
             'endereco': forms.TextInput(attrs={'placeholder':''}),
         }        
@@ -27,7 +27,7 @@ class Form_Artista(ModelForm):
         widgets = {
             # 'nome_artistico': forms.EmailInput(attrs={'placeholder':''}),
             # 'cpf': forms.TextInput(attrs={'onkeydown': 'mascara(this,icpf)'}),                        
-            
+            'area': forms.CheckboxSelectMultiple(),
             'descricao': forms.TextInput(attrs={'placeholder':''}),                        
             'pis': forms.TextInput(attrs={'placeholder':''}),                        
             'banco': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),                      
@@ -200,7 +200,7 @@ class Form_ArtistaEmpresa(ModelForm):
             'file_pis',
             'banco',
             'agencia',
-            'n_conta',
+            'n_coareanta',
             'comprovante_de_cc',
             'declaracao_n_viculo',
             'comprovante_iss',

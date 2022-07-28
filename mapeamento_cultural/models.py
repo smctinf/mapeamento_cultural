@@ -47,7 +47,7 @@ class Area_Atuacao(models.Model):
 class Artista(models.Model):
     
     fazedor_cultura=models.CharField(max_length=100, verbose_name='Nome artístico', blank=True, null=True)    
-    area=models.ManyToManyField(Area_Atuacao, verbose_name='Principal área de atuação', blank=True, null=True)
+    area=models.ManyToManyField(Area_Atuacao, verbose_name='Área(s) de atuação', blank=True, null=True)
     
     # email=models.EmailField()
     telefone=models.CharField(max_length=11)
@@ -123,8 +123,7 @@ class InformacoesExtras(models.Model):
         ('2', 'CNPJ'),                
     ]    
     
-    id_artista=models.CharField(max_length=20, blank=True)    
-    area=models.ManyToManyField(Area_Atuacao, blank=True, verbose_name='Áreas culturais de atuação')
+    id_artista=models.CharField(max_length=20, blank=True)        
     publico=models.ManyToManyField(Publico_Atuacao, blank=True, verbose_name='Públicos que participam das ações')
     enquadramento=models.ManyToManyField(Enquadramento_Atuacao, blank=True, verbose_name='Enquadramento da instituição/entidade/coletivo/grupo')
     forma_atuacao=models.ManyToManyField(Forma_insercao_Atuacao, blank=True, verbose_name='Formar de inserção da atividade artístico-cultural')

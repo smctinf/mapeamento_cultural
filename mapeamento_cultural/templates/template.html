@@ -58,6 +58,11 @@
                         </ul>
                       </li>  -->
                       <li class="nav-item">
+                        <a class="nav-link" href="https://oficinaescoladeartes.novafriburgo.rj.gov.br/">
+                          Oficina Escola de Artes
+                        </a>
+                      </li>
+                      <li class="nav-item">                        
                         <a class="nav-link {% block mapeamento %}{% endblock %}" href="{% url 'mapeamento' %}">
                           Mapeamento Cultural
                         </a>
@@ -73,10 +78,13 @@
                           {{ request.user.first_name }}
                         </button>
                         <ul id="menu-perfil" class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                          {% if request.user.is_staff %}
+                          <li><a class="dropdown-item py-2 text-center" href="/admin/">Administração</a></li>
+                          {% endif %}
                           <li><a class="dropdown-item py-2 text-center" href="{% url 'acc_meu_perfil' %}">Meu perfil</a></li>
                           <!-- <li><a class="dropdown-item py-2" href="{% url 'acc_meus_cadastros' %}">Meu perfil</a></li> -->
                           <li>
-                            <a class="dropdown-item text-center py-2" href="/admin/logout">
+                            <a class="dropdown-item text-center py-2" href="/logout">
                               <i class="fa-solid fa-arrow-right-from-bracket me-2"></i></i> Logout                            
                             </a>
                           </li>

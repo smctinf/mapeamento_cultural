@@ -17,9 +17,7 @@
         <p style="text-align: justify; text-indent: 30px;">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula risus a tristique bibendum. Aenean pretium hendrerit fringilla.
         </p>
-    </div>    
-</div>
-<div class="row">
+    </div>
     <div id="divForm" class="col d-flex flex-column pt-5">
         {% if messages %}
         <ul class="messages mb-4">
@@ -54,7 +52,9 @@
         url="/mapeamento-cultural/get_form_"+form
         console.log(url)
         $.get(url, function( data ) {
-            $( "#divForm" ).html( data );                      
+            $( "#divForm" ).html( data );  
+            $( "#divForm" ).removeClass('col')          
+            $( "#divForm" ).addClass('col-8')                      
         });
     }
 </script>
