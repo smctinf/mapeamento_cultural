@@ -28,9 +28,19 @@
             {% endfor %}
         </ul>
         {% endif %}
+
+        {% if artista %}
+        
+        <button class="btn bg-main text-white mx-auto mt-auto disabled" disabled style="width: 300px;">
+            Cadastro por CPF já realizado
+        </button>
+
+        {% else %}
         <button onclick="get_form('cpf')" class="btn bg-main text-white mx-auto mt-auto" style="width: 300px;">
             Contratação por CPF
         </button>
+        {% endif %}
+
         <button onclick="get_form('cnpj')" class="btn bg-main text-white mx-auto mt-3 mb-auto" style="width: 300px;">
             Contratação por CNPJ
         </button>

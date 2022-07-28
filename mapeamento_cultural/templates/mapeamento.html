@@ -25,6 +25,11 @@
                         <a href="{% url 'cad_cult_etapa1_artista' %}" class="btn btn-primary mx-auto mt-4 px-5 py-3">
                             CADASTRAR
                         </a>
+                        {% if artista %}
+                        <a href="{% url 'acc_meus_cadastros_map' %}" class="btn btn-outline-secondary mx-auto mt-4 px-5 py-3">
+                            VISUALIZAR CADASTROS
+                        </a>
+                        {% endif %}
                         </div>                                            
                 </div>
             </div>
