@@ -24,232 +24,269 @@ from mapeamento_cultural.models import Artista, InformacoesExtras, TiposContrata
 from qr_code.qrcode.utils import QRCodeOptions
 
 # Create your views here.
+
+
 def index(request):
     return render(request, 'index.html')
 
+
 def mapeamento_cultural(request):
+    context = {
+        "artista": False
+    }
+
     try:
-        artista=Artista.objects.get(user_responsavel=request.user)
+        artista = Artista.objects.get(user_responsavel=request.user)
         print(artista)
     except:
-        artista=None
+        artista = None
         print(artista)
     if artista:
-        return redirect('acc_meus_cadastros_map')
-    return render(request, 'mapeamento.html')
+        context = {
+            "artista": True
+        }
+
+    return render(request, 'mapeamento.html', context)
+
 
 def lei866(request):
     return render(request, 'lei866.html')
 
+
 def cadastro_usuario(request):
-    form=Form_Usuario()
-    senhas=False
-    nome=''
-    if request.method=='POST':
-        nome=request.POST['nome']
-        form=Form_Usuario(request.POST)
-        if form.is_valid():            
-            if len(request.POST['password'])<8:
-                senhas=[True, 'Sua senha deve ter pelo menos 8 digitos.']
-            elif request.POST['password']!=request.POST['password2']:
-                senhas=[True, ' As senhas abaixo não coincidem.']
+    form = Form_Usuario()
+    senhas = False
+    nome = ''
+    if request.method == 'POST':
+        nome = request.POST['nome']
+        form = Form_Usuario(request.POST)
+        if form.is_valid():
+            if len(request.POST['password']) < 8:
+                senhas = [True, 'Sua senha deve ter pelo menos 8 digitos.']
+            elif request.POST['password'] != request.POST['password2']:
+                senhas = [True, ' As senhas abaixo não coincidem.']
             else:
                 try:
-                    user = User.objects.create_user(username=request.POST['email'], email=request.POST['email'], password=request.POST['password'])                                        
-                    user.first_name = request.POST['nome'] 
-                    print(request.POST['password'])                   
+                    user = User.objects.create_user(
+                        username=request.POST['email'], email=request.POST['email'], password=request.POST['password'])
+                    user.first_name = request.POST['nome']
+                    print(request.POST['password'])
                     user.set_password(request.POST['password'])
                     user.save()
-                    usuario=form.save()
-                    usuario.user=user
+                    usuario = form.save()
+                    usuario.user = user
                     usuario.save()
-                    messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Usuário cadastrado com sucesso</b>")                
+                    messages.add_message(
+                        request, messages.SUCCESS, "<b class='text-success'>Usuário cadastrado com sucesso</b>")
                     return redirect('login')
-                except Exception as e:                    
+                except Exception as e:
                     print(e)
-                
+
         else:
             print(form.errors)
-    context={
+    context = {
         'form': form,
         'error_senha': senhas,
         'nome': nome
     }
     return render(request, 'admin/cadastrar-se.html', context)
 
+
 @login_required
 def cadastro_etapa_1(request):
     return render(request, 'cadastro_cultural/etapa_1.html')
 
+
 @login_required
-def cadastro_etapa_1_artista(request): 
+def cadastro_etapa_1_artista(request):
+    context = {
+    "artista": False
+    }
+
     try:
-        artista=Artista.objects.get(user_responsavel=request.user)
+        artista = Artista.objects.get(user_responsavel=request.user)
         print(artista)
     except:
-        artista=None
+        artista = None
         print(artista)
     if artista:
-        return redirect('acc_meus_cadastros_map') 
-    if request.method=='POST':        
-        forms={
+        context = {
+            "artista": True
+        }
+
+    if request.method == 'POST':
+        forms = {
             '2': Form_ArtistaCNPJ,
             '1': Form_Artista
         }
-        key=request.POST['tipo_form']        
-        form=forms[key](request.POST, request.FILES)
+        key = request.POST['tipo_form']
+        form = forms[key](request.POST, request.FILES)
         if form.is_valid():
             try:
-                obj=form.save()
-                obj.tipo_contratacao=TiposContratação.objects.get(id=key)
-                obj.user_responsavel=request.user
-                obj.save()                
-                messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso.</b>")                
+                obj = form.save()
+                obj.tipo_contratacao = TiposContratação.objects.get(id=key)
+                obj.user_responsavel = request.user
+                obj.save()
+                messages.add_message(
+                    request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso.</b>")
                 return redirect('cad_cult_etapa2')
             except Exception as E:
                 print(E)
                 messages.add_message(request, messages.ERROR, form.errors)
         else:
             messages.add_message(request, messages.ERROR, form.errors)
-    context={}
     return render(request, 'cadastro_cultural/etapa_1_artista.html', context)
 
+
 @login_required
-def editar_artista_b(request):  
-    dados=Artista.objects.get(user_responsavel=request.user)
-    if dados.tipo_contratacao.id==1:
-        form=Form_Artista(instance=dados)
+def editar_artista_b(request):
+    dados = Artista.objects.get(user_responsavel=request.user)
+    if dados.tipo_contratacao.id == 1:
+        form = Form_Artista(instance=dados)
     else:
-        form=Form_ArtistaCNPJ(instance=dados)
-    if request.method=='POST':      
-        if dados.tipo_contratacao.id==1:          
-            form=Form_Artista(request.POST, request.FILES, instance=dados)
+        form = Form_ArtistaCNPJ(instance=dados)
+    if request.method == 'POST':
+        if dados.tipo_contratacao.id == 1:
+            form = Form_Artista(request.POST, request.FILES, instance=dados)
         else:
-            form=Form_ArtistaCNPJ(request.POST, request.FILES, instance=dados)
+            form = Form_ArtistaCNPJ(
+                request.POST, request.FILES, instance=dados)
         if form.is_valid():
             try:
-                obj=form.save()                
-                messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso.</b>")                
+                obj = form.save()
+                messages.add_message(
+                    request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso.</b>")
                 return redirect('acc_meus_cadastros_map')
             except Exception as E:
                 print(E)
                 messages.add_message(request, messages.ERROR, form.errors)
         else:
             messages.add_message(request, messages.ERROR, form.errors)
-    context={
+    context = {
         'form': form,
     }
     return render(request, 'cadastro_cultural/etapa_1_editar.html', context)
 
+
 @login_required
-def editar_artista_c(request):  
-    dados=Artista.objects.get(user_responsavel=request.user)
-    form=Form_Artista2(instance=dados)
-    if request.method=='POST':                
-        form=Form_Artista2(request.POST, request.FILES, instance=dados)
+def editar_artista_c(request):
+    dados = Artista.objects.get(user_responsavel=request.user)
+    form = Form_Artista2(instance=dados)
+    if request.method == 'POST':
+        form = Form_Artista2(request.POST, request.FILES, instance=dados)
         if form.is_valid():
             try:
-                dados=form.save()                
-                messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro alterado com sucesso.</b>")                
+                dados = form.save()
+                messages.add_message(
+                    request, messages.SUCCESS, "<b class='text-success'>Cadastro alterado com sucesso.</b>")
                 return redirect('acc_meus_cadastros_map')
             except Exception as E:
                 print(E)
                 messages.add_message(request, messages.ERROR, form.errors)
         else:
             print(form.errors)
-            form=Form_Artista2(instance=dados)
+            form = Form_Artista2(instance=dados)
             print('error2')
             messages.add_message(request, messages.ERROR, form.errors)
             print('error3')
-    context={
+    context = {
         'form': form,
     }
     return render(request, 'cadastro_cultural/etapa_3_editar.html', context)
 
+
 @login_required
-def cadastro_etapa_1_empresa(request):  
-    form=Form_ArtistaEmpresa()
-    if request.method=='POST':        
-        form=Form_ArtistaEmpresa(request.POST, request.FILES)
+def cadastro_etapa_1_empresa(request):
+    form = Form_ArtistaEmpresa()
+    if request.method == 'POST':
+        form = Form_ArtistaEmpresa(request.POST, request.FILES)
         if form.is_valid():
             try:
-                obj=form.save()
-                obj.tipo_contratacao=TiposContratação.objects.get(nome='Contratação por CNPJ_E')
-                obj.user_responsavel=request.user
+                obj = form.save()
+                obj.tipo_contratacao = TiposContratação.objects.get(
+                    nome='Contratação por CNPJ_E')
+                obj.user_responsavel = request.user
                 obj.save()
-                messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso. <br>Aguarde nosso email validando seus dados.</b>")
-                return redirect('cad_cult_etapa2', tipo=2, id=obj.id )
+                messages.add_message(
+                    request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso. <br>Aguarde nosso email validando seus dados.</b>")
+                return redirect('cad_cult_etapa2', tipo=2, id=obj.id)
             except Exception as E:
                 print(E)
                 messages.add_message(request, messages.ERROR, form.errors)
         else:
             messages.add_message(request, messages.ERROR, form.errors)
-    context={
+    context = {
         'form': form
     }
     return render(request, 'cadastro_cultural/etapa_1_empresario.html', context)
 
+
 @login_required
 def get_form_cpf(request):
-    context={
+    context = {
         'form': Form_Artista(),
-        'tipo_form':1
+        'tipo_form': 1
     }
     return render(request, 'cadastro_cultural/form.html', context)
+
 
 @login_required
 def get_form_cnpj(request):
-    context={
+    context = {
         'form': Form_ArtistaCNPJ(),
-        'tipo_form':2
+        'tipo_form': 2
     }
     return render(request, 'cadastro_cultural/form.html', context)
 
+
 @login_required
 def meus_cadastros(request):
-    context={
+    context = {
         'cadastros_map_cultural_cpf': Artista.objects.filter(user_responsavel=request.user),
         'cadastros_map_cultural_cnpj': Artista.objects.filter(user_responsavel=request.user)
     }
     return render(request, 'meus_cadastros.html', context)
 
+
 @login_required
 def meu_perfil(request):
-    context={
+    context = {
         'usuario': Usuario.objects.get(user=request.user),
     }
     return render(request, 'meu_perfil.html', context)
 
+
 @login_required
 def cadastro_map_cultural_cpf(request):
 
-    artista=Artista.objects.get(user_responsavel=request.user)
-    tipo=artista.tipo_contratacao.nome.split()[-1]
+    artista = Artista.objects.get(user_responsavel=request.user)
+    tipo = artista.tipo_contratacao.nome.split()[-1]
     try:
-        info=InformacoesExtras.objects.get(id_artista=artista.id)    
-        complemento=True
+        info = InformacoesExtras.objects.get(id_artista=artista.id)
+        complemento = True
     except:
-        info=[]
-        complemento=False
-    context={
-        'cadastro': artista,       
+        info = []
+        complemento = False
+    context = {
+        'cadastro': artista,
         'info': info,
         'complemento': complemento,
         'usuario': Usuario.objects.get(user=request.user),
     }
     return render(request, 'meus_cadastros_detalhes_cpf.html', context)
 
+
 @login_required
 def cadastro_map_cultural_cnpj(request, id):
-    artista=Artista.objects.get(id=id)
-    tipo=artista.tipo_contratacao.nome.split()[-1]
+    artista = Artista.objects.get(id=id)
+    tipo = artista.tipo_contratacao.nome.split()[-1]
     try:
-        info=InformacoesExtras.objects.get(tipo=tipo.lower(), id_artista=id)    
+        info = InformacoesExtras.objects.get(tipo=tipo.lower(), id_artista=id)
     except:
-        info=[]
-    context={
-        'cadastro': artista,       
-        'info': info 
+        info = []
+    context = {
+        'cadastro': artista,
+        'info': info
     }
     return render(request, 'meus_cadastros_detalhes_cnpj.html', context)
 
@@ -261,8 +298,9 @@ def logout(request):
     else:
         return redirect('/login')
 
+
 def login_view(request):
-    context={}
+    context = {}
     if request.user.is_authenticated:
         return redirect('/')
     if request.method == 'POST':
@@ -270,55 +308,58 @@ def login_view(request):
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)            
+            login(request, user)
             if "next" in request.GET:
                 return redirect(request.GET.get('next'))
             return redirect('/')
-        else:                
-            context={
-                'error': True,    
+        else:
+            context = {
+                'error': True,
             }
-    
+
     return render(request, 'admin/login.html', context)
+
 
 @login_required
 def cadastro_etapa_2(request):
-    id=Artista.objects.get(user_responsavel=request.user).id
-    form=Form_InfoExtra(initial={'id_artista': id})
-    if request.method=='POST':
-        form=Form_InfoExtra(request.POST)
+    id = Artista.objects.get(user_responsavel=request.user).id
+    form = Form_InfoExtra(initial={'id_artista': id})
+    if request.method == 'POST':
+        form = Form_InfoExtra(request.POST)
         if form.is_valid():
-            obj=form.save()
-            obj.id_artista=id
-            obj.complete=True
+            obj = form.save()
+            obj.id_artista = id
+            obj.complete = True
             obj.save()
             return redirect('acc_meus_cadastros_map')
-    context={
+    context = {
         'form': form,
     }
     return render(request, 'cadastro_cultural/etapa_2.html', context)
 
+
 @login_required
 def admin_cadastros(request):
-    context={
+    context = {
         'cadastros_map_cultural_cpf': Artista.objects.all(),
         'cadastros_map_cultural_cnpj': Artista.objects.all()
     }
     return render(request, 'cadastros.html', context)
 
+
 @login_required
 def cadastro_etapa_3(request):
-    instance=Artista.objects.get(user_responsavel=request.user)
-    form=Form_Artista2(instance=instance)
-    if request.method=='POST':
-        form=Form_Artista2(request.POST, request.FILES, instance=instance)
+    instance = Artista.objects.get(user_responsavel=request.user)
+    form = Form_Artista2(instance=instance)
+    if request.method == 'POST':
+        form = Form_Artista2(request.POST, request.FILES, instance=instance)
         if form.is_valid():
-            instance=form.save()
-            instance.cadastro_completo=True
+            instance = form.save()
+            instance.cadastro_completo = True
             form.save()
 
             return redirect('acc_meus_cadastros_map')
-    context={
+    context = {
         'form': form,
     }
     return render(request, 'cadastro_cultural/etapa_3.html', context)
@@ -326,10 +367,10 @@ def cadastro_etapa_3(request):
 
 @login_required
 def cadastro_anexo(request):
-    instance=Artista.objects.get(user_responsavel=request.user)
-    if instance.tipo_contratacao.id==1:
-        form=Form_Anexo_Artista_CPF(instance=instance)
-        anexos=[
+    instance = Artista.objects.get(user_responsavel=request.user)
+    if instance.tipo_contratacao.id == 1:
+        form = Form_Anexo_Artista_CPF(instance=instance)
+        anexos = [
             'file_cpf',
             'file_comprovante_residencia',
             'file_pis',
@@ -339,13 +380,13 @@ def cadastro_anexo(request):
             'comprovante_recibos',
         ]
     else:
-        form=Form_Anexo_Artista_CNPJ(instance=instance)
-        anexos=[
+        form = Form_Anexo_Artista_CNPJ(instance=instance)
+        anexos = [
             'prova_inscricao_PJ_nacional',
             'file_comprovante_residencia',
             'file_pis',
             'comprovante_de_cc',
-            'declaracao_n_viculo',            
+            'declaracao_n_viculo',
             'comprovante_iss',
             'comprovante_recibos',
             'certidao_negativa_debitos_relativos',
@@ -356,81 +397,88 @@ def cadastro_anexo(request):
             'certidao_negativa_debitos_trabalhistas',
             'documento_empresario_exclusivo'
         ]
-    lista=[]
+    lista = []
 
-    if request.method=='POST':
-        form=Form_Anexo_Artista_CPF(request.POST, request.FILES, instance=instance)
+    if request.method == 'POST':
+        form = Form_Anexo_Artista_CPF(
+            request.POST, request.FILES, instance=instance)
         if form.is_valid():
-            instance=form.save()
-            form=Form_Anexo_Artista_CPF(instance=instance)
+            instance = form.save()
+            form = Form_Anexo_Artista_CPF(instance=instance)
             for a in anexos:
-                lista.append([a, instance.__dict__[a].name!=''])
-            context={
+                lista.append([a, instance.__dict__[a].name != ''])
+            context = {
                 'form': form,
                 'lista': lista,
                 'success': ['bg-success', 'Anexo enviado com sucesso!']
             }
             return render(request, 'cadastro_cultural/anexos.html', context)
     for a in anexos:
-        lista.append([a, instance.__dict__[a].name!=''])
-    context={
+        lista.append([a, instance.__dict__[a].name != ''])
+    context = {
         'form': form,
         'lista': lista,
         'success': ['', '']
     }
     return render(request, 'cadastro_cultural/anexos.html', context)
 
+
 @login_required
 def editar_etapa_2(request):
-    artista=Artista.objects.get(user_responsavel=request.user)
-    instance=InformacoesExtras.objects.get(id_artista=artista.id)
-    form=Form_InfoExtra(instance=instance)
-    if request.method=='POST':
-        form=Form_InfoExtra(request.POST, instance=instance)
+    artista = Artista.objects.get(user_responsavel=request.user)
+    instance = InformacoesExtras.objects.get(id_artista=artista.id)
+    form = Form_InfoExtra(instance=instance)
+    if request.method == 'POST':
+        form = Form_InfoExtra(request.POST, instance=instance)
         if form.is_valid():
-            obj=form.save()                        
+            obj = form.save()
             return redirect('acc_meus_cadastros_map')
-    context={
-        'form': form,        
+    context = {
+        'form': form,
     }
     return render(request, 'cadastro_cultural/etapa_2.html', context)
 
+
 @login_required
 def change_password(request):
-    status=['', '']
+    status = ['', '']
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Importante!
-            status=['bg-success text-white py-1 text-center','Senha alterada.']   
-            form = PasswordChangeForm(request.user)         
+            status = ['bg-success text-white py-1 text-center',
+                      'Senha alterada.']
+            form = PasswordChangeForm(request.user)
         else:
-            status=['bg-danger text-white','Você deve cumprir todos os requisitos para alterar sua senha.']
+            status = ['bg-danger text-white',
+                      'Você deve cumprir todos os requisitos para alterar sua senha.']
     else:
         form = PasswordChangeForm(request.user)
-    context={ 
+    context = {
         'form': form,
         'status': status
-         }
+    }
     return render(request, 'change_password.html', context)
+
 
 @login_required
 def alterar_meus_dados(request):
-    usuario=Usuario.objects.get(user=request.user)
-    context={
+    usuario = Usuario.objects.get(user=request.user)
+    context = {
         'usuario': usuario,
         'form': Form_Usuario(instance=usuario),
     }
-    if request.method=='POST':
-        form=Form_Usuario(request.POST, instance=usuario)
+    if request.method == 'POST':
+        form = Form_Usuario(request.POST, instance=usuario)
         if form.is_valid():
-            form.save()            
-            messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Dados alterado com sucesso.</b>")                
-            usuario=Usuario.objects.get(user=request.user)
-            context={
+            form.save()
+            messages.add_message(
+                request, messages.SUCCESS, "<b class='text-success'>Dados alterado com sucesso.</b>")
+            usuario = Usuario.objects.get(user=request.user)
+            context = {
                 'usuario': usuario,
                 'form': Form_Usuario(instance=usuario),
             }
-            
+
     return render(request, 'alterar_meus_dados.html', context)
