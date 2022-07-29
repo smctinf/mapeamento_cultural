@@ -65,7 +65,6 @@ def cadastro_usuario(request):
                     user = User.objects.create_user(
                         username=request.POST['email'], email=request.POST['email'], password=request.POST['password'])
                     user.first_name = request.POST['nome']
-                    print(request.POST['password'])
                     user.set_password(request.POST['password'])
                     user.save()
                     usuario = form.save()
@@ -94,10 +93,8 @@ def cadastro_etapa_1(request):
 
     try:
         artista = Artista.objects.get(user_responsavel=request.user)
-        print(artista)
     except:
         artista = None
-        print(artista)
     if artista:
         context = {
             "artista": True
@@ -118,7 +115,7 @@ def cadastro_etapa_1(request):
                 obj.save()
                 messages.add_message(
                     request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso.</b>")
-                return redirect('cad_cult_etapa2')
+                return redirect('acc_meus_cadastros')
             except Exception as E:
                 print(E)
                 messages.add_message(request, messages.ERROR, form.errors)
@@ -143,7 +140,8 @@ def cadastro_cnpj(request):
                 obj.save()
                 messages.add_message(
                     request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso.</b>")
-                return redirect('cad_cult_etapa2')
+                print("ta pronto para redirecionar")
+                return redirect('acc_meus_cadastros')
             except Exception as E:
                 print(E)
                 messages.add_message(request, messages.ERROR, form.errors)
@@ -281,6 +279,7 @@ def get_form_cnpj(request):
 
 @login_required
 def meus_cadastros(request):
+    print(request.user)
     cad_cpf=Artista.objects.filter(user_responsavel=request.user, tipo_contratacao__nome='Contratação por CPF')
     cad_cnpj=Artista.objects.filter(user_responsavel=request.user, tipo_contratacao__nome='Contratação por CNPJ')
     if len(cad_cpf)==0:
@@ -325,6 +324,7 @@ def cadastro_map_cultural_cpf(request, id):
 
 @login_required
 def cadastro_map_cultural_cnpj(request, id):
+    print("ESTOU NO DE CNPJ")
     artista = Artista.objects.get(id=id)
     tipo = artista.tipo_contratacao.nome.split()[-1]
     try:

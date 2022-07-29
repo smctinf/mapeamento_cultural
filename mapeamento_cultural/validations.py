@@ -17,6 +17,7 @@ error_messages = {
 }
 def validate_TELEFONE(value):
     telefone = [int(char) for char in value if char.isdigit()]
+    print(telefone)
     if len(telefone)>11 or len(telefone)<10:
         if len(telefone)!=0:            
             raise ValidationError(error_messages['tel_max_digits'])
@@ -25,7 +26,7 @@ def validate_TELEFONE(value):
         raise ValidationError(error_messages['tel_celular_invalido'])
     if telefone in (c * 10 for c in "1234567890"):
         raise ValidationError(error_messages['tel_telefone_invalido'])
-    
+    print(telefone)
     return telefone
 
 def validate_CNPJ(value):
