@@ -27,7 +27,11 @@
                           <a href="{% url 'cad_cult_anexo' %}" class="btn btn-dark  ms-auto">
                             <i class="fa-solid fa-paperclip me-2"></i>
                             Anexos
-                          </a>                       
+                          </a>            
+                          <a href="{% url 'acc_meus_cadastros' %}" class="btn btn-light ms-2" style="border: 1px solid black;">
+                            <i class="fa-solid fa-arrow-rotate-left me-2"></i>
+                            Voltar
+                          </a>           
                         </h3>
                         <div class="py-4 px-5">
                             <table class="table">                                
@@ -37,7 +41,7 @@
                                       <div class="row py-0">
                                         <div class="col d-flex py-0">
                                           <h5 class="text-uppercase my-auto pt-2 px-3">Dados Básicos</h5>
-                                          <a href="{% url 'acc_editar_map_b' %}" class="btn btn-light ms-auto me-3 mt-2">
+                                          <a href="{% url 'acc_editar_map_b' cadastro.id %}" class="btn btn-light ms-auto me-3 mt-2">
                                             <i class="fa-solid fa-pen-to-square me-2"></i>
                                             Editar
                                           </a>
@@ -78,10 +82,7 @@
                                       {% endif %}
                                     </td>
                                     <td colspan="2">
-                                      <b>Principal área de atuação</b><br>
-                                      {% for i in cadastro.area.all %}
-                                      {{i}} <br>
-                                      {% endfor %}
+                                                                     
                                     </td>
                                   </tr>                                    
                                   <tr>    
@@ -104,77 +105,16 @@
                                       {{cadastro.dt_inclusao|date:"SHORT_DATE_FORMAT"}}
                                     </td>                   
                                   </tr> 
-    
-                                </tbody>
-                              </table>  
-                              {% if cadastro.cadastro_completo %}
-                              <table class="table">                                
-                                <tbody>   
                                   <tr>
-                                    <td colspan='4' class="bg-dark text-white">
-                                      <div class="row py-0">
-                                        <div class="col d-flex py-0">
-                                          <h5 class="text-uppercase my-auto pt-2 px-3">Dados para contratação</h5>
-                                          <a href="{% url 'acc_editar_map_c' %}" class="btn btn-light ms-auto me-3 mt-2">
-                                            <i class="fa-solid fa-pen-to-square me-2"></i>
-                                            Editar
-                                          </a>
-                                        </div>
-                                      </div>
+                                    <td colspan="4">
+                                      <b>Área(s) de atuação</b><br>
+                                      {% for i in cadastro.area.all %}
+                                      {{i}} <br>
+                                      {% endfor %}
                                     </td>
-                                  </tr>                                                               
-                                  <tr>             
-                                    <tr>    
-                                      <td colspan="4">
-                                        <b>Descrição da atividade exercida:</b><br>
-                                        {{cadastro.descricao}}
-                                      </td>                                                                                                                                     
-                                    </tr>                                                         
-                                    <td scope="row">
-                                      <b>PIS:</b><br>
-                                      {% if cadastro.pis %}
-                                      {{cadastro.pis}}
-                                      {% else %}
-                                      <i>Complete seu cadastro</i>
-                                      {% endif %}
-                                    </td>
-                                    <td>
-                                      <b>Banco</b><br>
-                                      {% if cadastro.banco %}
-                                      {{cadastro.banco}}   
-                                      {% else %}
-                                      <i>Complete seu cadastro</i>
-                                      {% endif %}                                   
-                                    </td>                                    
-                                    <td>
-                                      <b>Agência:</b><br> 
-                                      {% if cadastro.agencia %}                                     
-                                      {{cadastro.agencia}}
-                                      {% else %}
-                                      <i>Complete seu cadastro</i>
-                                      {% endif %}                                      
-                                    </td>
-                                    <td>
-                                      <b>Conta:</b><br>
-                                      {% if cadastro.n_conta %}
-                                      {{cadastro.n_conta}}
-                                      {% else %}
-                                      <i>Complete seu cadastro</i>
-                                      {% endif %}
-                                    </td>                                    
-                                  </tr>                                                                      
-                                  </tbody>
-                                  </table>
-                              {% else %}
-                              <div class="row">
-                                <div class="col d-flex pt-5">
-                                  <a href="{% url 'cad_cult_etapa3' %}" class="btn btn-primary mx-auto" style="width: 400px;">
-                                    <i class="fa-solid fa-clipboard-list me-2"></i>
-                                    Cadastrar dados para contratação
-                                  </a>
-                                </div>
-                              </div>
-                              {% endif %}
+                                  </tr>
+                                </tbody>
+                              </table>                                
                               {% if complemento %}
                               <table class="table mt-5">                                
                                 <tbody>   
@@ -183,7 +123,7 @@
                                       <div class="row py-0">
                                         <div class="col d-flex py-0">
                                           <h5 class="text-uppercase my-auto pt-2 px-3">Dados complementares</h5>
-                                          <a href="{% url 'acc_editar_map_cmp' %}" class="btn btn-light ms-auto me-3 mt-2">
+                                          <a href="{% url 'acc_editar_map_cmp' cadastro.id %}" class="btn btn-light ms-auto me-3 mt-2">
                                             <i class="fa-solid fa-pen-to-square me-2"></i>
                                             Editar
                                           </a>
@@ -196,7 +136,13 @@
                                       <b>Status da atividade:</b><br>
                                       <span>{{info.get_status_display}}</span>
                                     </td>
-                                  </tr>                                                             
+                                  </tr>   
+                                  <tr>    
+                                    <td colspan="4">
+                                      <b>Descrição da atividade exercida:</b><br>
+                                      {{info.descricao}}
+                                    </td>                                                                                                                                     
+                                  </tr>                                                               
                                   <tr>   
                                     <td>
                                       <b>Quantidade de pessoas que fazem parte da instituição:</b> <br>
@@ -278,13 +224,75 @@
                               
                               <div class="row">
                                 <div class="col d-flex pt-5">
-                                  <a href="{% url 'cad_cult_etapa2' %}" class="btn btn-primary mx-auto" style="width: 400px;">
+                                  <a href="{% url 'cad_cult_etapa2' cadastro.id %}" class="btn btn-primary mx-auto" style="width: 400px;">
                                     <i class="fa-solid fa-server me-2"></i>
                                     Cadastrar dados complementares
                                   </a>
                                 </div>
                               </div>
-                                  {% endif %}
+                              {% endif %}
+                              {% if cadastro.cadastro_completo %}
+                              <table class="table">                                
+                                <tbody>   
+                                  <tr>
+                                    <td colspan='4' class="bg-dark text-white">
+                                      <div class="row py-0">
+                                        <div class="col d-flex py-0">
+                                          <h5 class="text-uppercase my-auto pt-2 px-3">Dados para contratação</h5>
+                                          <a href="{% url 'acc_editar_map_c' cadastro.id %}" class="btn btn-light ms-auto me-3 mt-2">
+                                            <i class="fa-solid fa-pen-to-square me-2"></i>
+                                            Editar
+                                          </a>
+                                        </div>
+                                      </div>
+                                    </td>
+                                  </tr>                                                               
+                                  <tr>                                                                                                     
+                                    <td scope="row">
+                                      <b>PIS:</b><br>
+                                      {% if cadastro.pis %}
+                                      {{cadastro.pis}}
+                                      {% else %}
+                                      <i>Complete seu cadastro</i>
+                                      {% endif %}
+                                    </td>
+                                    <td>
+                                      <b>Banco</b><br>
+                                      {% if cadastro.banco %}
+                                      {{cadastro.banco}}   
+                                      {% else %}
+                                      <i>Complete seu cadastro</i>
+                                      {% endif %}                                   
+                                    </td>                                    
+                                    <td>
+                                      <b>Agência:</b><br> 
+                                      {% if cadastro.agencia %}                                     
+                                      {{cadastro.agencia}}
+                                      {% else %}
+                                      <i>Complete seu cadastro</i>
+                                      {% endif %}                                      
+                                    </td>
+                                    <td>
+                                      <b>Conta:</b><br>
+                                      {% if cadastro.n_conta %}
+                                      {{cadastro.n_conta}}
+                                      {% else %}
+                                      <i>Complete seu cadastro</i>
+                                      {% endif %}
+                                    </td>                                    
+                                  </tr>                                                                      
+                                  </tbody>
+                                  </table>
+                              {% else %}
+                              <div class="row">
+                                <div class="col d-flex pt-5">
+                                  <a href="{% url 'cad_cult_etapa3' cadastro.id %}" class="btn btn-primary mx-auto" style="width: 400px;">
+                                    <i class="fa-solid fa-clipboard-list me-2"></i>
+                                    Cadastrar dados para contratação
+                                  </a>
+                                </div>
+                              </div>
+                              {% endif %}
                               <style>
                                 table img{
                                   max-height: 150px;
@@ -299,17 +307,6 @@
                         </div>
                       </div>
                 </div>
-                <!-- <div class="col  mx-3">
-                    <div class="mx-5 mt-5 d-flex flex-column h-100">
-                        <p class="text-justify text-dark" style="text-indent: 20px;">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula risus a tristique bibendum. Aenean pretium hendrerit fringilla. Nunc convallis sollicitudin lorem et fringilla. Nunc bibendum urna in odio mattis, ac malesuada justo mattis. Donec lacinia, sapien sed molestie ultrices, est velit faucibus diam, sit amet tristique ex felis vitae arcu.
-                            <a href="{% url 'lei866' %}" target="_blank" class="ms-3">Lei 866/93 art. 25</a>
-                        </p>
-                        <a href="{% url 'cad_cult_etapa1' %}" class="btn btn-primary mx-auto mt-4 px-5 py-3">
-                            CADASTRAR
-                        </a>
-                        </div>                                            
-                </div> -->
             </div>
         </div>        
     </div>

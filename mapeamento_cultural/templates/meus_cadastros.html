@@ -10,28 +10,40 @@
     <div class="col d-flex">
         <div class="container my-5 pb-5">
             <h1 class="display-4 d-flex mt-3 p-4 mb-3 text-center" style="background-color: #547DCD;">
-                <span class="my-auto mx-auto">MEUS CADASTROS</span>
+                <span class="my-auto mx-auto">MAPEAMENTO CULTURAL</span>
             </h1>
             <div class="row">
                 <div class="col text-dark">                                        
-                      <h4 class="px-3">Bem vindo, {{request.user.first_name}}!</h4>
-                      <div class="px-3 mt-5">
-                        <h3 class="px-5 text-uppercase">No Mapeamento Cultural:</h3>
+                    <h4 class="px-3">Bem vindo, {{request.user.first_name}}!</h4>
+                    <div class="px-3 mt-5">
+                        <div class="row">
+                            <div class="col d-flex">
+                                <h3 style="display: inline;" class="px-5 text-uppercase">MEUS CADASTROS</h3>
+                                <div class="d-flex ms-auto">     
+                                    {% if cpf %}                               
+                                    <a href="{% url 'cad_artista_cpf' %}" class="btn bg-main text-white mx-auto mb-auto" style="width: 200px;">
+                                        Cadastrar CPF
+                                    </a>                                
+                                    {% endif %}
+                                    <a href="{% url 'cad_artista_cnpj' %}" class="ms-1 btn bg-main text-white mx-auto mb-auto" style="width: 200px;">
+                                        Cadastrar CNPJ
+                                    </a>                                                                        
+                                </div>
+                            </div>
+                        </div>
                         <div class="py-4 px-5">
                             <table class="table">
                                 <thead>
-                                  <tr>
-                                    <th scope="col">id</th>
+                                  <tr>      
                                     <th scope="col">Tipo</th>                                    
-                                    <th scope="col">Nome artístico do envolvido no contrato</th>
+                                    <th scope="col">Nome artístico/fantasia</th>
                                     <th style="width: 40px;">
                                     </th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                     {% for i in cadastros_map_cultural_cpf %}
-                                  <tr>
-                                    <th scope="row">{{i.id}}</th>
+                                  <tr>         
                                     <td>{{i.tipo_contratacao}}</td>                                    
                                     <td>
                                         {% if i.fazedor_cultura %}
@@ -47,22 +59,31 @@
                                     </td>
                                   </tr>
                                  {% endfor %}
-                                </tbody>
-                              </table>
-                        </div>
-                      </div>
-                </div>
-                <!-- <div class="col  mx-3">
-                    <div class="mx-5 mt-5 d-flex flex-column h-100">
-                        <p class="text-justify text-dark" style="text-indent: 20px;">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula risus a tristique bibendum. Aenean pretium hendrerit fringilla. Nunc convallis sollicitudin lorem et fringilla. Nunc bibendum urna in odio mattis, ac malesuada justo mattis. Donec lacinia, sapien sed molestie ultrices, est velit faucibus diam, sit amet tristique ex felis vitae arcu.
-                            <a href="{% url 'lei866' %}" target="_blank" class="ms-3">Lei 866/93 art. 25</a>
-                        </p>
-                        <a href="{% url 'cad_cult_etapa1' %}" class="btn btn-primary mx-auto mt-4 px-5 py-3">
-                            CADASTRAR
-                        </a>
-                        </div>                                            
-                </div> -->
+                                </tbody>  
+                                <tbody>
+                                    {% for i in cadastros_map_cultural_cnpj %}
+                                  <tr>         
+                                    <td>{{i.tipo_contratacao}}</td>                                    
+                                    <td>
+                                        {% if i.fazedor_cultura %}
+                                        {{i.fazedor_cultura}}
+                                        {% else %}
+                                        {{i.fazedor_cultura_cnpj}}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'acc_meus_cadastros_map' i.id %}">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </a>
+                                    </td>
+                                  </tr>
+                                 {% endfor %}
+                                </tbody>                              
+                              </table>                                                                
+                        </div>                                                    
+                        
+                    </div>
+                </div>                
             </div>
         </div>        
     </div>

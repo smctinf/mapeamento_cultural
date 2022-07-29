@@ -50,8 +50,7 @@ class Artista(models.Model):
     area=models.ManyToManyField(Area_Atuacao, verbose_name='Área(s) de atuação', blank=True, null=True)
     
     # email=models.EmailField()
-    telefone=models.CharField(max_length=11)
-    descricao=models.TextField(verbose_name='Descrição resumida da atividade artística/culturais desenvolvidas', blank=True, null=True)
+    telefone=models.CharField(max_length=11)    
     tipo_contratacao=models.ForeignKey(TiposContratação, verbose_name='Tipo de contratação', on_delete=models.PROTECT, blank=True, null=True)        
     file_cpf=models.FileField(upload_to='file_cpf', verbose_name='CPF', blank=True, null=True)   
     file_comprovante_residencia=models.FileField(upload_to='file_comprovantes_residencia', verbose_name='Comprovante de residência', blank=True, null=True)
@@ -67,7 +66,7 @@ class Artista(models.Model):
     cadastro_completo=models.BooleanField(default=False)
     fazedor_cultura_cnpj=models.CharField(max_length=100, verbose_name='Nome fantasia', blank=True, null=True)
     cnpj=models.CharField(max_length=18, verbose_name='CNPJ', validators=[validate_CNPJ], null=True)  
-    cpf_responsavel=models.CharField(max_length=14, verbose_name='CPF do responsável', validators=[validate_CPF], blank=True, null=True)
+    # cpf_responsavel=models.CharField(max_length=14, verbose_name='CPF do responsável', validators=[validate_CPF], blank=True, null=True)
     file_cnpj=models.FileField(upload_to='file_cnpj', verbose_name='CNPJ - Documento scaneado evidenciando cadastro em atividades da àrea cultural', blank=True, null=True)
     prova_inscricao_PJ_nacional=models.FileField(upload_to='prova_inscricao_PJ_nacional', verbose_name='Prova de inscrição no Cadastro Nacional de Pessoa Jurídica', blank=True, null=True)
     certidao_negativa_debitos_relativos=models.FileField(upload_to='certidao_negativa_debitos_relativos', verbose_name='Certidão Negativa de Débitos Relativos a Tribunais Federais e à Divida Ativa da União', blank=True, null=True)
@@ -77,7 +76,7 @@ class Artista(models.Model):
     certidao_regularidade_situacao=models.FileField(upload_to='certidao_de_regularidade_de_situacao', verbose_name='Certidão de REgularidade de Situação', blank=True, null=True)
     certidao_negativa_debitos_trabalhistas=models.FileField(upload_to='certidao_debitos_trabalhistas_cndt', verbose_name='Certidão de Negativa de Débitos Trabalhistas - CDNT', blank=True, null=True)
     documento_empresario_exclusivo=models.FileField(upload_to='documento_empresario_exclusivo', verbose_name="Documento que comprove que o prestador é exclusivo do 'fazedor de cultura' em questão.*", blank=True, null=True)    
-    user_responsavel=models.OneToOneField(User, on_delete=models.CASCADE, null=True)        
+    user_responsavel=models.ForeignKey(User, on_delete=models.CASCADE, null=True)        
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')
 
 
@@ -123,7 +122,8 @@ class InformacoesExtras(models.Model):
         ('2', 'CNPJ'),                
     ]    
     
-    id_artista=models.CharField(max_length=20, blank=True)        
+    id_artista=models.CharField(max_length=20, blank=True)    
+    descricao=models.TextField(verbose_name='Descrição resumida da atividade artística/culturais desenvolvidas', blank=True, null=True)    
     publico=models.ManyToManyField(Publico_Atuacao, blank=True, verbose_name='Públicos que participam das ações')
     enquadramento=models.ManyToManyField(Enquadramento_Atuacao, blank=True, verbose_name='Enquadramento da instituição/entidade/coletivo/grupo')
     forma_atuacao=models.ManyToManyField(Forma_insercao_Atuacao, blank=True, verbose_name='Formar de inserção da atividade artístico-cultural')
