@@ -133,25 +133,12 @@ def cadastro_cnpj(request):
     'form': Form_ArtistaCNPJ(),
     }
 
-    try:
-        artista = Artista.objects.get(user_responsavel=request.user)
-        print(artista)
-    except:
-        artista = None
-        print(artista)
-    if artista:
-        context = {
-            "artista": True,
-            'form': Form_ArtistaCNPJ(),
-        }
-
-    if request.method == 'POST':        
-        key = request.POST['tipo_form']
+    if request.method == 'POST':                
         form = Form_ArtistaCNPJ(request.POST, request.FILES)
         if form.is_valid():
             try:
                 obj = form.save()
-                obj.tipo_contratacao = TiposContratação.objects.get(id=key)
+                obj.tipo_contratacao = TiposContratação.objects.get(id=2)
                 obj.user_responsavel = request.user
                 obj.save()
                 messages.add_message(
@@ -428,8 +415,8 @@ def cadastro_etapa_3(request, id):
 
 
 @login_required
-def cadastro_anexo(request):
-    instance = Artista.objects.get(user_responsavel=request.user)
+def cadastro_anexo(request, id):
+    instance = Artista.objects.get(id=id, user_responsavel=request.user)
     if instance.tipo_contratacao.id == 1:
         form = Form_Anexo_Artista_CPF(instance=instance)
         anexos = [
@@ -472,7 +459,8 @@ def cadastro_anexo(request):
             context = {
                 'form': form,
                 'lista': lista,
-                'success': ['bg-success', 'Anexo enviado com sucesso!']
+                'success': ['bg-success', 'Anexo enviado com sucesso!'],
+                'id': id
             }
             return render(request, 'cadastro_cultural/anexos.html', context)
     for a in anexos:
@@ -480,7 +468,8 @@ def cadastro_anexo(request):
     context = {
         'form': form,
         'lista': lista,
-        'success': ['', '']
+        'success': ['', ''],
+        'id': id
     }
     return render(request, 'cadastro_cultural/anexos.html', context)
 
