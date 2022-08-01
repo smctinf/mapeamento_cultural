@@ -14,8 +14,15 @@
             </h1>
             <div class="row">
                 <div class="col text-dark">                                        
-                    <h4 class="px-3">Bem vindo, {{request.user.first_name}}!</h4>
+                    <h4 class="px-3">Bem vindo, <strong>{{request.user.first_name}}</strong>!</h4>
                     <div class="px-3 mt-5">
+                        {% if messages %}
+        <ul class="messages mb-4">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
                         <div class="row">
                             <div class="col d-flex">
                                 <h3 style="display: inline;" class="px-5 text-uppercase">MEUS CADASTROS</h3>

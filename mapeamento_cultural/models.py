@@ -50,7 +50,7 @@ class Artista(models.Model):
     area=models.ManyToManyField(Area_Atuacao, verbose_name='Área(s) de atuação', blank=True, null=True)
     
     # email=models.EmailField()
-    telefone=models.CharField(max_length=11)    
+    telefone=models.CharField(max_length=15, validators=[validate_TELEFONE])    
     tipo_contratacao=models.ForeignKey(TiposContratação, verbose_name='Tipo de contratação', on_delete=models.PROTECT, blank=True, null=True)        
     file_cpf=models.FileField(upload_to='file_cpf', verbose_name='CPF', blank=True, null=True)   
     file_comprovante_residencia=models.FileField(upload_to='file_comprovantes_residencia', verbose_name='Comprovante de residência', blank=True, null=True)
@@ -65,7 +65,7 @@ class Artista(models.Model):
     comprovante_recibos=models.FileField(upload_to='file_comprovante_recibos', verbose_name='Recibos, contratos ou notas que comprovem cachê', blank=True, null=True)
     cadastro_completo=models.BooleanField(default=False)
     fazedor_cultura_cnpj=models.CharField(max_length=100, verbose_name='Nome fantasia', blank=True, null=True)
-    cnpj=models.CharField(max_length=18, verbose_name='CNPJ', validators=[validate_CNPJ], null=True)  
+    cnpj=models.CharField(max_length=18, verbose_name='CNPJ', validators=[validate_CNPJ], null=True, unique=True)  
     # cpf_responsavel=models.CharField(max_length=14, verbose_name='CPF do responsável', validators=[validate_CPF], blank=True, null=True)
     file_cnpj=models.FileField(upload_to='file_cnpj', verbose_name='CNPJ - Documento scaneado evidenciando cadastro em atividades da àrea cultural', blank=True, null=True)
     prova_inscricao_PJ_nacional=models.FileField(upload_to='prova_inscricao_PJ_nacional', verbose_name='Prova de inscrição no Cadastro Nacional de Pessoa Jurídica', blank=True, null=True)

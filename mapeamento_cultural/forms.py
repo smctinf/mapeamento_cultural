@@ -32,11 +32,20 @@ class Form_Artista(ModelForm):
             'pis': forms.TextInput(attrs={'placeholder':''}),                        
             'banco': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),                      
             'agencia': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),                        
-            'n_conta': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),                        
+            'n_conta': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),  
+            'telefone': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,itelefone)'})                      
         }        
         fields=['fazedor_cultura', 'area', 'telefone']
 
     field_order=['fazedor_cultura', 'area', 'telefone']
+
+    def clean_telefone(self):
+        telefone = validate_TELEFONE(self.cleaned_data["telefone"])
+        telefone = telefone.replace('(', '')
+        telefone = telefone.replace(')', '')
+        telefone = telefone.replace('-', '')
+       
+        return telefone
 
     # def clean_cpf(self):
     #     cpf = validate_CPF(self.cleaned_data["cpf"])
@@ -58,6 +67,7 @@ class Form_Artista2(ModelForm):
             'banco': forms.TextInput(attrs={'placeholder':'',}),
             'agencia': forms.TextInput(attrs={'placeholder':'',}),
             'n_conta': forms.TextInput(attrs={'placeholder':'',}),
+            
         }        
         fields = [
             # 'cpf',
@@ -127,7 +137,9 @@ class Form_ArtistaCNPJ(ModelForm):
             'pis': forms.TextInput(attrs={'placeholder':''}),                        
             'banco': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),                      
             'agencia': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),                        
-            'n_conta': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),                           
+            'n_conta': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),   
+            'telefone': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,itelefone)'})                      
+
         }        
         exclude = [
             'fazedor_cultura',
@@ -163,18 +175,27 @@ class Form_ArtistaCNPJ(ModelForm):
     field_order=['fazedor_cultura_cnpj', 'cnpj', 'area', 'telefone', 'cpf_responsavel']
     
     def clean_cnpj(self):
+        print('baralho 2')
         cnpj = validate_CNPJ(self.cleaned_data["cnpj"])
         cnpj = cnpj.replace('.', '')
         cnpj = cnpj.replace('/', '')
         cnpj = cnpj.replace('-', '')
         return cnpj
 
+    def clean_telefone(self):
+        print('baralho 1')
+        telefone = validate_TELEFONE(self.cleaned_data["telefone"])
+        telefone = telefone.replace('.', '')
+        telefone = telefone.replace('/', '')
+        telefone = telefone.replace('-', '')
+        return telefone
 
     def clean_cpf_responsavel(self):
         cpf = validate_CPF(self.cleaned_data["cpf_responsavel"])
         cpf = cpf.replace('.', '')
         cpf = cpf.replace('-', '')
         return cpf
+
 class Form_ArtistaEmpresa(ModelForm):
     class Meta:
         model = Artista
