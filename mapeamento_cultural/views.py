@@ -338,12 +338,12 @@ def cadastro_map_cultural_cnpj(request, id):
     return render(request, 'meus_cadastros_detalhes_cnpj.html', context)
 
 
-def logout(request):
+def logout_view(request):
     if request.user.is_authenticated:
         logout(request)
-        return redirect('/logout')
-    else:
         return redirect('/login')
+    else:
+        return redirect('/')
 
 
 def login_view(request):
