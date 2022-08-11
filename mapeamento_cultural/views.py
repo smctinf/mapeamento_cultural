@@ -35,8 +35,10 @@ def mapeamento_cultural(request):
         "artista": False
     }
 
-    
-    artista = Artista.objects.filter(user_responsavel=request.user)
+    try:
+        artista = Artista.objects.filter(user_responsavel=request.user)
+    except:
+        artista = []
     
     if len(artista) > 0:    
         return redirect('acc_meus_cadastros')

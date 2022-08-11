@@ -1,3 +1,4 @@
+from ast import Delete
 from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import User
@@ -80,9 +81,29 @@ class Artista(models.Model):
     user_responsavel=models.ForeignKey(User, on_delete=models.CASCADE, null=True)        
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')
 
+    def delete(self):
+        anexos = [
+            'file_cpf',                                                           
+            'prova_inscricao_PJ_nacional',
+            'file_comprovante_residencia',
+            'file_pis',
+            'comprovante_de_cc',
+            'declaracao_n_viculo',
+            'comprovante_iss',            
+            'certidao_negativa_debitos_relativos',
+            'certidao_regularidade_icms',
+            'certidao_regularidade_iss',
+            'certidao_negativa_debitos',
+            'certidao_regularidade_situacao',
+            'certidao_negativa_debitos_trabalhistas',
+            'documento_empresario_exclusivo'            
+        ]
+        super(self).delete()
+    
 class Recibos(models.Model):
     comprovante=models.FileField(upload_to='file_comprovante_recibos', verbose_name='Recibos, contratos ou notas que comprovem cachê', blank=True, null=True)
     artista=models.ForeignKey(Artista, on_delete=models.CASCADE, verbose_name='Artista', blank=True, null=True)
+
 class Publico_Atuacao(models.Model):
     
     publico=models.CharField(max_length=150)

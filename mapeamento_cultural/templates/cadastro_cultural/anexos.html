@@ -37,15 +37,24 @@
                         {% for f in form %}
                             <div id="{{f.name}}" class="row">
                                 <div class="col d-flex flex-column">
-                                    {{f.label}}
+                                    <label for="">{{f.label}}</label>
                                     {{f}}
                                 </div>
                             </div>
                         {% endfor %}
                         <div id="recibos" class="row">
                             <div class="col d-flex flex-column">
-                                Recibos
-                                <input type="file" name="recibos" id="id_recibos">
+                                <div class="d-flex flex-column">                                    
+                                    <h5>Recibos enviados</h5>
+                                    <ul>
+                                        <li>Anexo 1</li>
+                                        <li>Anexo 2</li>
+                                    </ul>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <label for="">Enviar recibo</label>
+                                    <input type="file" name="recibos" id="id_recibos">
+                                </div>
                             </div>
                         </div>
                     </div>
