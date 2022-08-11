@@ -426,7 +426,7 @@ def cadastro_anexo(request, id):
             'comprovante_de_cc',
             'declaracao_n_viculo',
             'comprovante_iss',
-            'comprovante_recibos',
+            
         ]
     else:
         form = Form_Anexo_Artista_CNPJ(instance=instance)
@@ -436,8 +436,7 @@ def cadastro_anexo(request, id):
             'file_pis',
             'comprovante_de_cc',
             'declaracao_n_viculo',
-            'comprovante_iss',
-            'comprovante_recibos',
+            'comprovante_iss',            
             'certidao_negativa_debitos_relativos',
             'certidao_regularidade_icms',
             'certidao_regularidade_iss',

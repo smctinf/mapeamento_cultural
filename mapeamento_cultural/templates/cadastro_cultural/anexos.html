@@ -28,6 +28,9 @@
                         {{i.label}}                       
                     </a>
                     {% endfor %}
+                    <a onclick="showInput('recibos')" class="btn btn-secondary my-1 w-100">                    
+                        Recibos                     
+                    </a>
                 </div>
                 <div class="col d-flex flex-column">
                     <div id='inputs' class="m-auto">
@@ -39,6 +42,12 @@
                                 </div>
                             </div>
                         {% endfor %}
+                        <div id="recibos" class="row">
+                            <div class="col d-flex flex-column">
+                                Recibos
+                                <input type="file" name="recibos" id="id_recibos">
+                            </div>
+                        </div>
                     </div>
                     <button class="btn btn-primary mt-3">
                         Enviar anexo

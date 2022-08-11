@@ -11,6 +11,7 @@ class Usuario(models.Model):
     data_nascimento = models.DateField(verbose_name='Data Nascimento')
     email=models.EmailField(verbose_name='Email:', unique=True)
     endereco=models.CharField(max_length=40, verbose_name='Endereço:')
+    bairro=models.CharField(max_length=40, verbose_name='Bairro:')
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')
 
     __original_email = None
@@ -43,7 +44,7 @@ class Area_Atuacao(models.Model):
     area=models.CharField(max_length=150)
     def __str__(self):
         return '%s' % (self.area)
- 
+
 class Artista(models.Model):
     
     fazedor_cultura=models.CharField(max_length=100, verbose_name='Nome artístico', blank=True, null=True)    
@@ -62,7 +63,7 @@ class Artista(models.Model):
     comprovante_de_cc=models.FileField(upload_to='file_comprovante_cc', verbose_name='Comprovante de número de conta corrente (banco, agência e nº da conta)', blank=True, null=True)
     declaracao_n_viculo=models.FileField(upload_to='file_declaracao_n_vinculo', verbose_name='Declaração de não vínculo com a Administração Federal, Estadual e Municipal', blank=True, null=True)    
     comprovante_iss=models.FileField(upload_to='file_comprovante_iss', verbose_name='Comprovante de inscrição do ISS Municipal', blank=True, null=True)
-    comprovante_recibos=models.FileField(upload_to='file_comprovante_recibos', verbose_name='Recibos, contratos ou notas que comprovem cachê', blank=True, null=True)
+    
     cadastro_completo=models.BooleanField(default=False)
     fazedor_cultura_cnpj=models.CharField(max_length=100, verbose_name='Nome fantasia', blank=True, null=True)
     cnpj=models.CharField(max_length=18, verbose_name='CNPJ', validators=[validate_CNPJ], null=True, unique=True)  
@@ -79,7 +80,9 @@ class Artista(models.Model):
     user_responsavel=models.ForeignKey(User, on_delete=models.CASCADE, null=True)        
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')
 
-
+class Recibos(models.Model):
+    comprovante=models.FileField(upload_to='file_comprovante_recibos', verbose_name='Recibos, contratos ou notas que comprovem cachê', blank=True, null=True)
+    artista=models.ForeignKey(Artista, on_delete=models.CASCADE, verbose_name='Artista', blank=True, null=True)
 class Publico_Atuacao(models.Model):
     
     publico=models.CharField(max_length=150)

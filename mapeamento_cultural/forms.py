@@ -11,6 +11,7 @@ class Form_Usuario(ModelForm):
             'data_nascimento': forms.DateInput(attrs={'placeholder':'', 'type':'date'}),            
             'cpf': forms.TextInput(attrs={'placeholder':'', 'onkeydown':'mascara(this,icpf)'}),
             'endereco': forms.TextInput(attrs={'placeholder':''}),
+            'bairro': forms.TextInput(attrs={'placeholder':''}),
         }        
         exclude = ['dt_inclusao', 'user']
     
@@ -101,7 +102,7 @@ class Form_Anexo_Artista_CPF(ModelForm):
             'declaracao_n_viculo',
             'comprovante_iss',
             'comprovante_iss',
-            'comprovante_recibos',
+            
         ]
 
 class Form_Anexo_Artista_CNPJ(ModelForm):
@@ -116,7 +117,7 @@ class Form_Anexo_Artista_CNPJ(ModelForm):
             'declaracao_n_viculo',
             'comprovante_iss',
             'comprovante_iss',
-            'comprovante_recibos',
+            
             'certidao_negativa_debitos_relativos',
             'certidao_regularidade_icms',
             'certidao_regularidade_iss',
@@ -157,7 +158,7 @@ class Form_ArtistaCNPJ(ModelForm):
             'declaracao_n_viculo',
             'comprovante_iss',
             'comprovante_iss',
-            'comprovante_recibos',
+            
             'file_cnpj',
             'prova_inscricao_PJ_nacional',
             'certidao_negativa_debitos_relativos',
@@ -226,7 +227,7 @@ class Form_ArtistaEmpresa(ModelForm):
             'declaracao_n_viculo',
             'comprovante_iss',
             'comprovante_iss',
-            'comprovante_recibos',            
+                     
             'file_cnpj',
             'prova_inscricao_PJ_nacional',
             'certidao_negativa_debitos_relativos',
