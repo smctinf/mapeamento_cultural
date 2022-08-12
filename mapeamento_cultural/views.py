@@ -14,8 +14,8 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 
-from .models import Usuario
-from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra, Form_Usuario
+from .models import Recibos, Usuario
+from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra, Form_Recibos, Form_Usuario
 
 from django.contrib import messages
 import os
@@ -418,7 +418,15 @@ def cadastro_etapa_3(request, id):
 
 @login_required
 def cadastro_anexo(request, id):
+    '''
+    CPF -> instance.tipo_contratacao.id == 1
+    CNPJ -> instance.tipo_contratacao.id == 2
+    '''
     instance = Artista.objects.get(id=id, user_responsavel=request.user)
+    try:
+        recibos=Recibos.objects.filter(artista=instance)
+    except:
+        recibos=[]
     if instance.tipo_contratacao.id == 1:
         form = Form_Anexo_Artista_CPF(instance=instance)
         anexos = [
@@ -448,10 +456,26 @@ def cadastro_anexo(request, id):
             'documento_empresario_exclusivo'
         ]
     lista = []
-
+    form_recibos=Form_Recibos()
     if request.method == 'POST':
-        form = Form_Anexo_Artista_CPF(
-            request.POST, request.FILES, instance=instance)
+        form = Form_Anexo_Artista_CPF(request.POST, request.FILES, instance=instance)
+        keys=request.FILES.keys()
+        if 'comprovante' in keys:
+            form_recibos=Form_Recibos(request.POST, request.FILES)
+            if form_recibos.is_valid():
+                obj = form_recibos.save()
+                obj.artista = instance
+                obj.save()                
+                context = {
+                    'form': form,
+                    'lista': lista,
+                    'success': ['bg-success', 'Anexo enviado com sucesso!'],
+                    'id': id,
+                    'recibos': recibos,
+                    'form_recibos': form_recibos
+                }                
+    
+            
         if form.is_valid():
             instance = form.save()
             form = Form_Anexo_Artista_CPF(instance=instance)
@@ -461,17 +485,23 @@ def cadastro_anexo(request, id):
                 'form': form,
                 'lista': lista,
                 'success': ['bg-success', 'Anexo enviado com sucesso!'],
-                'id': id
+                'id': id,
+                'recibos': recibos,
+                'form_recibos': form_recibos
             }
-            return render(request, 'cadastro_cultural/anexos.html', context)
-    for a in anexos:
-        lista.append([a, instance.__dict__[a].name != ''])
-    context = {
-        'form': form,
-        'lista': lista,
-        'success': ['', ''],
-        'id': id
-    }
+    
+    else:
+        for a in anexos:
+            lista.append([a, instance.__dict__[a].name != ''])
+        context = {
+            'form': form,
+            'lista': lista,
+            'success': ['', ''],
+            'id': id,
+            'recibos': recibos,
+            'form_recibos': form_recibos,
+            'bg_recibos': 'btn-secondary' if len(recibos)==0 else 'bg-primary'
+        }
     return render(request, 'cadastro_cultural/anexos.html', context)
 
 

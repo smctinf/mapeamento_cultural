@@ -263,3 +263,9 @@ class Form_InfoExtra(ModelForm):
             'youtube': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
         }        
         exclude = ['complete']
+
+class Form_Recibos(ModelForm):
+    class Meta:
+        model = Recibos
+        widgets = {'artista': forms.HiddenInput()}
+        exclude = []
