@@ -15,7 +15,7 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 
 from .models import Recibos, Usuario
-from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra, Form_Recibos, Form_Usuario
+from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra_CPF, Form_InfoExtra_CNPJ, Form_Recibos, Form_Usuario
 
 from django.contrib import messages
 import os
@@ -90,7 +90,7 @@ def cadastro_usuario(request):
 @login_required
 def cadastro_etapa_1(request):
     context = {
-    "artista": False
+    "artista": False 
     }
 
     try:
@@ -320,6 +320,7 @@ def cadastro_map_cultural_cpf(request, id):
         'info': info,
         'complemento': complemento,
         'usuario': Usuario.objects.get(user=request.user),
+        'tipo': tipo
     }
     return render(request, 'meus_cadastros_detalhes_cpf.html', context)
 
@@ -371,10 +372,17 @@ def login_view(request):
 
 @login_required
 def cadastro_etapa_2(request, id):
-    id = Artista.objects.get(id=id, user_responsavel=request.user).id
-    form = Form_InfoExtra(initial={'id_artista': id})
+    artista=Artista.objects.get(id=id, user_responsavel=request.user)
+    id = artista.id
+    if artista.tipo_contratacao.id==1:
+        form = Form_InfoExtra_CPF(initial={'id_artista': id})
+    elif artista.tipo_contratacao.id==2:
+        form = Form_InfoExtra_CNPJ(initial={'id_artista': id})
     if request.method == 'POST':
-        form = Form_InfoExtra(request.POST)
+        if artista.tipo_contratacao.id==1:
+            form = Form_InfoExtra_CPF(request.POST)
+        elif artista.tipo_contratacao.id==2:
+            form = Form_InfoExtra_CNPJ(request.POST)
         if form.is_valid():
             obj = form.save()
             obj.id_artista = id
@@ -472,7 +480,8 @@ def cadastro_anexo(request, id):
                     'success': ['bg-success', 'Anexo enviado com sucesso!'],
                     'id': id,
                     'recibos': recibos,
-                    'form_recibos': form_recibos
+                    'form_recibos': form_recibos,
+                    'bg_recibos': 'btn-secondary' if len(recibos)==0 else 'bg-primary'
                 }                
     
             
@@ -487,7 +496,8 @@ def cadastro_anexo(request, id):
                 'success': ['bg-success', 'Anexo enviado com sucesso!'],
                 'id': id,
                 'recibos': recibos,
-                'form_recibos': form_recibos
+                'form_recibos': form_recibos,
+                'bg_recibos': 'btn-secondary' if len(recibos)==0 else 'bg-primary'
             }
     
     else:
@@ -509,9 +519,15 @@ def cadastro_anexo(request, id):
 def editar_etapa_2(request, id):
     artista = Artista.objects.get(id=id, user_responsavel=request.user)
     instance = InformacoesExtras.objects.get(id_artista=artista.id)
-    form = Form_InfoExtra(instance=instance)
+    if artista.tipo_contratacao.id==1:
+        form = Form_InfoExtra_CPF(instance=instance)
+    elif artista.tipo_contratacao.id==2:
+        form = Form_InfoExtra_CNPJ(instance=instance)
     if request.method == 'POST':
-        form = Form_InfoExtra(request.POST, instance=instance)
+        if artista.tipo_contratacao.id==1:
+            form = Form_InfoExtra_CPF(request.POST, instance=instance)
+        elif artista.tipo_contratacao.id==2:
+            form = Form_InfoExtra_CNPJ(request.POST, instance=instance)
         if form.is_valid():
             obj = form.save()
             return redirect('acc_meus_cadastros_map', id)
