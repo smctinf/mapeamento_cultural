@@ -151,21 +151,15 @@
                                       <b>Descrição da atividade exercida:</b><br>
                                       {{info.descricao}}
                                     </td>                                                                                                                                     
-                                  </tr>                                                               
+                                  </tr>  
+                                  {% if not cadastro.fazedor_cultura %}                                                             
                                   <tr>   
                                     <td>
                                       <b>Quantidade de pessoas que fazem parte da instituição:</b> <br>
                                         Entre {{info.get_qnt_display}} pessoas
                                     </td>
                                   </tr>                                                             
-                                  <tr>                                                                                                     
-                                    <td>
-                                      <b>Áreas culturais de atuação:</b><br>
-                                      {% for i in info.area.all%}
-                                        {{i}} <br>
-                                      {% endfor %}
-                                    </td>
-                                  </tr>
+                                 {% endif %}
                                   <tr>    
                                     <td>
                                       <b>Públicos que participam das ações:</b><br>

@@ -43,8 +43,12 @@ class TiposContratação(models.Model):
 class Area_Atuacao(models.Model):
     
     area=models.CharField(max_length=150)
+    
     def __str__(self):
         return '%s' % (self.area)
+    
+    class Meta:
+        ordering = ["area"]
 
 class Artista(models.Model):
     
@@ -109,13 +113,18 @@ class Publico_Atuacao(models.Model):
     publico=models.CharField(max_length=150)
     def __str__(self):
         return '%s' % (self.publico)
-
+    
+    class Meta:
+        ordering = ["publico"]
+        
 class Enquadramento_Atuacao(models.Model):    
 
     enquadramento=models.CharField(max_length=150)
     def __str__(self):
         return '%s' % (self.enquadramento)
 
+    class Meta:
+        ordering = ["enquadramento"]
 
 class Forma_insercao_Atuacao(models.Model):
     
@@ -123,6 +132,8 @@ class Forma_insercao_Atuacao(models.Model):
     def __str__(self):
         return '%s' % (self.forma)
 
+    class Meta:
+        ordering = ["forma"]
 
 
 class InformacoesExtras(models.Model):
@@ -152,7 +163,7 @@ class InformacoesExtras(models.Model):
     enquadramento=models.ManyToManyField(Enquadramento_Atuacao, blank=True, verbose_name='Enquadramento da instituição/entidade/coletivo/grupo')
     forma_atuacao=models.ManyToManyField(Forma_insercao_Atuacao, blank=True, verbose_name='Formar de inserção da atividade artístico-cultural')
     endereco=models.CharField(max_length=150, blank=True, verbose_name='Endereço')
-    qnt=models.CharField(max_length=1, choices=QNT_CHOICES, blank=True, verbose_name='Quantidade de pessoas que fazem parte do grupo')
+    qnt=models.CharField(max_length=1, choices=QNT_CHOICES, blank=True, null=True, verbose_name='Quantidade de pessoas que fazem parte da instituição')
     status=models.CharField(max_length=1, choices=STATUS_CHOICES, blank=True, verbose_name='Status da atividade')
     instagram=models.CharField(max_length=150, blank=True)
     facebook=models.CharField(max_length=150, blank=True)
