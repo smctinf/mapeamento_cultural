@@ -65,6 +65,43 @@
         </div>
     </div>
 </div>
+{% if request.user.is_superuser %}
+<div class="row">
+    <div class="col">
+        <h4 class="mb-4">Log de anexos</h4>
+        <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                
+                
+                <th>Artista</th>
+                <th>Anexo</th>
+                <th>Arquivo</th>
+                <th>Usuário</th>
+                <th>Dt. Alteração</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for l in log %}
+            <tr>
+                <td>
+                {% if l.artista.fazedor_cultura %}
+                {{l.artista.fazedor_cultura}}
+                {% else %}
+                {{l.artista.fazedor_cultura_cnpj}}
+                {% endif %}
+                </td>
+                <td>{{l.anexo}}</td>
+                <td>{{l.filename}}</td>
+                <td>{{l.user_responsavel}}</td>
+                <td>{{l.dt_alteration}}</td>
+            </tr> 
+                {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
 <style>
     .quem{
         width: 380px;

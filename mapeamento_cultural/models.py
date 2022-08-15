@@ -152,9 +152,19 @@ class InformacoesExtras(models.Model):
     enquadramento=models.ManyToManyField(Enquadramento_Atuacao, blank=True, verbose_name='Enquadramento da instituição/entidade/coletivo/grupo')
     forma_atuacao=models.ManyToManyField(Forma_insercao_Atuacao, blank=True, verbose_name='Formar de inserção da atividade artístico-cultural')
     endereco=models.CharField(max_length=150, blank=True, verbose_name='Endereço')
-    qnt=models.CharField(max_length=1, choices=QNT_CHOICES, blank=True, verbose_name='Quantidade de pessoas que fazem parte da instituição')
+    qnt=models.CharField(max_length=1, choices=QNT_CHOICES, blank=True, verbose_name='Quantidade de pessoas que fazem parte do grupo')
     status=models.CharField(max_length=1, choices=STATUS_CHOICES, blank=True, verbose_name='Status da atividade')
     instagram=models.CharField(max_length=150, blank=True)
     facebook=models.CharField(max_length=150, blank=True)
     youtube=models.CharField(max_length=150, blank=True)
     complete=models.BooleanField(default=False)
+
+
+class Log_anexos(models.Model):
+    artista=models.ForeignKey(Artista, on_delete=models.CASCADE, verbose_name='Artista')
+    anexo=models.CharField(max_length=150, verbose_name='Anexo')
+    filename=models.CharField(max_length=150, verbose_name='Nome do arquivo')
+    dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')
+    dt_alteration = models.DateTimeField(auto_now=True, verbose_name='Dt. Alteração')
+    user_responsavel=models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    
