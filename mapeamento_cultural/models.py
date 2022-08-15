@@ -3,7 +3,8 @@ from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import User
 from .validations import *
-
+import os
+from cultura.settings import BASE_DIR   
 class Usuario(models.Model):
     
     user=models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)    
@@ -87,26 +88,43 @@ class Artista(models.Model):
 
     def delete(self):
         anexos = [
-            'file_cpf',                                                           
-            'prova_inscricao_PJ_nacional',
-            'file_comprovante_residencia',
-            'file_pis',
-            'comprovante_de_cc',
-            'declaracao_n_viculo',
-            'comprovante_iss',            
-            'certidao_negativa_debitos_relativos',
-            'certidao_regularidade_icms',
-            'certidao_regularidade_iss',
-            'certidao_negativa_debitos',
-            'certidao_regularidade_situacao',
-            'certidao_negativa_debitos_trabalhistas',
-            'documento_empresario_exclusivo'            
+            self.file_cpf,
+            self.prova_inscricao_PJ_nacional,
+            self.file_comprovante_residencia,
+            self.file_pis,
+            self.comprovante_de_cc,
+            self.declaracao_n_viculo,
+            self.comprovante_iss,
+            self.certidao_negativa_debitos_relativos,
+            self.certidao_regularidade_icms,
+            self.certidao_regularidade_iss,
+            self.certidao_negativa_debitos,
+            self.certidao_regularidade_situacao,
+            self.certidao_negativa_debitos_trabalhistas,
+            self.documento_empresario_exclusivo
         ]
-        super(self).delete()
+        
+        for i in anexos:
+            if i != '':
+                try:
+                    url_path=str(BASE_DIR)+'/cultura/media/'+str(i)
+                    os.remove(url_path)
+                except Exception as e:
+                    print(e)
+        super(Artista, self).delete()
     
 class Recibos(models.Model):
     comprovante=models.FileField(upload_to='file_comprovante_recibos', verbose_name='Recibos, contratos ou notas que comprovem cachê', blank=True, null=True)
     artista=models.ForeignKey(Artista, on_delete=models.CASCADE, verbose_name='Artista', blank=True, null=True)
+
+    def delete(self):            
+            if self.comprovante != '':                
+                try:
+                    url_path=str(BASE_DIR)+'/cultura/media/'+str(self.comprovante)
+                    os.remove(url_path)
+                except Exception as e:
+                    print(e)
+            super(Recibos, self).delete()
 
 class Publico_Atuacao(models.Model):
     
