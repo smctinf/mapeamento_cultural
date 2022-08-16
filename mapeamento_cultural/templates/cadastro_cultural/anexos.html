@@ -41,14 +41,20 @@
                                     {{f}}
                                 </div>
                             </div>
-                        {% endfor %}
+                        {% endfor %}                        
                         <div id="recibos" class="row">
                             <div class="col d-flex flex-column">
                                 <div class="d-flex flex-column">                                    
                                     <h5>Lista de enviados</h5>
                                     <ul>
                                         {% for recibo in recibos %}
-                                        <li><a href="{{recibo.comprovante.url}}">Anexo {{forloop.counter}}</a></li>
+                                        <li id="{{recibo.id}}" ><a href="{{recibo.comprovante.url}}">Anexo {{forloop.counter}}</a>
+                                        <a onclick="deletarRecibo('{{recibo.id}}')" class="btn text-danger ms-5 me-3">
+                                            <i class="fa-solid fa-circle-xmark"></i>
+                                            Remover
+                                        </a>
+                                        </li>
+                                        <!-- deletar_recibo -->
                                         {% endfor %}
                                     </ul>
                                 </div>
@@ -152,6 +158,20 @@
         }        
         document.getElementById(value).style.display='block'
         last=value
+    }
+    function deletarRecibo(id_recibo){
+        fetch("http://localhost:8000/acc/meus_cadastros/1d61"+id_recibo+"d9281/anexos/deletar-recibo/", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        }).then(function(response) {
+            if (response.ok) {
+                document.getElementById(id_recibo).remove()
+            }
+        }).catch(function(error) {
+            console.log('Erro ao deletar recibo: ' + error.message)
+        });        
     }
 </script>
 {% endblock %}

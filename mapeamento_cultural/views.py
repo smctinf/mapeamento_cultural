@@ -499,7 +499,8 @@ def cadastro_anexo(request, id):
                         form = Form_Anexo_Artista_CPF(instance=instance)     
                     else:
                         form = Form_Anexo_Artista_CNPJ(instance=instance)
-
+                    for a in anexos:
+                        lista.append([a, instance.__dict__[a].name != ''])
                     log=Log_anexos(artista=instance, anexo='comprovante',filename=request.FILES['comprovante'].name, user_responsavel=request.user)
                     log.save()
                     context = {
@@ -619,3 +620,14 @@ def alterar_meus_dados(request):
             }
 
     return render(request, 'alterar_meus_dados.html', context)
+
+@login_required
+def deletar_anexo(request, id):
+    
+    if request.method == 'POST':
+        recibo=Recibos.objects.get(id=id)
+        if request.user==recibo.artista.user_responsavel:
+            recibo.delete()
+        else:
+            raise PermissionDenied()
+    return HttpResponse(status=200)  
