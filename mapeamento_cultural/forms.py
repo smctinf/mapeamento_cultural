@@ -11,6 +11,7 @@ class Form_Usuario(ModelForm):
             'data_nascimento': forms.DateInput(attrs={'placeholder':'', 'type':'date'}),            
             'cpf': forms.TextInput(attrs={'placeholder':'', 'onkeydown':'mascara(this,icpf)'}),
             'endereco': forms.TextInput(attrs={'placeholder':''}),
+            'bairro': forms.TextInput(attrs={'placeholder':''}),
         }        
         exclude = ['dt_inclusao', 'user']
     
@@ -101,7 +102,7 @@ class Form_Anexo_Artista_CPF(ModelForm):
             'declaracao_n_viculo',
             'comprovante_iss',
             'comprovante_iss',
-            'comprovante_recibos',
+            
         ]
 
 class Form_Anexo_Artista_CNPJ(ModelForm):
@@ -116,7 +117,7 @@ class Form_Anexo_Artista_CNPJ(ModelForm):
             'declaracao_n_viculo',
             'comprovante_iss',
             'comprovante_iss',
-            'comprovante_recibos',
+            
             'certidao_negativa_debitos_relativos',
             'certidao_regularidade_icms',
             'certidao_regularidade_iss',
@@ -157,7 +158,7 @@ class Form_ArtistaCNPJ(ModelForm):
             'declaracao_n_viculo',
             'comprovante_iss',
             'comprovante_iss',
-            'comprovante_recibos',
+            
             'file_cnpj',
             'prova_inscricao_PJ_nacional',
             'certidao_negativa_debitos_relativos',
@@ -226,7 +227,7 @@ class Form_ArtistaEmpresa(ModelForm):
             'declaracao_n_viculo',
             'comprovante_iss',
             'comprovante_iss',
-            'comprovante_recibos',            
+                     
             'file_cnpj',
             'prova_inscricao_PJ_nacional',
             'certidao_negativa_debitos_relativos',
@@ -243,7 +244,26 @@ class Form_ArtistaEmpresa(ModelForm):
 
     field_order=['fazedor_cultura_cnpj', 'cnpj', 'area', 'telefone', 'cpf_responsavel']
 
-class Form_InfoExtra(ModelForm):
+class Form_InfoExtra_CPF(ModelForm):
+    class Meta:
+        model = InformacoesExtras
+        widgets = {
+            'tipo': forms.HiddenInput(),
+            'id_artista': forms.HiddenInput(attrs={'class': 'mb-3'}),            
+            'descricao': forms.Textarea(attrs={'class':'form-control mb-3','placeholder':'', 'rows':'3'}),
+            'area': forms.CheckboxSelectMultiple(attrs={'class': 'mb-3'}),
+            'publico': forms.CheckboxSelectMultiple(attrs={'class': 'mb-3'}),
+            'enquadramento': forms.CheckboxSelectMultiple(attrs={'class': 'mb-3'}),
+            'forma_atuacao': forms.CheckboxSelectMultiple(attrs={'class': 'mb-3'}),
+            'endereco': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),            
+            'status': forms.Select(attrs={'class': 'form-control mb-3'}),
+            'instagram': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
+            'facebook': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
+            'youtube': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
+        }        
+        exclude = ['complete', 'qnt']
+
+class Form_InfoExtra_CNPJ(ModelForm):
     class Meta:
         model = InformacoesExtras
         widgets = {
@@ -262,3 +282,10 @@ class Form_InfoExtra(ModelForm):
             'youtube': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
         }        
         exclude = ['complete']
+
+
+class Form_Recibos(ModelForm):
+    class Meta:
+        model = Recibos
+        widgets = {'artista': forms.HiddenInput()}
+        exclude = []

@@ -28,17 +28,33 @@
                         {{i.label}}                       
                     </a>
                     {% endfor %}
+                    <a onclick="showInput('recibos')" class="btn {{bg_recibos}} text-white my-1 w-100">                    
+                        Recibos                     
+                    </a>
                 </div>
                 <div class="col d-flex flex-column">
                     <div id='inputs' class="m-auto">
                         {% for f in form %}
                             <div id="{{f.name}}" class="row">
                                 <div class="col d-flex flex-column">
-                                    {{f.label}}
+                                    <label for="">{{f.label}}</label>
                                     {{f}}
                                 </div>
                             </div>
                         {% endfor %}
+                        <div id="recibos" class="row">
+                            <div class="col d-flex flex-column">
+                                <div class="d-flex flex-column">                                    
+                                    <h5>Lista de enviados</h5>
+                                    <ul>
+                                        {% for recibo in recibos %}
+                                        <li><a href="{{recibo.comprovante.url}}">Anexo {{forloop.counter}}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {{form_recibos}}
+                            </div>
+                        </div>
                     </div>
                     <button class="btn btn-primary mt-3">
                         Enviar anexo
@@ -49,6 +65,43 @@
         </div>
     </div>
 </div>
+{% if request.user.is_superuser %}
+<div class="row">
+    <div class="col">
+        <h4 class="mb-4">Log de anexos</h4>
+        <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                
+                
+                <th>Artista</th>
+                <th>Anexo</th>
+                <th>Arquivo</th>
+                <th>Usuário</th>
+                <th>Dt. Alteração</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for l in log %}
+            <tr>
+                <td>
+                {% if l.artista.fazedor_cultura %}
+                {{l.artista.fazedor_cultura}}
+                {% else %}
+                {{l.artista.fazedor_cultura_cnpj}}
+                {% endif %}
+                </td>
+                <td>{{l.anexo}}</td>
+                <td>{{l.filename}}</td>
+                <td>{{l.user_responsavel}}</td>
+                <td>{{l.dt_alteration}}</td>
+            </tr> 
+                {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
 <style>
     .quem{
         width: 380px;

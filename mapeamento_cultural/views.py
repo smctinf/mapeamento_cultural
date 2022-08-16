@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User, UserManager
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.utils.http import urlsafe_base64_encode
@@ -14,8 +14,9 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 
-from .models import Usuario
-from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra, Form_Usuario
+from .models import Log_anexos, Recibos, Usuario
+from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra_CPF, Form_InfoExtra_CNPJ, Form_Recibos, Form_Usuario
+
 
 from django.contrib import messages
 import os
@@ -35,8 +36,10 @@ def mapeamento_cultural(request):
         "artista": False
     }
 
-    
-    artista = Artista.objects.filter(user_responsavel=request.user)
+    try:
+        artista = Artista.objects.filter(user_responsavel=request.user)
+    except:
+        artista = []
     
     if len(artista) > 0:    
         return redirect('acc_meus_cadastros')
@@ -88,7 +91,7 @@ def cadastro_usuario(request):
 @login_required
 def cadastro_etapa_1(request):
     context = {
-    "artista": False
+    "artista": False 
     }
 
     try:
@@ -305,8 +308,15 @@ def meu_perfil(request):
 @login_required
 def cadastro_map_cultural_cpf(request, id):
 
-    artista = Artista.objects.get(id=id, user_responsavel=request.user)
-    tipo = artista.tipo_contratacao.nome.split()[-1]
+    try:
+        artista = Artista.objects.get(id=id, user_responsavel=request.user)
+        tipo = artista.tipo_contratacao.nome.split()[-1]
+    except:
+        if request.user.is_superuser:
+            artista = Artista.objects.get(id=id)
+            tipo = artista.tipo_contratacao.nome.split()[-1]
+        else:
+            raise PermissionDenied()
     try:
         info = InformacoesExtras.objects.get(id_artista=artista.id)
         complemento = True
@@ -318,6 +328,7 @@ def cadastro_map_cultural_cpf(request, id):
         'info': info,
         'complemento': complemento,
         'usuario': Usuario.objects.get(user=request.user),
+        'tipo': tipo
     }
     return render(request, 'meus_cadastros_detalhes_cpf.html', context)
 
@@ -338,12 +349,12 @@ def cadastro_map_cultural_cnpj(request, id):
     return render(request, 'meus_cadastros_detalhes_cnpj.html', context)
 
 
-def logout(request):
+def logout_view(request):
     if request.user.is_authenticated:
         logout(request)
-        return redirect('/logout')
-    else:
         return redirect('/login')
+    else:
+        return redirect('/')
 
 
 def login_view(request):
@@ -369,10 +380,17 @@ def login_view(request):
 
 @login_required
 def cadastro_etapa_2(request, id):
-    id = Artista.objects.get(id=id, user_responsavel=request.user).id
-    form = Form_InfoExtra(initial={'id_artista': id})
+    artista=Artista.objects.get(id=id, user_responsavel=request.user)
+    id = artista.id
+    if artista.tipo_contratacao.id==1:
+        form = Form_InfoExtra_CPF(initial={'id_artista': id})
+    elif artista.tipo_contratacao.id==2:
+        form = Form_InfoExtra_CNPJ(initial={'id_artista': id})
     if request.method == 'POST':
-        form = Form_InfoExtra(request.POST)
+        if artista.tipo_contratacao.id==1:
+            form = Form_InfoExtra_CPF(request.POST)
+        elif artista.tipo_contratacao.id==2:
+            form = Form_InfoExtra_CNPJ(request.POST)
         if form.is_valid():
             obj = form.save()
             obj.id_artista = id
@@ -416,7 +434,23 @@ def cadastro_etapa_3(request, id):
 
 @login_required
 def cadastro_anexo(request, id):
-    instance = Artista.objects.get(id=id, user_responsavel=request.user)
+    '''
+    CPF -> instance.tipo_contratacao.id == 1
+    CNPJ -> instance.tipo_contratacao.id == 2
+    '''
+
+    try:
+        instance = Artista.objects.get(id=id, user_responsavel=request.user)        
+    except:
+        if request.user.is_superuser:
+            instance = Artista.objects.get(id=id)            
+        else:
+            raise PermissionDenied()
+    
+    try:
+        recibos=Recibos.objects.filter(artista=instance)
+    except:
+        recibos=[]
     if instance.tipo_contratacao.id == 1:
         form = Form_Anexo_Artista_CPF(instance=instance)
         anexos = [
@@ -426,7 +460,7 @@ def cadastro_anexo(request, id):
             'comprovante_de_cc',
             'declaracao_n_viculo',
             'comprovante_iss',
-            'comprovante_recibos',
+            
         ]
     else:
         form = Form_Anexo_Artista_CNPJ(instance=instance)
@@ -436,8 +470,7 @@ def cadastro_anexo(request, id):
             'file_pis',
             'comprovante_de_cc',
             'declaracao_n_viculo',
-            'comprovante_iss',
-            'comprovante_recibos',
+            'comprovante_iss',            
             'certidao_negativa_debitos_relativos',
             'certidao_regularidade_icms',
             'certidao_regularidade_iss',
@@ -447,30 +480,76 @@ def cadastro_anexo(request, id):
             'documento_empresario_exclusivo'
         ]
     lista = []
-
+    form_recibos=Form_Recibos()
     if request.method == 'POST':
-        form = Form_Anexo_Artista_CPF(
-            request.POST, request.FILES, instance=instance)
-        if form.is_valid():
-            instance = form.save()
-            form = Form_Anexo_Artista_CPF(instance=instance)
-            for a in anexos:
-                lista.append([a, instance.__dict__[a].name != ''])
-            context = {
-                'form': form,
-                'lista': lista,
-                'success': ['bg-success', 'Anexo enviado com sucesso!'],
-                'id': id
-            }
-            return render(request, 'cadastro_cultural/anexos.html', context)
-    for a in anexos:
-        lista.append([a, instance.__dict__[a].name != ''])
-    context = {
-        'form': form,
-        'lista': lista,
-        'success': ['', ''],
-        'id': id
-    }
+        if request.user == instance.user_responsavel:
+            if instance.tipo_contratacao.id == 1:
+                form = Form_Anexo_Artista_CPF(request.POST, request.FILES, instance=instance)
+            else:
+                form = Form_Anexo_Artista_CNPJ(request.POST, request.FILES, instance=instance)
+            
+            keys=request.FILES.keys()
+            if 'comprovante' in keys:
+                form_recibos=Form_Recibos(request.POST, request.FILES)
+                if form_recibos.is_valid():
+                    obj = form_recibos.save()
+                    obj.artista = instance
+                    obj.save() 
+                    if instance.tipo_contratacao.id == 1:
+                        form = Form_Anexo_Artista_CPF(instance=instance)     
+                    else:
+                        form = Form_Anexo_Artista_CNPJ(instance=instance)
+
+                    log=Log_anexos(artista=instance, anexo='comprovante',filename=request.FILES['comprovante'].name, user_responsavel=request.user)
+                    log.save()
+                    context = {
+                        'form': form,
+                        'lista': lista,
+                        'success': ['bg-success', 'Anexo enviado com sucesso!'],
+                        'id': id,
+                        'recibos': recibos,
+                        'bg_recibos': 'btn-secondary' if len(recibos)==0 else 'bg-primary',
+                        'form_recibos': form_recibos
+                    }                
+        
+                
+            if form.is_valid():
+                instance = form.save()
+                if instance.tipo_contratacao.id == 1:
+                    form = Form_Anexo_Artista_CPF(instance=instance)     
+                else:
+                    form = Form_Anexo_Artista_CNPJ(instance=instance)            
+                for a in anexos:
+                    lista.append([a, instance.__dict__[a].name != ''])
+                
+                for i in keys:
+                    log=Log_anexos(artista=instance, anexo=i, filename=request.FILES[i].name, user_responsavel=request.user)
+                    log.save()
+                context = {
+                    'form': form,
+                    'lista': lista,
+                    'success': ['bg-success', 'Anexo enviado com sucesso!'],
+                    'id': id,
+                    'recibos': recibos,
+                    'bg_recibos': 'btn-secondary' if len(recibos)==0 else 'bg-primary',
+                    'form_recibos': form_recibos
+                }
+        else:
+            raise PermissionDenied()
+
+    else:
+        for a in anexos:
+            lista.append([a, instance.__dict__[a].name != ''])
+        context = {
+            'form': form,
+            'lista': lista,
+            'success': ['', ''],
+            'id': id,
+            'recibos': recibos,
+            'form_recibos': form_recibos,
+            'bg_recibos': 'btn-secondary' if len(recibos)==0 else 'bg-primary',
+            'log': Log_anexos.objects.filter(artista=instance)
+        }
     return render(request, 'cadastro_cultural/anexos.html', context)
 
 
@@ -478,9 +557,15 @@ def cadastro_anexo(request, id):
 def editar_etapa_2(request, id):
     artista = Artista.objects.get(id=id, user_responsavel=request.user)
     instance = InformacoesExtras.objects.get(id_artista=artista.id)
-    form = Form_InfoExtra(instance=instance)
+    if artista.tipo_contratacao.id==1:
+        form = Form_InfoExtra_CPF(instance=instance)
+    elif artista.tipo_contratacao.id==2:
+        form = Form_InfoExtra_CNPJ(instance=instance)
     if request.method == 'POST':
-        form = Form_InfoExtra(request.POST, instance=instance)
+        if artista.tipo_contratacao.id==1:
+            form = Form_InfoExtra_CPF(request.POST, instance=instance)
+        elif artista.tipo_contratacao.id==2:
+            form = Form_InfoExtra_CNPJ(request.POST, instance=instance)
         if form.is_valid():
             obj = form.save()
             return redirect('acc_meus_cadastros_map', id)

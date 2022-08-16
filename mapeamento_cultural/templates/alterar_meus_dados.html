@@ -20,6 +20,15 @@
                     <a href="{% url 'acc_meu_perfil' %}" class="btn btn-outline-light ms-auto">Meu perfil</a>       
                     <a href="{% url 'acc_mudar_senha' %}" class="btn btn-outline-light ms-2">Alterar dados pessoais</a>
                     <a href="{% url 'acc_mudar_senha' %}" class="btn btn-outline-light ms-2">Alterar senha</a>
+                    <button class="btn btn-outline-danger ms-2"
+                          data-bs-toggle="modal"
+                          data-bs-target="#myModal">
+                            <i class="fa-solid fa-trash"
+                              data-bs-toggle="tooltip" 
+                            data-bs-placement="top"
+                            data-bs-target="#myModal"
+                            data-bs-title="Excluir cadastro"></i>
+                          </button> 
                 </div>
             </div>
             <div class="row">
@@ -45,6 +54,25 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="border-radius: 0;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-danger">
+          <h5 class="modal-title" id="exampleModalLabel">
+            Você tem certeza?
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-dark">
+          Você deseja realmente excluir sua conta de usuário e todos seus dados vinculados a essa conta?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn border" data-bs-dismiss="modal">Cancelar</button>
+          <a href="#" class="btn btn-danger">Excluir conta</a>
+        </div>
+      </div>
+    </div>
+  </div>
 <style>
   h5{
     line-height: 0;
@@ -55,6 +83,11 @@
   }
 </style>
 <script>
-    document.getElementById('id_data_nascimento').value = "{{usuario.data_nascimento|date:'Y-m-d'}}"
+
+document.getElementById('id_data_nascimento').value = "{{usuario.data_nascimento|date:'Y-m-d'}}"
+
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
 </script>
 {% endblock %}

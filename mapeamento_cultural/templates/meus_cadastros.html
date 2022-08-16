@@ -39,19 +39,24 @@
                             </div>
                         </div>
                         <div class="py-4 px-5">
-                            <table class="table">
+                            <table class="table table-hover">
                                 <thead>
                                   <tr>      
-                                    <th scope="col">Tipo</th>                                    
+                                    <th>Ação</th>                                    
                                     <th scope="col">Nome artístico/fantasia</th>
-                                    <th style="width: 40px;">
-                                    </th>
+                                    <th scope="col">Tipo de Cadastro</th>                                    
+                                    <th>Status</th>                                                                        
                                   </tr>
                                 </thead>
                                 <tbody>
                                     {% for i in cadastros_map_cultural_cpf %}
-                                  <tr>         
-                                    <td>{{i.tipo_contratacao}}</td>                                    
+                                  <tr>  
+                                    <td>
+                                        <a href="{% url 'acc_meus_cadastros_map' i.id %}" style="text-decoration: none;">
+                                            <i class="fa-solid fa-eye me-2"></i>
+                                            Visualizar cadastro
+                                        </a>
+                                    </td>       
                                     <td>
                                         {% if i.fazedor_cultura %}
                                         {{i.fazedor_cultura}}
@@ -59,18 +64,23 @@
                                         {{i.fazedor_cultura_cnpj}}
                                         {% endif %}
                                     </td>
-                                    <td>
-                                        <a href="{% url 'acc_meus_cadastros_map' i.id %}">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </a>
+                                    <td>Por CPF</td>                                    
+                                    <td>                                        
+                                        <small class="text-secondary">Cadastro incompleto.</small>
                                     </td>
+                                   
                                   </tr>
                                  {% endfor %}
                                 </tbody>  
                                 <tbody>
                                     {% for i in cadastros_map_cultural_cnpj %}
-                                  <tr>         
-                                    <td>{{i.tipo_contratacao}}</td>                                    
+                                  <tr> 
+                                    <td>
+                                        <a href="{% url 'acc_meus_cadastros_map' i.id %}" style="text-decoration: none;">
+                                            <i class="fa-solid fa-eye me-2"></i>
+                                            Visualizar cadastro
+                                        </a>
+                                    </td>                                            
                                     <td>
                                         {% if i.fazedor_cultura %}
                                         {{i.fazedor_cultura}}
@@ -78,11 +88,13 @@
                                         {{i.fazedor_cultura_cnpj}}
                                         {% endif %}
                                     </td>
+                                    <td>Por CNPJ</td>                                    
                                     <td>
-                                        <a href="{% url 'acc_meus_cadastros_map' i.id %}">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </a>
+                                        <small class="text-success">
+                                            Cadastro completo!
+                                        </small>
                                     </td>
+                                    
                                   </tr>
                                  {% endfor %}
                                 </tbody>                              

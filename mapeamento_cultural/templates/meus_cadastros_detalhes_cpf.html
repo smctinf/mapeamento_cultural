@@ -22,12 +22,21 @@
                             {% endfor %}
                         </ul>
                         {% endif %}   
-                        <h3 class="px-5 text-uppercase d-flex ">SEU CADASTRO CPF
+                        <h3 class="px-5 text-uppercase d-flex ">SEU CADASTRO {{tipo}}
                           <!-- <span class="ms-2 my-auto" style="font-size: 14pt; text-transform: lowercase;">(id: {{cadastro.id}})</span>                                                     -->
-                          <a href="{% url 'cad_cult_anexo' cadastro.id %}" class="btn btn-dark  ms-auto">
+                          <button class="btn btn-danger ms-auto"
+                          data-bs-toggle="modal"
+                          data-bs-target="#myModal">
+                            <i class="fa-solid fa-trash"
+                              data-bs-toggle="tooltip" 
+                            data-bs-placement="top"
+                            data-bs-target="#myModal"
+                            data-bs-title="Excluir cadastro"></i>
+                          </button> 
+                          <a href="{% url 'cad_cult_anexo' cadastro.id %}" class="btn btn-dark  ms-2">
                             <i class="fa-solid fa-paperclip me-2"></i>
                             Anexos
-                          </a>            
+                          </a>                                  
                           <a href="{% url 'acc_meus_cadastros' %}" class="btn btn-light ms-2" style="border: 1px solid black;">
                             <i class="fa-solid fa-arrow-rotate-left me-2"></i>
                             Voltar
@@ -78,7 +87,7 @@
                                       {{usuario.data_nascimento|date:"SHORT_DATE_FORMAT"}}
                                       {% else %}
                                       <b>CPF do responsável:</b><br>
-                                      <span id="cpf">{{cadastro.cpf_responsavel}}</span>                                      
+                                      <span id="cpf">{{usuario.cpf}}</span>                                      
                                       {% endif %}
                                     </td>
                                     <td colspan="2">
@@ -142,21 +151,15 @@
                                       <b>Descrição da atividade exercida:</b><br>
                                       {{info.descricao}}
                                     </td>                                                                                                                                     
-                                  </tr>                                                               
+                                  </tr>  
+                                  {% if not cadastro.fazedor_cultura %}                                                             
                                   <tr>   
                                     <td>
                                       <b>Quantidade de pessoas que fazem parte da instituição:</b> <br>
                                         Entre {{info.get_qnt_display}} pessoas
                                     </td>
                                   </tr>                                                             
-                                  <tr>                                                                                                     
-                                    <td>
-                                      <b>Áreas culturais de atuação:</b><br>
-                                      {% for i in info.area.all%}
-                                        {{i}} <br>
-                                      {% endfor %}
-                                    </td>
-                                  </tr>
+                                 {% endif %}
                                   <tr>    
                                     <td>
                                       <b>Públicos que participam das ações:</b><br>
@@ -311,6 +314,25 @@
         </div>        
     </div>
 </div>
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="border-radius: 0;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Você tem certeza?
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-dark">
+        Você deseja realmente excluir este cadastro?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn border" data-bs-dismiss="modal">Cancelar</button>
+        <a href="#" class="btn btn-danger">Excluir cadastro</a>
+      </div>
+    </div>
+  </div>
+</div>
 <style>
   h5{
     line-height: 0;
@@ -321,6 +343,8 @@
   }
 </style>
 <script>
+
+
   function icpf(v){
     v=v.replace(/\D/g,"")                   //Remove tudo o que nao e digito
     v=v.replace(/(\d{3})(\d)/,"$1.$2")      //Coloca um ponto entre o terceiro e o quarto digitos
@@ -351,5 +375,7 @@
                         document.getElementById('tel').innerText=tel.replace(/(\d{2})(\d{4})(\d{4})/g, "($1) $2-$3");              
                         document.getElementById('tel').innerText=tel.replace(/(\d{2})(\d{5})(\d{4})/g, "($1) $2-$3");              
                     };
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 </script>
 {% endblock %}
