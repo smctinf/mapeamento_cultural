@@ -42,7 +42,10 @@ def mapeamento_cultural(request):
         artista = []
     
     if len(artista) > 0:    
-        return redirect('acc_meus_cadastros')
+        context = {
+            "artista": True
+        }
+        # return redirect('acc_meus_cadastros')
 
     return render(request, 'mapeamento.html', context)
 
@@ -157,6 +160,7 @@ def cadastro_cpf(request):
     context = {
     "artista": False,
     'form': Form_Artista(),
+    'tipo_cadastro': 1
     }
 
     if request.method == 'POST':                
@@ -169,7 +173,7 @@ def cadastro_cpf(request):
                 obj.save()
                 messages.add_message(
                     request, messages.SUCCESS, "<b class='text-success'>Cadastro realizado com sucesso.</b>")
-                return redirect('cad_cult_etapa2')
+                return redirect('cad_cult_etapa2', obj.id)
             except Exception as E:
                 print(E)
                 messages.add_message(request, messages.ERROR, form.errors)
@@ -332,6 +336,17 @@ def cadastro_map_cultural_cpf(request, id):
     }
     return render(request, 'meus_cadastros_detalhes_cpf.html', context)
 
+@login_required
+def excluir_map_cultural(request, id):
+    try:
+        artista = Artista.objects.get(id=id, user_responsavel=request.user)
+        artista.delete()
+        messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro excluído com sucesso.</b>")
+        return redirect('acc_meus_cadastros')
+    except Exception as E:
+        print(E)
+        messages.add_message(request, messages.ERROR, "<b class='text-danger'>Erro ao excluir cadastro.</b>")
+        return redirect('acc_meus_cadastros')
 
 @login_required
 def cadastro_map_cultural_cnpj(request, id):

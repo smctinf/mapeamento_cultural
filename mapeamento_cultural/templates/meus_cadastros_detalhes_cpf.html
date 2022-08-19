@@ -143,81 +143,121 @@
                                   <tr>
                                     <td>
                                       <b>Status da atividade:</b><br>
+                                      {% if info.get_status_display != '' %}
                                       <span>{{info.get_status_display}}</span>
+                                      {% else %}
+                                      <i>Complete seu cadastro</i>
+                                      {% endif %}
                                     </td>
                                   </tr>   
                                   <tr>    
                                     <td colspan="4">
                                       <b>Descrição da atividade exercida:</b><br>
+                                      {% if info.descricao != '' %}
                                       {{info.descricao}}
+                                      {% else %}
+                                      <i>Complete seu cadastro</i>                                      
+                                      {% endif %}
                                     </td>                                                                                                                                     
                                   </tr>  
+                                  <tr>    
+                                    <td colspan="4">
+                                      <b>Endereço:</b><br>
+                                      {% if info.endereco != '' %}
+                                      {{info.endereco}}
+                                      {% else %}
+                                      <i>Complete seu cadastro</i>                                      
+                                      {% endif %}
+                                    </td>                                                                                                                                     
+                                  </tr> 
                                   {% if not cadastro.fazedor_cultura %}                                                             
                                   <tr>   
                                     <td>
                                       <b>Quantidade de pessoas que fazem parte da instituição:</b> <br>
+                                      {% if info.get_qnt_display != None %}
                                         Entre {{info.get_qnt_display}} pessoas
+                                      {% else %}
+                                        <i>Complete seu cadastro</i>
+                                      {% endif %}
                                     </td>
                                   </tr>                                                             
                                  {% endif %}
                                   <tr>    
                                     <td>
                                       <b>Públicos que participam das ações:</b><br>
+                                      {% if info.publico.all|length != 0 %}
                                       {% for i in info.publico.all%}
                                         {{i}} <br>
                                       {% endfor %}
+                                      {% else %}
+                                        <i>Complete seu cadastro</i>                                      
+                                      {% endif %}
                                     </td>                                                                                    
                                   </tr>      
                                   <tr>                                                                                                     
                                     <td>
                                       <b>Enquadramento da instituição/entidade/coletivo/grupo:</b><br>
+                                      {% if info.enquadramento.all|length != 0 %}
                                       {% for i in info.enquadramento.all%}
                                         {{i}} <br>
                                       {% endfor %}
+                                      {% else %}
+                                        <i>Complete seu cadastro</i>                                      
+                                      {% endif %}
                                     </td>
                                   </tr>
                                   <tr>    
                                     <td>
                                       <b>Formar de inserção da atividade artístico-cultural:</b><br>
+                                      {% if info.forma_atuacao.all|length != 0 %}
                                       {% for i in info.forma_atuacao.all%}
                                         {{i}} <br>
                                       {% endfor %}
+                                      {% else %}
+                                      <i>Complete seu cadastro</i>                                      
+                                      {% endif %}
                                     </td>                                                                                    
                                   </tr>     
                                   <tr>    
                                     <td>
                                       <b>Redes sociais:</b><br>                                      
-                                      <div class="d-flex">
-                                        {% if info.instagram != ''%}
+                                      <div class="d-flex">                                        
                                         <div>
                                           <div>
                                             <i>Instagram:</i>
                                           </div>
                                           <div>
+                                            {% if info.instagram != ''%}
                                             <a href="{{info.instagram}}">{{info.instagram}}</a>
+                                            {% else %}
+                                            <i>Não informado.</i>
+                                            {% endif %}                                            
                                           </div>
-                                        </div>
-                                        {% endif %}
-                                        {% if info.facebook != '' %}
+                                        </div>                                                                                
                                         <div class="mx-auto">
                                           <div>
                                             <i>Facebook:</i>
                                           </div>
                                           <div>
+                                            {% if info.facebook != ''%}
                                             <a href="{{info.facebook}}">{{info.facebook}}</a>
+                                            {% else %}
+                                            <i>Não informado.</i>
+                                            {% endif %}  
                                           </div>
-                                        </div>
-                                        {% endif %}
-                                        {% if info.youtube != ''%}
+                                        </div>                                        
                                         <div class="mx-auto">
                                           <div>
                                             <i>Youtube:</i>
                                           </div>
                                           <div>
+                                            {% if info.youtube != ''%}
                                             <a href="{{info.youtube}}">{{info.youtube}}</a>
+                                            {% else %}
+                                            <i>Não informado.</i>
+                                            {% endif %}  
                                           </div>
-                                        </div>
-                                        {% endif %}
+                                        </div>                                        
                                       </div>
                                     </td>                                                                                    
                                   </tr>                                                             
@@ -328,7 +368,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn border" data-bs-dismiss="modal">Cancelar</button>
-        <a href="#" class="btn btn-danger">Excluir cadastro</a>
+        <a href="{% url 'acc_meus_cadastros_map_excluir' cadastro.id %}" class="btn btn-danger">Excluir cadastro</a>
       </div>
     </div>
   </div>

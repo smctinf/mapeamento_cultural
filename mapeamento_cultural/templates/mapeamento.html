@@ -13,21 +13,26 @@
                 <span class="my-auto mx-auto">MAPEAMENTO CULTURAL</span>
             </h1>
             <div class="row">
-                <div class="col">                                        
-                        <img class="img-fluid" src="/static/images/mapeamento/botao_cadastro.png" alt="">                    
+                <div class="col d-flex">                                        
+                        <img class="img-fluid m-auto" src="/static/images/mapeamento/botao_cadastro.png" alt="">                    
                 </div>
                 <div class="col  mx-3">
                     <div class="mx-5 mt-5 d-flex flex-column h-100">
                         <p class="text-justify text-dark" style="text-indent: 20px;">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula risus a tristique bibendum. Aenean pretium hendrerit fringilla. Nunc convallis sollicitudin lorem et fringilla. Nunc bibendum urna in odio mattis, ac malesuada justo mattis. Donec lacinia, sapien sed molestie ultrices, est velit faucibus diam, sit amet tristique ex felis vitae arcu.
-                            <a href="{% url 'lei866' %}" target="_blank" class="ms-3">Lei 866/93 art. 25</a>
+                            O Mapeamento Cultural de Nova Friburgo é uma plataforma para levantamento de dados para direcionamento das ações de políticas públicas.
+                            <!-- <a href="{% url 'lei866' %}" target="_blank" class="ms-3">Lei 866/93 art. 25</a> -->
                         </p>
-                        <a href="{% url 'cad_cult_etapa1_artista' %}" class="btn btn-primary mx-auto mt-4 px-5 py-3">
-                            CADASTRAR
-                        </a>
+                        <p class="text-justify text-dark" style="text-indent: 20px;">
+                            O fazedor de cultura que estiver com o cadastro completo no sistema estará colaborando com a sua linguagem artística e com a sua região, além de se tornar apto à contratação para eventos públicos, receberá em primeira mão os avisos de Editais e chamadas públicas, poderá participar de consultas feitas pela Secretaria e em breve caso deseje, ter seu perfil aberto para divulgação do trabalho em uma plataforma oficial da cultura de Nova Friburgo.
+                        </p>
+
                         {% if artista %}
-                        <a href="{% url 'acc_meus_cadastros_map' %}" class="btn btn-outline-secondary mx-auto mt-4 px-5 py-3">
+                        <a href="{% url 'acc_meus_cadastros' %}" class="btn btn-outline-primary mx-auto mt-4 px-5 py-3">
                             VISUALIZAR CADASTROS
+                        </a>
+                        {% else %}
+                        <a href="{% url 'cad_cult_etapa1_artista' %}" class="btn btn-outline-primary m-auto mt-4 px-5 py-3">
+                            CADASTRE-SE!
                         </a>
                         {% endif %}
                         </div>                                            

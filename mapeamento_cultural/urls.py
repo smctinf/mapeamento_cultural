@@ -20,6 +20,7 @@ urlpatterns = [
     path('acc/meus_cadastros/1d61<id>d9281/editar/cmp/', views.editar_etapa_2, name='acc_editar_map_cmp'),    
     path('acc/meus_cadastros/1d61<id>d9281/anexos/', views.cadastro_anexo, name='cad_cult_anexo'),
     path('acc/meus_cadastros/1d61<id>d9281/anexos/deletar-recibo/', views.deletar_anexo, name='deletar_recibo'),
+    path('acc/meus_cadastros/1d1d61<id>d9281/excluir', views.excluir_map_cultural, name='acc_meus_cadastros_map_excluir'),
     #path('acc/meus_cadastros/detalhes/02<id>', views.cadastro_map_cultural_cnpj, name='acc_meus_cadastros_map_cnpj'),
     
     path('mapeamento-cultural/', views.mapeamento_cultural, name='mapeamento'),
