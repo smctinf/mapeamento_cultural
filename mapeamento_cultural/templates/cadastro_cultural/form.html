@@ -4,7 +4,7 @@
     <input type="hidden" name="tipo_form" value="{{tipo_form}}">
     {% bootstrap_form form %} 
     {% if tipo_form == 2 %}
-    <label for="id_coletivo" class="mb-3">
+    <!-- <label for="id_coletivo" class="mb-3">
         O cadastro é de banda e/ou grupo e/ou companhia?
     </label>
     <div class="form-check form-switch">
@@ -24,18 +24,18 @@
                 }
             }
         </script>
-    </div>
+    </div> -->
     <div id="msg" class="mt-4">
         <span class="text-danger">Atenção!</span><br>
         <p class="text-justify">
-        No caso de contratação de banda e/ou grupo e/ou companhia deverá ser prenchido uma procuração (a ser fornecida pela Secretaria Municipal de Cultura) em que os demais integrantes elegerão um responsável pelo processo no ato da contratação. Esse integrante será o responsável pelo recebimento do valor contratado, ao final da execução do serviço e mediante expedição de nota fiscal de serviço. Todos os integrantes deverão preencher a procuração autorizando o integrante escolhido a responder pelo processo de contratação e acostar cópia legível de seu documento de identificação.
+        No caso de contratação de CNPJ's pela Prefeitura deverá ser prenchido uma procuração (a ser fornecida pela Secretaria Municipal de Cultura) em que os demais integrantes elegerão um responsável pelo processo no ato da contratação. Esse integrante será o responsável pelo recebimento do valor contratado, ao final da execução do serviço e mediante expedição de nota fiscal de serviço. Todos os integrantes deverão preencher a procuração autorizando o integrante escolhido a responder pelo processo de contratação e acostar cópia legível de seu documento de identificação.
         </p>        
     </div>
     {% endif %}
     <style>
-        #msg{
+        /* #msg{
             display: none;
-        }
+        } */
     </style>
     <button class="btn bg-main text-white px-4 mt-4">Enviar</button>
 </form>
