@@ -4,7 +4,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from .validations import *
 import os
-from cultura.settings import BASE_DIR   
+from cultura.settings import BASE_DIR  
+
 class Usuario(models.Model):
     
     user=models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)    
@@ -14,8 +15,8 @@ class Usuario(models.Model):
     email=models.EmailField(verbose_name='Email:', unique=True)
     endereco=models.CharField(max_length=40, verbose_name='Endereço:')
     bairro=models.CharField(max_length=40, verbose_name='Bairro:')
-    dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')
-
+    dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')    
+    
     __original_email = None
     
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
@@ -32,6 +33,11 @@ class TiposContratação(models.Model):
 
     nome=models.CharField(max_length=50)
 
+    class Meta:
+        verbose_name_plural = "Tipos de Contratações"
+        verbose_name = "Tipo de Contratação"
+        ordering = ['nome']
+
     def __str__(self):
         return '%s' % (self.nome)
 
@@ -44,11 +50,13 @@ class TiposContratação(models.Model):
 class Area_Atuacao(models.Model):
     
     area=models.CharField(max_length=150)
-    
+
     def __str__(self):
         return '%s' % (self.area)
     
     class Meta:
+        verbose_name_plural = "Áreas de Atuação"
+        verbose_name = "Área de Atuação"
         ordering = ["area"]
    
 class Publico_Atuacao(models.Model):
@@ -58,6 +66,8 @@ class Publico_Atuacao(models.Model):
         return '%s' % (self.publico)
     
     class Meta:
+        verbose_name_plural = "Públicos"
+        verbose_name = "Público"
         ordering = ["publico"]
         
 class Enquadramento_Atuacao(models.Model):    
@@ -67,6 +77,8 @@ class Enquadramento_Atuacao(models.Model):
         return '%s' % (self.enquadramento)
 
     class Meta:
+        verbose_name_plural = "Enquadramentos de atuação"
+        verbose_name = "Enquadramento de atuação"
         ordering = ["enquadramento"]
 
 class Forma_insercao_Atuacao(models.Model):
@@ -76,6 +88,8 @@ class Forma_insercao_Atuacao(models.Model):
         return '%s' % (self.forma)
 
     class Meta:
+        verbose_name_plural = "Formas de inserção"
+        verbose_name = "Forma de inserção"
         ordering = ["forma"]
 
 
