@@ -193,7 +193,8 @@
                                         <i>Complete seu cadastro</i>                                      
                                       {% endif %}
                                     </td>                                                                                    
-                                  </tr>      
+                                  </tr> 
+                                  {% if not cadastro.fazedor_cultura %}      
                                   <tr>                                                                                                     
                                     <td>
                                       <b>Enquadramento da instituição/entidade/coletivo/grupo:</b><br>
@@ -206,6 +207,7 @@
                                       {% endif %}
                                     </td>
                                   </tr>
+                                  {% endif %}
                                   <tr>    
                                     <td>
                                       <b>Formar de inserção da atividade artístico-cultural:</b><br>
