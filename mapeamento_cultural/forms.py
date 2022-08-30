@@ -261,7 +261,7 @@ class Form_InfoExtra_CPF(ModelForm):
             'facebook': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
             'youtube': forms.TextInput(attrs={'placeholder':'', 'class': 'form-control mb-3'}),
         }        
-        exclude = ['complete', 'qnt']
+        exclude = ['complete', 'qnt', 'enquadramento']
 
 class Form_InfoExtra_CNPJ(ModelForm):
     class Meta:

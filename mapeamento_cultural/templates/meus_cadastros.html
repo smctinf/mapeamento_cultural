@@ -25,15 +25,15 @@
         {% endif %}
                         <div class="row">
                             <div class="col d-flex">
-                                <h3 style="display: inline;" class="px-5 text-uppercase">MEUS CADASTROS</h3>
+                                <h3 style="display: inline;" class="px-5 text-uppercase">MINHAS INSCRIÇÕES</h3>
                                 <div class="d-flex ms-auto">     
                                     {% if cpf %}                               
                                     <a href="{% url 'cad_artista_cpf' %}" class="btn bg-main text-white mx-auto mb-auto" style="width: 200px;">
-                                        Cadastrar CPF
+                                        Inscrever-se com CPF
                                     </a>                                
                                     {% endif %}
                                     <a href="{% url 'cad_artista_cnpj' %}" class="ms-1 btn bg-main text-white mx-auto mb-auto" style="width: 200px;">
-                                        Cadastrar CNPJ
+                                        Inscrever-se com CNPJ
                                     </a>                                                                        
                                 </div>
                             </div>
@@ -44,8 +44,8 @@
                                   <tr>      
                                     <th>Ação</th>                                    
                                     <th scope="col">Nome artístico/fantasia</th>
-                                    <th scope="col">Tipo de Cadastro</th>                                    
-                                    <th>Status</th>                                                                        
+                                    <th scope="col">Tipo de Inscricão</th>                                    
+                                    <th></th>                                                                        
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -64,9 +64,9 @@
                                         {{i.fazedor_cultura_cnpj}}
                                         {% endif %}
                                     </td>
-                                    <td>Por CPF</td>                                    
+                                    <td>CPF</td>                                    
                                     <td>                                        
-                                        <small class="text-secondary">Cadastro incompleto.</small>
+                                        <!-- <small class="text-secondary">Cadastro incompleto.</small> -->
                                     </td>
                                    
                                   </tr>
@@ -88,11 +88,11 @@
                                         {{i.fazedor_cultura_cnpj}}
                                         {% endif %}
                                     </td>
-                                    <td>Por CNPJ</td>                                    
+                                    <td>CNPJ</td>                                    
                                     <td>
-                                        <small class="text-success">
+                                        <!-- <small class="text-success">
                                             Cadastro completo!
-                                        </small>
+                                        </small> -->
                                     </td>
                                     
                                   </tr>
