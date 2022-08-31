@@ -65,7 +65,7 @@ class Form_Artista2(ModelForm):
             # 'telefone': forms.HiddenInput(),
             # 'descricao': forms.Textarea(attrs={'placeholder':'', 'rows':'3'}),
             'pis': forms.TextInput(attrs={'placeholder':'',}),                  
-            'banco': forms.TextInput(attrs={'placeholder':'',}),
+            'banco': forms.Select(attrs={'placeholder':'',}),
             'agencia': forms.TextInput(attrs={'placeholder':'',}),
             'n_conta': forms.TextInput(attrs={'placeholder':'',}),
             

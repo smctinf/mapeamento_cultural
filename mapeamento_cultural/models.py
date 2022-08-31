@@ -130,6 +130,19 @@ class InformacoesExtras(models.Model):
 
 class Artista(models.Model):
     
+    BANCO_CHOICES=[
+        ('001', 'Banco do Brasil'),
+        ('033', 'Banco Santander'),                
+        ('104', 'Caixa Econômica Federal'),
+        ('237', 'Banco Bradesco'),
+        ('341', 'Banco Itaú'),
+        ('399','HSBC'),
+        ('745','Banco Citibank'),
+        ('260','Nu Bank'),
+        ('out','Outro'),        
+    ]    
+
+
     fazedor_cultura=models.CharField(max_length=100, verbose_name='Nome artístico', blank=True, null=True)    
     area=models.ManyToManyField(Area_Atuacao, verbose_name='Área(s) de atuação', blank=True, null=True)
     
@@ -140,7 +153,7 @@ class Artista(models.Model):
     file_comprovante_residencia=models.FileField(upload_to='file_comprovantes_residencia', verbose_name='Comprovante de residência', blank=True, null=True)
     pis=models.CharField(max_length=80, verbose_name='PIS/PASEP/NIT', blank=True, null=True)
     file_pis=models.FileField(upload_to='file_pis', verbose_name='PIS/PASEP/NIT', blank=True, null=True)
-    banco=models.CharField(verbose_name='Banco (Conta Corrente):', default='', max_length=3, blank=True, null=True)
+    banco=models.CharField(verbose_name='Banco (Conta Corrente):', default='', max_length=3, choices=BANCO_CHOICES, blank=True, null=True)
     agencia=models.CharField(verbose_name='Agência:', default='', max_length=4, blank=True, null=True)
     n_conta=models.CharField(verbose_name='Número da conta', default='', max_length=8, blank=True, null=True)
     comprovante_de_cc=models.FileField(upload_to='file_comprovante_cc', verbose_name='Comprovante de número de conta corrente (banco, agência e nº da conta)', blank=True, null=True)
