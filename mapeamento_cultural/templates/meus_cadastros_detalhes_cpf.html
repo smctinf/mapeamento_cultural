@@ -96,8 +96,12 @@
                                   </tr>                                    
                                   <tr>    
                                     <td>
-                                      <b>Tipo de contratação:</b><br>
-                                      {{cadastro.tipo_contratacao}}                                      
+                                      <b>Tipo de inscrição:</b><br>
+                                      {% if cadastro.tipo_contratacao == 'Contratação por CPF' %}
+                                        Inscrição por CPF
+                                      {% else %}
+                                        Inscrição por CNPJ
+                                      {% endif %}
                                     </td>                                                                 
                                     <td scope="row">
                                       <b>Email:</b><br>
@@ -160,9 +164,10 @@
                                       {% endif %}
                                     </td>                                                                                                                                     
                                   </tr>  
+                                  {% if not cadastro.fazedor_cultura %}  
                                   <tr>    
                                     <td colspan="4">
-                                      <b>Endereço:</b><br>
+                                      <b>Endereço da entidade/grupo:</b><br>
                                       {% if info.endereco != '' %}
                                       {{info.endereco}}
                                       {% else %}
@@ -170,6 +175,7 @@
                                       {% endif %}
                                     </td>                                                                                                                                     
                                   </tr> 
+                                  {% endif %}
                                   {% if not cadastro.fazedor_cultura %}                                                             
                                   <tr>   
                                     <td>
