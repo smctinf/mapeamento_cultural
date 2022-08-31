@@ -97,10 +97,11 @@
                                   <tr>    
                                     <td>
                                       <b>Tipo de inscrição:</b><br>
-                                      {% if cadastro.tipo_contratacao == 'Contratação por CPF' %}
+                                      {% if cadastro.tipo_contratacao.nome == 'Contratação por CPF' %}                                      
                                         Inscrição por CPF
                                       {% else %}
                                         Inscrição por CNPJ
+                                        <p>{{cadastro.tipo_contratacao}}</p>
                                       {% endif %}
                                     </td>                                                                 
                                     <td scope="row">
