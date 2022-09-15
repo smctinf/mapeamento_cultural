@@ -303,6 +303,7 @@ def meus_cadastros(request):
 
 @login_required
 def meu_perfil(request):
+    print(request.user)
     context = {
         'usuario': Usuario.objects.get(user=request.user),
     }
@@ -475,6 +476,8 @@ def cadastro_anexo(request, id):
             'comprovante_de_cc',
             'declaracao_n_viculo',
             'comprovante_iss',
+            'portfolio',
+            'rg'
             
         ]
     else:
@@ -493,6 +496,8 @@ def cadastro_anexo(request, id):
             'certidao_regularidade_situacao',
             'certidao_negativa_debitos_trabalhistas',
             'documento_empresario_exclusivo'
+            'portfolio',
+            'rg'
         ]
     lista = []
     form_recibos=Form_Recibos()

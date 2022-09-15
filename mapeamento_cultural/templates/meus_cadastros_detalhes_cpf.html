@@ -237,7 +237,7 @@
                                           </div>
                                           <div>
                                             {% if info.instagram != ''%}
-                                            <a href="{{info.instagram}}">{{info.instagram}}</a>
+                                            <a href="https://instagram.com/{{info.instagram}}">{{info.instagram}}</a>
                                             {% else %}
                                             <i>Não informado.</i>
                                             {% endif %}                                            
@@ -311,7 +311,7 @@
                                     <td>
                                       <b>Banco</b><br>
                                       {% if cadastro.banco %}
-                                      {{cadastro.banco}}   
+                                      {{cadastro.get_banco_display}}   
                                       {% else %}
                                       <i>Complete seu cadastro</i>
                                       {% endif %}                                   
