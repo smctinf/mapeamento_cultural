@@ -1,4 +1,5 @@
 from ast import Delete
+from distutils.command.upload import upload
 from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import User
@@ -118,7 +119,7 @@ class InformacoesExtras(models.Model):
     descricao=models.TextField(verbose_name='Descrição resumida da atividade artística/culturais desenvolvidas', blank=True, null=True)    
     publico=models.ManyToManyField(Publico_Atuacao, blank=True, verbose_name='Públicos que participam das ações')
     enquadramento=models.ManyToManyField(Enquadramento_Atuacao, blank=True, verbose_name='Enquadramento da instituição/entidade/coletivo/grupo')
-    forma_atuacao=models.ManyToManyField(Forma_insercao_Atuacao, blank=True, verbose_name='Formar de inserção da atividade artístico-cultural')
+    forma_atuacao=models.ManyToManyField(Forma_insercao_Atuacao, blank=True, verbose_name='Forma de inserção da atividade artístico-cultural')
     endereco=models.CharField(max_length=150, blank=True, verbose_name='Endereço')
     qnt=models.CharField(max_length=1, choices=QNT_CHOICES, blank=True, null=True, verbose_name='Quantidade de pessoas que fazem parte da instituição')
     status=models.CharField(max_length=1, choices=STATUS_CHOICES, blank=True, verbose_name='Status da atividade')
@@ -131,14 +132,14 @@ class InformacoesExtras(models.Model):
 class Artista(models.Model):
     
     BANCO_CHOICES=[
-        ('001', 'Banco do Brasil'),
-        ('033', 'Banco Santander'),                
-        ('104', 'Caixa Econômica Federal'),
-        ('237', 'Banco Bradesco'),
-        ('341', 'Banco Itaú'),
-        ('399','HSBC'),
-        ('745','Banco Citibank'),
-        ('260','Nu Bank'),
+        ('001', 'Banco do Brasil - 001'),
+        ('033', 'Banco Santander - 033'),                
+        ('104', 'Caixa Econômica Federal - 104'),
+        ('237', 'Banco Bradesco - 237'),
+        ('341', 'Banco Itaú - 341'),
+        ('399','HSBC - 399'),
+        ('745','Banco Citibank - 745'),
+        ('260','Nu Bank - 260'),
         ('out','Outro'),        
     ]    
 
@@ -173,6 +174,8 @@ class Artista(models.Model):
     certidao_regularidade_situacao=models.FileField(upload_to='certidao_de_regularidade_de_situacao', verbose_name='Certidão de REgularidade de Situação', blank=True, null=True)
     certidao_negativa_debitos_trabalhistas=models.FileField(upload_to='certidao_debitos_trabalhistas_cndt', verbose_name='Certidão de Negativa de Débitos Trabalhistas - CDNT', blank=True, null=True)
     documento_empresario_exclusivo=models.FileField(upload_to='documento_empresario_exclusivo', verbose_name="Documento que comprove que o prestador é exclusivo do 'fazedor de cultura' em questão.*", blank=True, null=True)    
+    portfolio=models.FileField(upload_to='portfolio', verbose_name='Portfólio', blank=True, null=True)
+    rg=models.FileField(upload_to='rg', verbose_name='RG', blank=True, null=True)
     user_responsavel=models.ForeignKey(User, on_delete=models.CASCADE, null=True)        
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')
 
@@ -192,7 +195,9 @@ class Artista(models.Model):
             self.certidao_negativa_debitos,
             self.certidao_regularidade_situacao,
             self.certidao_negativa_debitos_trabalhistas,
-            self.documento_empresario_exclusivo
+            self.documento_empresario_exclusivo,
+            self.portfolio,
+            self.rg
         ]
         
         for i in anexos:

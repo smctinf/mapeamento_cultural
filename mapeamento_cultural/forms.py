@@ -102,6 +102,8 @@ class Form_Anexo_Artista_CPF(ModelForm):
             'declaracao_n_viculo',
             'comprovante_iss',
             'comprovante_iss',
+            'portfolio',
+            'rg'
             
         ]
 
@@ -124,7 +126,9 @@ class Form_Anexo_Artista_CNPJ(ModelForm):
             'certidao_negativa_debitos',
             'certidao_regularidade_situacao',
              'certidao_negativa_debitos_trabalhistas',
-             'documento_empresario_exclusivo'
+             'documento_empresario_exclusivo',
+             'portfolio',
+             'rg'
         ]
 class Form_ArtistaCNPJ(ModelForm):
     class Meta:
