@@ -20,22 +20,39 @@
                 <div class="col {{success.0}} py-1 text-white text-center mb-2">
                     {{success.1}}
                 </div>
-                <div class="row">
-                <div class="col">
-                    <label for="">Tipo de documento</label>
-                    <select name="" id="documentos">
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <label for="">Selecione o documento</label>
+                    <select onchange="showInput(this.value)" class="form-select" name="" id="documentos">
+                        <option value=""></option>
                         {% for i in form %}
-                        <option  value="">{{i.label}}</option>
+                        <option value="{{i.name}}">
+                            {% for l in lista %}
+                            {% if i.name == l.0 %}
+                                {% if l.1 %}
+                                [ANEXADO]
+                                {% else %}
+                                [SEM ANEXO]
+                                {% endif %}
+                            {% else %}                            
+                            {% endif %}
+                            {% endfor %}
+                            {{i.label}}
+                        </option>
                         {% endfor %}
+                        <option value="recibos">{{bg_recibos}} Recibos</option>
                     </select>
                 </div>
                 <div class="col">
                     <div id='inputs' class="m-auto">
                         {% for f in form %}
                             <div id="{{f.name}}" class="row">
-                                <div class="col d-flex flex-column">
+                                <div class="col">
                                     <label for="">{{f.label}}</label>
-                                    {{f}}
+                                    <div class="">
+                                        {{f}}
+                                    </div>
                                 </div>
                             </div>
                         {% endfor %}                        
@@ -61,18 +78,9 @@
                     </div>
                 </div>
             </div>
-
-            </div>
             <div class="row">
                 <div class="col-3 d-flex flex-column flex-wrap">
-                    {% for i in form %}                
-                    <a onclick="showInput('{{i.name}}')" class="btn {% for l in lista %}{% if i.name == l.0 %}{% if l.1 %}btn-primary{% else %}btn-secondary{% endif %}{% else %}{% endif %}{% endfor %} my-1 w-100">                    
-                        {{i.label}}                       
-                    </a>
-                    {% endfor %}
-                    <a onclick="showInput('recibos')" class="btn {{bg_recibos}} text-white my-1 w-100">                    
-                        Recibos                     
-                    </a>
+                   
                 </div>
                 <div class="col d-flex flex-column">
                     
@@ -164,19 +172,16 @@
         // labels[i].style.display='none'
         divs[i].style.display='none'
     }
-    let docs = document.querySelector("#documentos")
-    docs.addEventListener('change', (event)=>{
-        console.log("oi")
-        let value = event.target.value
-        console.log(value)
+    
+
+    function showInput(value){
+        
         if (last!=''){            
             document.getElementById(last).style.display='none'
         }        
         document.getElementById(value).style.display='block'
         last=value
-    })
-
-    
+    }
     function deletarRecibo(id_recibo){
         fetch("http://localhost:8000/acc/meus_cadastros/1d61"+id_recibo+"d9281/anexos/deletar-recibo/", {
             method: 'POST',

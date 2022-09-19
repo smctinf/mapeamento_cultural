@@ -529,7 +529,7 @@ def cadastro_anexo(request, id):
                         'success': ['bg-success', 'Anexo enviado com sucesso!'],
                         'id': id,
                         'recibos': recibos,
-                        'bg_recibos': 'btn-secondary' if len(recibos)==0 else 'bg-primary',
+                        'bg_recibos': '[SEM ANEXO]' if len(recibos)==0 else '[ANEXADO]',
                         'form_recibos': form_recibos
                     }                
         
@@ -552,7 +552,7 @@ def cadastro_anexo(request, id):
                     'success': ['bg-success', 'Anexo enviado com sucesso!'],
                     'id': id,
                     'recibos': recibos,
-                    'bg_recibos': 'btn-secondary' if len(recibos)==0 else 'bg-primary',
+                    'bg_recibos': '[SEM ANEXO]' if len(recibos)==0 else '[ANEXADO]',
                     'form_recibos': form_recibos
                 }
         else:
@@ -568,7 +568,7 @@ def cadastro_anexo(request, id):
             'id': id,
             'recibos': recibos,
             'form_recibos': form_recibos,
-            'bg_recibos': 'btn-secondary' if len(recibos)==0 else 'bg-primary',
+            'bg_recibos': '[SEM ANEXO]' if len(recibos)==0 else '[ANEXADO]',
             'log': Log_anexos.objects.filter(artista=instance)
         }
     return render(request, 'cadastro_cultural/anexos.html', context)
