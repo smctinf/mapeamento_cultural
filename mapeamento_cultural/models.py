@@ -168,6 +168,7 @@ class Artista(models.Model):
     file_cnpj=models.FileField(upload_to='file_cnpj', verbose_name='CNPJ - Documento scaneado evidenciando cadastro em atividades da àrea cultural', blank=True, null=True)
     prova_inscricao_PJ_nacional=models.FileField(upload_to='prova_inscricao_PJ_nacional', verbose_name='Prova de inscrição no Cadastro Nacional de Pessoa Jurídica', blank=True, null=True)
     certidao_negativa_debitos_relativos=models.FileField(upload_to='certidao_negativa_debitos_relativos', verbose_name='Certidão Negativa de Débitos Relativos a Tribunais Federais e à Divida Ativa da União', blank=True, null=True)
+    certidao_negativa_debitos_relativos_validade=models.DateField(verbose_name='Validade da Certidão Negativa de Débitos Relativos a Tribunais Federais e à Divida Ativa da União', null=True, blank=True)
     certidao_regularidade_icms=models.FileField(upload_to='certidao_regularidade_icms', verbose_name='Certidão de Regularidade de Tribunais Estaduais (ICMS)', blank=True, null=True)
     certidao_regularidade_iss=models.FileField(upload_to='certidao_regularidade_iss', verbose_name='Certidão de Regularidade de Tribunais Municipais (ISS)', blank=True, null=True)
     certidao_negativa_debitos=models.FileField(upload_to='certidao_negativa_debitos', verbose_name='Certidão Negativa de Débitos', blank=True, null=True)
@@ -176,6 +177,7 @@ class Artista(models.Model):
     documento_empresario_exclusivo=models.FileField(upload_to='documento_empresario_exclusivo', verbose_name="Documento que comprove que o prestador é exclusivo do 'fazedor de cultura' em questão.*", blank=True, null=True)    
     portfolio=models.FileField(upload_to='portfolio', verbose_name='Portfólio', blank=True, null=True)
     rg=models.FileField(upload_to='rg', verbose_name='RG', blank=True, null=True)
+    rg_validade= models.DateField(verbose_name='Validade RG', null=True)
     user_responsavel=models.ForeignKey(User, on_delete=models.CASCADE, null=True)        
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')
 

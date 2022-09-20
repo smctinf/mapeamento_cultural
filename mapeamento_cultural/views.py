@@ -15,7 +15,7 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 
 from .models import Log_anexos, Recibos, Usuario
-from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra_CPF, Form_InfoExtra_CNPJ, Form_Recibos, Form_Usuario
+from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra_CPF, Form_InfoExtra_CNPJ, Form_Recibos, Form_Usuario, Form_Validade_Anexo_Artista_CPF
 
 
 from django.contrib import messages
@@ -530,7 +530,8 @@ def cadastro_anexo(request, id):
                         'id': id,
                         'recibos': recibos,
                         'bg_recibos': '[SEM ANEXO]' if len(recibos)==0 else '[ANEXADO]',
-                        'form_recibos': form_recibos
+                        'form_recibos': form_recibos,
+                        
                     }                
         
                 
@@ -569,7 +570,8 @@ def cadastro_anexo(request, id):
             'recibos': recibos,
             'form_recibos': form_recibos,
             'bg_recibos': '[SEM ANEXO]' if len(recibos)==0 else '[ANEXADO]',
-            'log': Log_anexos.objects.filter(artista=instance)
+            'log': Log_anexos.objects.filter(artista=instance),
+            'validade': Form_Validade_Anexo_Artista_CPF()
         }
     return render(request, 'cadastro_cultural/anexos.html', context)
 

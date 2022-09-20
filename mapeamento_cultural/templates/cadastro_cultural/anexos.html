@@ -77,6 +77,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="col" id="inputs-validade">
+                    {% for j in validade %}
+                    <div id="{{j.name}}" class="v_inputs">
+                        <label for="">{{j.label}}</label>
+                        {{j}}
+                    </div>
+                    {% endfor %}
+
+                </div>
             </div>
             <div class="row">
                 <div class="col-3 d-flex flex-column flex-wrap">
@@ -170,16 +179,22 @@
         // divs[i].classList.remove("mb-3");
         // brs[i].remove()
         // labels[i].style.display='none'
+    }
+    for(i=0; i<divs.length-1; i++){
         divs[i].style.display='none'
     }
-    
+
 
     function showInput(value){
-        
-        if (last!=''){            
+        v_last = document.getElementById(last+'_validade')
+        v_value = document.getElementById(value+'_validade')
+        if (last!=''){ 
+            
             document.getElementById(last).style.display='none'
-        }        
+            document.getElementById(last+'_validade').style.display='none'
+        }
         document.getElementById(value).style.display='block'
+        document.getElementById(value+'_validade').style.display='block'
         last=value
     }
     function deletarRecibo(id_recibo){
