@@ -101,11 +101,19 @@ class Form_Anexo_Artista_CPF(ModelForm):
             'comprovante_de_cc',
             'declaracao_n_viculo',
             'comprovante_iss',
-            'comprovante_iss',
             'portfolio',
-            'rg'
+            'rg',
             
         ]
+
+class Form_Validade_Anexo_Artista_CPF(ModelForm):
+
+    class Meta:
+        model = Artista
+        fields = [
+            'rg_validade'
+        ]
+
 
 class Form_Anexo_Artista_CNPJ(ModelForm):
 
@@ -118,7 +126,6 @@ class Form_Anexo_Artista_CNPJ(ModelForm):
             'comprovante_de_cc',
             'declaracao_n_viculo',
             'comprovante_iss',
-            'comprovante_iss',
             
             'certidao_negativa_debitos_relativos',
             'certidao_regularidade_icms',
@@ -130,6 +137,8 @@ class Form_Anexo_Artista_CNPJ(ModelForm):
              'portfolio',
              'rg'
         ]
+
+
 class Form_ArtistaCNPJ(ModelForm):
     class Meta:
         model = Artista
