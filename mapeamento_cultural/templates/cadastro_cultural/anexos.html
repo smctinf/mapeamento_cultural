@@ -79,9 +79,11 @@
                 </div>
                 <div class="col" id="inputs-validade">
                     {% for j in validade %}
-                    <div id="{{j.name}}" class="v_inputs">
-                        <label for="">{{j.label}}</label>
-                        {{j}}
+                    <div id="{{j.name}}" class="row">
+                        <div>
+                            <label for="">Vencimento do Documento</label>
+                            {{j}}
+                        </div>
                     </div>
                     {% endfor %}
 
@@ -171,6 +173,9 @@
 <script>
     last=''
     divs=document.querySelectorAll('#inputs .row')
+    v_divs=document.querySelectorAll('#inputs-validade .row')
+    console.log(divs)
+    console.log(v_divs)
     // brs=document.querySelectorAll('#inputs div br')
     // inputs=document.querySelectorAll('#inputs div input')
     // labels=document.getElementsByTagName('label')
@@ -180,22 +185,31 @@
         // brs[i].remove()
         // labels[i].style.display='none'
     }
-    for(i=0; i<divs.length-1; i++){
+    for(i=0; i<v_divs.length; i++){
+         v_divs[i].style.display='none'
+    }
+    for(i=0; i<divs.length; i++){
         divs[i].style.display='none'
     }
 
-
+  
     function showInput(value){
-        v_last = document.getElementById(last+'_validade')
-        v_value = document.getElementById(value+'_validade')
+        
+
+        console.log(value)
         if (last!=''){ 
-            
             document.getElementById(last).style.display='none'
-            document.getElementById(last+'_validade').style.display='none'
+            if(last != 'portfolio' && last != 'recibos'){
+            document.getElementById(last+"_validade").style.display='none'
+            }
         }
         document.getElementById(value).style.display='block'
-        document.getElementById(value+'_validade').style.display='block'
+        if(value != 'portfolio' && value != 'recibos'){
+        console.log(value)
+        document.getElementById(value+"_validade").style.display='block'
+        }
         last=value
+
     }
     function deletarRecibo(id_recibo){
         fetch("http://localhost:8000/acc/meus_cadastros/1d61"+id_recibo+"d9281/anexos/deletar-recibo/", {

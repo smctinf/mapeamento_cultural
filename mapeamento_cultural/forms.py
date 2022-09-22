@@ -111,8 +111,23 @@ class Form_Validade_Anexo_Artista_CPF(ModelForm):
     class Meta:
         model = Artista
         fields = [
-            'rg_validade'
+            'file_cpf_validade',
+            'file_comprovante_residencia_validade',
+            'file_pis_validade',
+            'comprovante_de_cc_validade',
+            'declaracao_n_viculo_validade',
+            'comprovante_iss_validade',
+            'rg_validade',
         ]
+        widgets={
+            'file_cpf_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+            'file_comprovante_residencia_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+            'file_pis_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+            'comprovante_de_cc_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+            'declaracao_n_viculo_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+            'comprovante_iss_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+            'rg_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        }
 
 
 class Form_Anexo_Artista_CNPJ(ModelForm):
@@ -132,10 +147,10 @@ class Form_Anexo_Artista_CNPJ(ModelForm):
             'certidao_regularidade_iss',
             'certidao_negativa_debitos',
             'certidao_regularidade_situacao',
-             'certidao_negativa_debitos_trabalhistas',
-             'documento_empresario_exclusivo',
-             'portfolio',
-             'rg'
+            'certidao_negativa_debitos_trabalhistas',
+            'documento_empresario_exclusivo',
+            'portfolio',
+            'rg'
         ]
 
 
