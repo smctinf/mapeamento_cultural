@@ -101,11 +101,34 @@ class Form_Anexo_Artista_CPF(ModelForm):
             'comprovante_de_cc',
             'declaracao_n_viculo',
             'comprovante_iss',
-            'comprovante_iss',
             'portfolio',
-            'rg'
+            'rg',
             
         ]
+
+class Form_Validade_Anexo_Artista_CPF(ModelForm):
+
+    class Meta:
+        model = Artista
+        fields = [
+            'file_cpf_validade',
+            'file_comprovante_residencia_validade',
+            'file_pis_validade',
+            'comprovante_de_cc_validade',
+            'declaracao_n_viculo_validade',
+            'comprovante_iss_validade',
+            'rg_validade',
+        ]
+        widgets={
+            'file_cpf_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+            'file_comprovante_residencia_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+            'file_pis_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+            'comprovante_de_cc_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+            'declaracao_n_viculo_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+            'comprovante_iss_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+            'rg_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        }
+
 
 class Form_Anexo_Artista_CNPJ(ModelForm):
 
@@ -118,18 +141,57 @@ class Form_Anexo_Artista_CNPJ(ModelForm):
             'comprovante_de_cc',
             'declaracao_n_viculo',
             'comprovante_iss',
-            'comprovante_iss',
             
             'certidao_negativa_debitos_relativos',
             'certidao_regularidade_icms',
             'certidao_regularidade_iss',
             'certidao_negativa_debitos',
             'certidao_regularidade_situacao',
-             'certidao_negativa_debitos_trabalhistas',
-             'documento_empresario_exclusivo',
-             'portfolio',
-             'rg'
+            'certidao_negativa_debitos_trabalhistas',
+            'documento_empresario_exclusivo',
+            'portfolio',
+            'rg'
         ]
+
+class Form_Validade_Anexo_Artista_CNPJ(ModelForm):
+
+    class Meta:
+        model = Artista
+        fields = [
+            'prova_inscricao_PJ_nacional_validade',
+            'file_comprovante_residencia_validade',
+            'file_pis_validade',
+            'comprovante_de_cc_validade',
+            'declaracao_n_viculo_validade',
+            'comprovante_iss_validade',
+            'portfolio',
+            'rg_validade',
+            
+            'certidao_negativa_debitos_relativos_validade',
+            'certidao_regularidade_icms_validade',
+            'certidao_regularidade_iss_validade',
+            'certidao_negativa_debitos_validade',
+            'certidao_regularidade_situacao_validade',
+            'certidao_negativa_debitos_trabalhistas_validade',
+            'documento_empresario_exclusivo_validade',
+        ]
+        widgets={
+        'file_cpf_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        'file_comprovante_residencia_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        'file_pis_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        'comprovante_de_cc_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        'declaracao_n_viculo_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        'comprovante_iss_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        'rg_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        'certidao_negativa_debitos_relativos_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        'certidao_regularidade_icms_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        'certidao_regularidade_iss_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        'certidao_negativa_debitos_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        'certidao_regularidade_situacao_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        'certidao_negativa_debitos_trabalhistas_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        'documento_empresario_exclusivo_validade': forms.TextInput(attrs={'type':'date', 'class':'form-control'}),
+        }
+
 class Form_ArtistaCNPJ(ModelForm):
     class Meta:
         model = Artista
@@ -145,38 +207,47 @@ class Form_ArtistaCNPJ(ModelForm):
             'n_conta': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,apenasNumeros)'}),   
             'telefone': forms.TextInput(attrs={'placeholder':'', 'onkeydown': 'mascara(this,itelefone)'})                      
 
-        }        
-        exclude = [
-            'fazedor_cultura',
-            # 'data_nascimento',
-            # 'descricao',
-            # 'cpf',
-            'file_cpf',
-            'file_comprovante_residencia',
-            'pis',
-            'file_pis',
-            'banco',
-            'agencia',
-            'n_conta',
-            'comprovante_de_cc',
-            'declaracao_n_viculo',
-            'comprovante_iss',
-            'comprovante_iss',
+        }     
+        fields={
+            'fazedor_cultura_cnpj',
+            'cnpj',
+            'area',
+            'telefone',
+            'portfolio',
+            'rg'
+        }   
+        # exclude = [
+        #     'fazedor_cultura',
+        #     # 'data_nascimento',
+        #     # 'descricao',
+        #     # 'cpf',
+        #     'file_cpf',
+        #     'file_comprovante_residencia',
+        #     'pis',
+        #     'file_pis',
+        #     'banco',
+        #     'agencia',
+        #     'n_conta',
+        #     'comprovante_de_cc',
+        #     'declaracao_n_viculo',
+        #     'comprovante_iss',
+        #     'comprovante_iss',
             
-            'file_cnpj',
-            'prova_inscricao_PJ_nacional',
-            'certidao_negativa_debitos_relativos',
-            'certidao_regularidade_icms',
-            'certidao_regularidade_iss',
-            'certidao_regularidade_iss',
-            'certidao_negativa_debitos',
-            'certidao_regularidade_situacao',
-            'certidao_negativa_debitos_trabalhistas',
-            'documento_empresario_exclusivo',
-            'tipo_contratacao',
-            'cadastro_completo',
-            'dt_inclusao',
-            'user_responsavel']
+        #     'file_cnpj',
+        #     'prova_inscricao_PJ_nacional',
+        #     'certidao_negativa_debitos_relativos',
+        #     'certidao_regularidade_icms',
+        #     'certidao_regularidade_iss',
+        #     'certidao_regularidade_iss',
+        #     'certidao_negativa_debitos',
+        #     'certidao_regularidade_situacao',
+        #     'certidao_negativa_debitos_trabalhistas',
+        #     'documento_empresario_exclusivo',
+        #     'tipo_contratacao',
+        #     'cadastro_completo',
+        #     'dt_inclusao',
+        #     'user_responsavel',
+        #     'rg_validade']
     field_order=['fazedor_cultura_cnpj', 'cnpj', 'area', 'telefone', 'cpf_responsavel']
     
     def clean_cnpj(self):

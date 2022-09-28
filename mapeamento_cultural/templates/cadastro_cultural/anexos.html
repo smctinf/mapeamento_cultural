@@ -77,6 +77,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="col" id="inputs-validade">
+                    {% for j in validade %}
+                    <div id="{{j.name}}" class="row">
+                        <div>
+                            <label for="">Vencimento do Documento</label>
+                            {{j}}
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
             </div>
             <div class="row">
                 <div class="col-3 d-flex flex-column flex-wrap">
@@ -162,6 +173,9 @@
 <script>
     last=''
     divs=document.querySelectorAll('#inputs .row')
+    v_divs=document.querySelectorAll('#inputs-validade .row')
+    console.log(divs)
+    console.log(v_divs)
     // brs=document.querySelectorAll('#inputs div br')
     // inputs=document.querySelectorAll('#inputs div input')
     // labels=document.getElementsByTagName('label')
@@ -170,17 +184,32 @@
         // divs[i].classList.remove("mb-3");
         // brs[i].remove()
         // labels[i].style.display='none'
+    }
+    for(i=0; i<v_divs.length; i++){
+         v_divs[i].style.display='none'
+    }
+    for(i=0; i<divs.length; i++){
         divs[i].style.display='none'
     }
-    
 
+  
     function showInput(value){
         
-        if (last!=''){            
+
+        console.log(value)
+        if (last!=''){ 
             document.getElementById(last).style.display='none'
-        }        
+            if(last != 'portfolio' && last != 'recibos'){
+            document.getElementById(last+"_validade").style.display='none'
+            }
+        }
         document.getElementById(value).style.display='block'
+        if(value != 'portfolio' && value != 'recibos'){
+        console.log(value)
+        document.getElementById(value+"_validade").style.display='block'
+        }
         last=value
+
     }
     function deletarRecibo(id_recibo){
         fetch("http://localhost:8000/acc/meus_cadastros/1d61"+id_recibo+"d9281/anexos/deletar-recibo/", {

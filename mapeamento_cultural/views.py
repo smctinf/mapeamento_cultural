@@ -15,7 +15,7 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 
 from .models import Log_anexos, Recibos, Usuario
-from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra_CPF, Form_InfoExtra_CNPJ, Form_Recibos, Form_Usuario
+from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra_CPF, Form_InfoExtra_CNPJ, Form_Recibos, Form_Usuario, Form_Validade_Anexo_Artista_CNPJ, Form_Validade_Anexo_Artista_CPF
 
 
 from django.contrib import messages
@@ -495,12 +495,18 @@ def cadastro_anexo(request, id):
             'certidao_negativa_debitos',
             'certidao_regularidade_situacao',
             'certidao_negativa_debitos_trabalhistas',
-            'documento_empresario_exclusivo'
+            'documento_empresario_exclusivo',
             'portfolio',
             'rg'
         ]
     lista = []
     form_recibos=Form_Recibos()
+    form_validade=""
+
+    if instance.tipo_contratacao.id == 1:
+        form_validade = Form_Validade_Anexo_Artista_CPF(instance=instance)
+    else:
+        form_validade = Form_Validade_Anexo_Artista_CNPJ(instance=instance)
     if request.method == 'POST':
         if request.user == instance.user_responsavel:
             if instance.tipo_contratacao.id == 1:
@@ -530,31 +536,41 @@ def cadastro_anexo(request, id):
                         'id': id,
                         'recibos': recibos,
                         'bg_recibos': '[SEM ANEXO]' if len(recibos)==0 else '[ANEXADO]',
-                        'form_recibos': form_recibos
+                        'form_recibos': form_recibos,
+                        'validade':form_validade
+                        
                     }                
         
                 
             if form.is_valid():
                 instance = form.save()
-                if instance.tipo_contratacao.id == 1:
-                    form = Form_Anexo_Artista_CPF(instance=instance)     
+                if instance.tipo_contratacao.id ==1:
+                    form_validade = Form_Validade_Anexo_Artista_CPF(request.POST, instance=instance)
                 else:
-                    form = Form_Anexo_Artista_CNPJ(instance=instance)            
-                for a in anexos:
-                    lista.append([a, instance.__dict__[a].name != ''])
-                
-                for i in keys:
-                    log=Log_anexos(artista=instance, anexo=i, filename=request.FILES[i].name, user_responsavel=request.user)
-                    log.save()
-                context = {
-                    'form': form,
-                    'lista': lista,
-                    'success': ['bg-success', 'Anexo enviado com sucesso!'],
-                    'id': id,
-                    'recibos': recibos,
-                    'bg_recibos': '[SEM ANEXO]' if len(recibos)==0 else '[ANEXADO]',
-                    'form_recibos': form_recibos
-                }
+                    form_validade = Form_Validade_Anexo_Artista_CNPJ(request.POST, instance=instance)
+                if form_validade.is_valid():
+
+                    if instance.tipo_contratacao.id == 1:
+                        form = Form_Anexo_Artista_CPF(instance=instance)     
+                    else:
+                        form = Form_Anexo_Artista_CNPJ(instance=instance)            
+                    for a in anexos:
+                        lista.append([a, instance.__dict__[a].name != ''])
+                    
+                    for i in keys:
+                        log=Log_anexos(artista=instance, anexo=i, filename=request.FILES[i].name, user_responsavel=request.user)
+                        log.save()
+                    form_validade.save()
+                    context = {
+                        'form': form,
+                        'lista': lista,
+                        'success': ['bg-success', 'Anexo enviado com sucesso!'],
+                        'id': id,
+                        'recibos': recibos,
+                        'bg_recibos': '[SEM ANEXO]' if len(recibos)==0 else '[ANEXADO]',
+                        'form_recibos': form_recibos,
+                        'validade':form_validade
+                    }
         else:
             raise PermissionDenied()
 
@@ -569,7 +585,8 @@ def cadastro_anexo(request, id):
             'recibos': recibos,
             'form_recibos': form_recibos,
             'bg_recibos': '[SEM ANEXO]' if len(recibos)==0 else '[ANEXADO]',
-            'log': Log_anexos.objects.filter(artista=instance)
+            'log': Log_anexos.objects.filter(artista=instance),
+            'validade':  form_validade
         }
     return render(request, 'cadastro_cultural/anexos.html', context)
 
