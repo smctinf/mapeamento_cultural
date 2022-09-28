@@ -651,3 +651,8 @@ def deletar_anexo(request, id):
         else:
             raise PermissionDenied()
     return HttpResponse(status=200)  
+
+
+@login_required
+def auxiliar(request):
+    return render(request, 'auxiliar.html')
