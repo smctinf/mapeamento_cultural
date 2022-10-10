@@ -213,8 +213,8 @@ class Form_ArtistaCNPJ(ModelForm):
             'cnpj',
             'area',
             'telefone',
-            'portfolio',
-            'rg'
+#           'portfolio',
+#           'rg'
         }   
         # exclude = [
         #     'fazedor_cultura',
