@@ -17,7 +17,7 @@ error_messages = {
 }
 def validate_TELEFONE(value):
     telefone = [int(char) for char in value if char.isdigit()]
-    print(telefone)
+    # print(telefone)
     if len(telefone)>11 or len(telefone)<10:
         if len(telefone)!=0:            
             raise ValidationError(error_messages['tel_max_digits'])
@@ -26,7 +26,7 @@ def validate_TELEFONE(value):
         raise ValidationError(error_messages['tel_celular_invalido'])
     if telefone in (c * 10 for c in "1234567890"):
         raise ValidationError(error_messages['tel_telefone_invalido'])
-    print(telefone)
+    # print(telefone)
     return telefone
 
 def validate_CNPJ(value):
@@ -53,13 +53,13 @@ def validate_CPF(value):
 #    print(value)
     cpf = [int(char) for char in value if char.isdigit()]
 #    print(cnpj)
-    print(cpf)
+    # print(cpf)
     if len(cpf) != 11:
         raise ValidationError(error_messages['max_digits_cpf'])
     if cpf in (c * 11 for c in "1234567890"):
         raise ValidationError(error_messages['invalid_CPF'])
     orig_value = ''.join([str(_) for _ in cpf])    
-    print(orig_value)
+    # print(orig_value)
     for i in range(9, 11):
         value = sum((cpf[num] * ((i+1) - num) for num in range(0, i)))
         digit = ((value * 10) % 11) % 10

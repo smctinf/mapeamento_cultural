@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 
-from .models import Log_anexos, Recibos, Usuario
+from .models import Area_Atuacao, Log_anexos, Recibos, Usuario
 from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra_CPF, Form_InfoExtra_CNPJ, Form_Recibos, Form_Usuario, Form_Validade_Anexo_Artista_CNPJ, Form_Validade_Anexo_Artista_CPF
 
 
@@ -25,11 +25,50 @@ from mapeamento_cultural.models import Artista, InformacoesExtras, TiposContrata
 from qr_code.qrcode.utils import QRCodeOptions
 
 # Create your views here.
-
+import numpy as np
+import pandas as pd
 
 def index(request):
     return render(request, 'index.html')
 
+
+def mapeamento_listagem(request):
+    busca=False    
+    filtro_template={}
+    area_atuacao=Area_Atuacao.objects.all()
+    if request.method=='POST':
+        filtro=[]        
+        # print(request.POST)
+        # if request.POST['ordem_area']!='':
+        #     if request.POST['ordem_area']=='Artes Cênicas' and request.POST['ordem']=='crescente':
+        #         ordem=['fazedor_cultura', 'fazedor_cultura_cnpj']
+        #     elif request.POST['ordem_area']=='Artes Cênicas' and request.POST['ordem']=='decrescente':
+        #         ordem=['-fazedor_cultura', '-fazedor_cultura_cnpj']
+        # else:
+        #     ordem='id'
+        for i in request.POST:
+            if request.POST[i]!='' and i!='csrfmiddlewaretoken' and i!='ordem':                
+                busca=True
+                filtro.append([i,request.POST[i]])
+                filtro_template[i]=True
+        if busca:
+            if request.POST['area_atuacao']!='' and request.POST['tipo_inscricao']!='':            
+                artista=Artista.objects.filter(area=request.POST['area_atuacao'], tipo_contratacao=request.POST['tipo_inscricao'])
+            elif request.POST['area_atuacao']!='' and request.POST['tipo_inscricao']=='':      
+                artista=Artista.objects.filter(area=request.POST['area_atuacao'])
+            elif request.POST['area_atuacao']=='' and request.POST['tipo_inscricao']!='':      
+                artista=Artista.objects.filter(tipo_contratacao=request.POST['tipo_inscricao'])
+        else:
+            busca=True
+            artista=Artista.objects.all()    
+    else:
+        artista=Artista.objects.all()
+    context={
+        'algo': artista,
+        'busca': busca,
+        'area_atuacao':area_atuacao,
+    }
+    return render(request, 'mapeamento_listagem.html', context)
 
 def mapeamento_cultural(request):
     context = {
@@ -672,4 +711,143 @@ def deletar_anexo(request, id):
 
 @login_required
 def auxiliar(request):
-    return render(request, 'auxiliar.html')
+    url=str(BASE_DIR) +'/cultura/static/dados.csv'
+
+    colunas_de_interesse={
+        'dt_inclusao': 'Carimbo de data/hora',
+        #user
+        'nome': 'NOME COMPLETO:',
+        'cpf': 'CPF:',
+        'data_nascimento' : 'DATA DE NASCIMENTO:',
+        'email': 'Endereço de e-mail',
+        # 'endereco',
+        # 'bairro',        
+        #informacoes extras
+        'descricao': 'FAÇA UM BREVE HISTÓRICO DE SUAS ATIVIDADES CULTURAIS DESENVOLVIDAS NOS ÚLTIMOS ANOS (2018, 2019, 2020)',
+        #'endereco',
+        #artista
+        'tipo_contratacao': 'Desejo fazer cadastro de:',
+        'fazedor_cultura': 'NOME ARTÍSTICO:',
+        'telefone': 'TELEFONE celular/WhatsApp:',
+        'pis': 'PIS/PASEP/NIT:',
+        'fazedor_cultura_cnpj': 'NOME FANTASIA (caso exista):',
+        'cnpj': 'CNPJ:',
+    }
+
+    area_atuacao=[
+        'EM QUAL SEGMENTO, GRUPO, CATEGORIA E/OU LINGUAGEM ARTÍSTICA VOCÊ ESTÁ INSERIDO?',
+    ]
+    lista_colunas_de_interesse=[
+        'Carimbo de data/hora',
+        'NOME COMPLETO:',
+        'CPF:',
+        'DATA DE NASCIMENTO:',
+        'Endereço de e-mail',
+        # 'endereco',
+        # 'bairro',        
+        #informacoes extras
+        'FAÇA UM BREVE HISTÓRICO DE SUAS ATIVIDADES CULTURAIS DESENVOLVIDAS NOS ÚLTIMOS ANOS (2018, 2019, 2020)',
+        #'endereco',
+        #artista
+        'Desejo fazer cadastro de:',
+        'NOME ARTÍSTICO:',
+        'TELEFONE celular/WhatsApp:',
+        'PIS/PASEP/NIT:',
+        'NOME FANTASIA (caso exista):',
+        'CNPJ:',
+    ]
+
+    df=pd.read_csv(url)
+    df.drop('Unnamed: 2', inplace=True, axis=1)
+    df.drop('VOCÊ É TITULAR DE BENEFÍCIO PREVIDENCIÁRIO, ASSISTENCIAL, DE SEGURO DESEMPREGO, DO AUXÍLIO EMERGENCIAL PREVISTO PELA LEI 13982 DE 2/4/2020 OU PROGRAMA DE TRANSFERÊNCIA DE RENDA FEDERAL (RESSALVADO O PROGRAMA BOLSA FAMÍLIA)?', inplace=True, axis=1)
+    df.drop('SUA RENDA FAMILIAR MENSAL POR PESSOA É DE ATÉ MEIO SALÁRIO MÍNIMO (R$ 552,50)? (De acordo com Art. 6º, inciso IV da Lei 14.017, 29 de junho de 2020)', inplace=True, axis=1)
+    df.drop('SUA RENDA FAMILIAR MENSAL TOTAL, OU SEJA, SOMANDO O SALÁRIO DE TODOS DA RESIDÊNCIA É DE ATÉ 03 (TRÊS) SALÁRIOS MÍNIMOS (R$3.135,00)? (De acordo com Art. 6º, inciso IV da Lei 14.017, 29 de junho de 2020)', inplace=True, axis=1)
+    df.drop('VOCÊ REALIZOU DECLARAÇÃO DE IMPOSTO DE RENDA, EM 2018, INFORMANDO RENDA SUPERIOR A R$: 28.559,70 (vinte e oito mil, quinhentos e cinquenta e nove reais e setenta centavos)? (De acordo com Art. 6º, inciso V daLei 14.017, 29 de junho de 2020)', inplace=True, axis=1)
+    # df_=df.drop_duplicates(area_atuacao[0])
+    df_=df.sort_values(by=[area_atuacao[0]])
+    df_=df_.drop_duplicates(area_atuacao[0])
+    
+    dados=df.loc[:, lista_colunas_de_interesse]
+    
+    #área de atuação
+    dados_area_atuacao=df_.loc[:, area_atuacao]   
+    # for dado_atuacao in dados_area_atuacao[dados_area_atuacao.columns[0]]:
+            # print(dado_atuacao)
+
+    cont=0
+    cont_fisica=0
+    cont_artista=0
+    cont_erro_artista=0
+    cont_erro_user=0
+    cont_usuarios_cadastrados=0
+
+    for i in range(357):
+        d={'endereco': 'NaN', 'bairro': 'NaN'}
+        for j in colunas_de_interesse:
+            if j!='dt_inclusao':
+                d[j]=dados.loc[i, lista_colunas_de_interesse][colunas_de_interesse[j]]                
+            # print(j+': ', dados.loc[i, lista_colunas_de_interesse][colunas_de_interesse[j]])        
+
+                #         info=dt_obj.strftime("%d-%m-%y")
+        if d['tipo_contratacao']=='PESSOA FÍSICA':
+            if d['cpf']=='NaN':
+                senha=d['cnpj']
+            else:
+                senha=d['cpf']
+                from datetime import datetime
+                d['data_nascimento'] = datetime.strptime(str(d['data_nascimento']), '%d/%m/%Y')
+
+            form=Form_Usuario(d)
+            if form.is_valid():
+                user = User.objects.create_user(
+                    username=d['email'], 
+                    email=d['email'], 
+                    password=senha
+                    )
+                user.first_name = d['nome']
+                user.set_password(senha)
+                user.save()
+                usuario = form.save()
+                usuario.user = user
+                usuario.save()
+                cont_usuarios_cadastrados+=1
+
+                form2=Form_Artista(d)
+                if form2.is_valid():
+                    obj=form2.save()
+                    obj.tipo_contratacao = TiposContratação.objects.get(id=1)
+                    obj.user_responsavel = user
+                    form2.save()
+                    cont_artista+=1
+                else:
+                    print('Indice: '+str(i))
+                    print('Nome: '+str(d['nome']))
+                    print('CPF: '+str(d['cpf']))
+                    print('Telefone: '+str(d['telefone']))
+                    print('Erro no formulário do artista:')                    
+                    print(form2.errors)
+                    print('''-------------------------------------------------------------------------''')
+                    cont_erro_artista+=1
+            else:
+                print('Indice: '+str(i))
+                print('Nome: '+str(d['nome']))
+                print('CPF: '+str(d['cpf']))
+                print('Telefone: '+str(d['telefone']))
+                print('Erro no formulário do usuário:')                
+                print(form.errors)
+                print('''-------------------------------------------------------------------------''')
+                cont_erro_user+=1
+            cont_fisica+=1            
+        else:
+            cont+=1
+                            
+    print('Erros ao cadastrar usuários: ',cont_erro_user)        
+    print('PJ: ',cont)
+    print('PF: ',cont_fisica)
+    print('Artistas: ',cont_artista)
+    print('Erros ao cadastrar artista: ',cont_erro_artista)        
+    context={
+        # 'print': df_.loc[:, area_atuacao].to_html,
+        'print': dados.to_html
+    }
+    return render(request, 'auxiliar.html', context)

@@ -194,6 +194,12 @@ class Artista(models.Model):
     user_responsavel=models.ForeignKey(User, on_delete=models.CASCADE, null=True)        
     dt_inclusao = models.DateTimeField(auto_now_add=True, verbose_name='Dt. Inclusão')
 
+    def __str__(self):
+        if self.fazedor_cultura:
+            return '%s' % (self.fazedor_cultura)
+        else:
+            return '%s' % (self.fazedor_cultura_cnpj)
+
     def delete(self):
         #deletar anexos
         anexos = [

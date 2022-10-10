@@ -27,12 +27,19 @@
                         </p>
 
                         {% if artista %}
-                        <a href="{% url 'acc_meus_cadastros' %}" class="btn btn-outline-primary mx-auto mt-4 px-5 py-3">
-                            VISUALIZAR CADASTROS
-                        </a>
+                        <a style="width: 100%;" href="{% url 'acc_meus_cadastros' %}" class="btn btn-outline-primary mx-auto mt-4 px-5 py-3">
+                            <i class="fa-sharp fa-solid fa-address-card me-1"></i>
+                            VISUALIZAR MEUS CADASTROS
+                        </a>                        
                         {% else %}
-                        <a href="{% url 'cad_cult_etapa1_artista' %}" class="btn btn-outline-primary m-auto mt-4 px-5 py-3">
+                        <a style="width: 100%;" href="{% url 'cad_cult_etapa1_artista' %}" class="btn btn-outline-primary m-auto mt-4 px-5 py-3">
                             CADASTRE-SE!
+                        </a>
+                        {% endif %}
+                        {% if request.user.is_superuser %}
+                        <a style="width: 100%;" href="{% url 'mapeamento_listagem' %}" class="btn btn-outline-primary mx-auto mt-4 px-5 py-3">
+                            <i class="fa-solid fa-map me-1"></i>
+                            ACESSAR SISTEMA DE MAPEAMENTO 
                         </a>
                         {% endif %}
                         </div>                                            

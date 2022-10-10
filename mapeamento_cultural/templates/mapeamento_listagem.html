@@ -1,0 +1,239 @@
+{% extends 'template.html' %}
+{% load static %}
+{% load filtros %}
+{% block title %}Mapeamento Cultural{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/mapeamento.css' %}">
+{% endblock %}
+{% block mapeamento %}active{% endblock %}
+{% block main %}
+<div id="banner" class="row">
+    <div class="col d-flex">
+        <div class="container my-5 pb-5">
+            <h1 class="display-4 d-flex mt-3 p-4 mb-3 text-center" style="background-color: #547DCD;">
+                <span class="my-auto mx-auto">MAPEAMENTO CULTURAL</span>
+            </h1>
+            <div class="row">
+                <div class="col d-flex flex-column"></div>
+                        <div class="row">
+                            <div class="col d-flex">
+                                <h2 class="text-dark my-auto display-5">
+                                    Bem-vindo, {{request.user.first_name}}!
+                                </h2>
+                            </div>
+                            <div class="col-3">
+                                <img class="img-fluid m-auto" src="/static/images/mapeamento/botao_cadastro.png" alt="">                    
+                            </div>
+                        </div>      
+                        <div class="row mx-auto px-4 pb-5">
+                            <div class="col text-dark">
+                                <i>O que estamos procurando para nos alegrar hoje?</i>
+                            </div>
+                        </div>
+                        <form class="w-100" method="POST">
+                            {% csrf_token %}
+                        <div class="row mx-auto">
+                            <div class="col d-flex flex-column px-4 pb-3 text-dark">
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="w-100 text-start">
+                                            <h4>
+                                                <i class="fa-solid fa-filter me-2"></i>
+                                                Filtros
+                                            </h4>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="w-100 d-flex px-2">
+                                    <div class="w-100 pe-1 mt-2">
+                                        <b>Tipo de Inscrição</b>
+                                        <select type="text" name="tipo_inscricao" class="form-select">
+                                            <option value="">
+                                                --- Selecione a área de atuação ---
+                                            </option>
+                                            <option value="1">Pessoa Física</option>
+                                            <option value="2">Pessoa Jurídica</option>
+                                        </select>                                        
+                                    </div>
+                                    <div class="w-100 pe-1 mt-2">                                        
+                                        <b>Área de Atuação</b>
+                                        <select type="text" name="area_atuacao" class="form-select">
+                                            <option value="">
+                                                --- Selecione a área de atuação ---
+                                            </option>
+                                            {% for area in area_atuacao%}
+                                            <option value="{{area.id}}">
+                                                {{area}}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>                        
+                                    <div class="w-100 pe-1 mt-2">
+                                        <b>Filtro 3</b>
+                                        <select type="text" class="form-select">
+                                            <option value="">
+                                                --- Selecione a área de atuação ---
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="w-100 pe-1 mt-2">
+                                        <b>Filtro 4</b>
+                                        <select type="text" class="form-select">
+                                            <option value="">
+                                                --- Selecione a área de atuação ---
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="d-flex">
+                                        <a class="btn btn-dark mt-auto">
+                                            <i class="fa-solid fa-filter-circle-xmark"></i>
+                                        </a>
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                        <div class="row mx-auto">
+                            <div class="col px-4 d-flex flex-column pb-3 text-dark">
+                                <!-- <div class="row">
+                                    <div class="col">
+                                        <span class="w-100 text-start">
+                                        <h4>
+                                            <i class="fa-solid fa-arrow-down-wide-short me-2"></i>
+                                            Ordenação
+                                        </h4>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="w-100 d-flex px-2">
+                                    <div class="w-100 pe-1 mt-2">
+                                        <b>Tipo de Ordenação</b>
+                                        <select type="text" name="ordem" class="form-select">
+                                            <option value="crescente">
+                                                Crescente ou de A á Z
+                                            </option>
+                                            <option value="decrescente">
+                                                Decrescente ou de Z á A
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="w-100 pe-1 mt-2">
+                                        <b>Campo de ordenação</b>
+                                        <select type="text" name="ordem_area" class="form-select">
+                                            <option value="">
+                                                --- Selecione um campo p/ ordenação ---
+                                            </option>
+                                            {% for area in area_atuacao%}
+                                            <option value="{{area}}">
+                                                {{area}}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>  
+                                    <div class="d-flex">
+                                        <a class="btn btn-dark mt-auto">
+                                            <i class="fa-solid fa-arrow-down-up-across-line"></i>
+                                        </a>
+                                    </div>                                  
+                                </div>   -->
+                            </div>
+                        </div>                        
+                        <div class="row mx-auto">
+                            <div class="col pt-2">
+                                <div class="w-100 px-4">
+                                    <button class="btn btn-primary" type="submit">                                    
+                                        Procurar
+                                        <i class="fa-solid fa-magnifying-glass ms-1"></i> 
+                                      </button>
+                                      <a class="btn btn-secondary">
+                                        Indicadores
+                                        <i class="fa-solid fa-chart-pie ms-1"></i>
+                                      </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                        <div class="row mx-auto">
+                            <div class="col pt-2 d-flex flex-column">
+                                {% if busca %}
+                                <div class="w-100 d-flex">
+                                    <h1 class="text-dark mt-5" style="display: inline;">
+                                        Resultado da busca
+                                    </h1>
+                                    <div class="ms-auto input-group mt-auto mb-3" style="width: 400px;">                                        
+                                        <input type="text"  class="form-control ms-auto mt-auto" style="border-right: none;"> 
+                                        <span class="input-group-text" id="basic-addon1" style="border-left: none; background-color: rgba(0, 0, 255, 0) !important;">
+                                            <i class="fa-solid fa-magnifying-glass"></i> 
+                                        </span>
+                                      </div>
+                                    
+                                    
+                                </div>
+                                <table class="table mb-0 table-dark table-striped table-hover mx-auto">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col" style="width: 150px;">Tipo</th>
+                                        <th style="width: 250px;">Responsável</th>
+                                        <th scope="col" style="width: 260px;">Nome Artístico/Fantasia</th>   
+                                        <th>Área de atuação</th> 
+                                        <th style="width: 120px">Data inclusão</th>                                                                                                                                                          
+                                      </tr>
+                                    </thead>
+                                </table>
+                                <table class="table mt-0 table-striped table-hover mx-auto">
+                                    <tbody>
+                                        {% for i in algo %}
+                                      <tr>
+                                        <td style="width: 150px;">
+                                            {% if i.tipo_contratacao.id == 1 %}
+                                            Pessoa Física
+                                            {% else %}
+                                            Pessoa Jurídica
+                                            {% endif %}                                            
+                                        </td>
+                                        <td style="width: 260px;">
+                                            <span class="limitarCaracteres">
+                                                {{i.user_responsavel.first_name}}
+                                            </span>
+                                        </td>
+                                        <td style="width: 250px;">
+                                            <span class="limitarCaracteres d-flex">
+                                                <a href="#" class="text-dark me-2 my-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Descrição: {{i|descricao}}"><i class="fa-solid fa-circle-info ms-auto"></i></a> {{i}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {{i|area_atuacao}}
+                                        </td>
+                                        <td  style="width: 120px" class="text-center"> 
+                                            {{i.dt_inclusao|date:"d/m/Y"}}
+                                        </td>                                           
+                                      </tr>              
+                                      {% endfor %}                        
+                                    </tbody>
+                                  </table>
+                                  {% else %}
+                                  NOTHING
+                                  {% endif %}
+
+                            </div>
+                        </div>                  
+                </div>                
+            </div>
+        </div>        
+    </div>
+</div>
+<style>
+.limitarCaracteres {
+    display: inline-block;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+ }
+ </style>
+ <script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+ </script>
+{% endblock %}

@@ -3,8 +3,8 @@ from django.urls import path
 from . import views
  
 urlpatterns = [
-    path('auxiliar/', views.auxiliar, name='auxiliar'),
-    path('', views.index),
+    # path('auxiliar/', views.auxiliar, name='auxiliar'),
+    path('', views.index),    
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     
@@ -25,6 +25,7 @@ urlpatterns = [
     #path('acc/meus_cadastros/detalhes/02<id>', views.cadastro_map_cultural_cnpj, name='acc_meus_cadastros_map_cnpj'),
     
     path('mapeamento-cultural/', views.mapeamento_cultural, name='mapeamento'),
+    path('mapeamento-cultural/listagem', views.mapeamento_listagem, name='mapeamento_listagem'),
     path('mapeamento-cultural/lei-866-93-art-25', views.lei866, name='lei866'),    
     path('mapeamento-cultural/cadastrar/', views.cadastro_etapa_1, name='cad_cult_etapa1_artista'),
     path('mapeamento-cultural/cadastrar/cpf/', views.cadastro_cpf, name='cad_artista_cpf'),
