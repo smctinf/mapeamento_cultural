@@ -36,7 +36,7 @@
                             CADASTRE-SE!
                         </a>
                         {% endif %}
-                        {% if request.user.is_superuser %}
+                        {% if request.user.is_staff %}
                         <a style="width: 100%;" href="{% url 'mapeamento_listagem' %}" class="btn btn-outline-primary mx-auto mt-4 px-5 py-3">
                             <i class="fa-solid fa-map me-1"></i>
                             ACESSAR SISTEMA DE MAPEAMENTO 
