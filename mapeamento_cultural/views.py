@@ -732,6 +732,7 @@ def auxiliar(request):
         'pis': 'PIS/PASEP/NIT:',
         'fazedor_cultura_cnpj': 'NOME FANTASIA (caso exista):',
         'cnpj': 'CNPJ:',
+        'area': 'EM QUAL SEGMENTO, GRUPO, CATEGORIA E/OU LINGUAGEM ARTÍSTICA VOCÊ ESTÁ INSERIDO?'
     }
 
     area_atuacao=[
@@ -755,6 +756,7 @@ def auxiliar(request):
         'PIS/PASEP/NIT:',
         'NOME FANTASIA (caso exista):',
         'CNPJ:',
+        'EM QUAL SEGMENTO, GRUPO, CATEGORIA E/OU LINGUAGEM ARTÍSTICA VOCÊ ESTÁ INSERIDO?'
     ]
 
     df=pd.read_csv(url)
@@ -768,7 +770,7 @@ def auxiliar(request):
     df_=df_.drop_duplicates(area_atuacao[0])
     
     dados=df.loc[:, lista_colunas_de_interesse]
-    
+    # dados=df
     #área de atuação
     dados_area_atuacao=df_.loc[:, area_atuacao]   
     # for dado_atuacao in dados_area_atuacao[dados_area_atuacao.columns[0]]:
@@ -780,72 +782,90 @@ def auxiliar(request):
     cont_erro_artista=0
     cont_erro_user=0
     cont_usuarios_cadastrados=0
+    error_area=[]
+    if True:
+        for i in range(357):
+            d={'endereco': 'NaN', 'bairro': 'NaN'}
+            for j in colunas_de_interesse:
+                if j!='dt_inclusao':
+                    d[j]=dados.loc[i, lista_colunas_de_interesse][colunas_de_interesse[j]]                
+                # print(j+': ', dados.loc[i, lista_colunas_de_interesse][colunas_de_interesse[j]])        
 
-    for i in range(357):
-        d={'endereco': 'NaN', 'bairro': 'NaN'}
-        for j in colunas_de_interesse:
-            if j!='dt_inclusao':
-                d[j]=dados.loc[i, lista_colunas_de_interesse][colunas_de_interesse[j]]                
-            # print(j+': ', dados.loc[i, lista_colunas_de_interesse][colunas_de_interesse[j]])        
+                    #         info=dt_obj.strftime("%d-%m-%y")
+            if d['tipo_contratacao']=='PESSOA FÍSICA':
+                if d['cpf']=='NaN':
+                    senha=d['cnpj']
+                else:
+                    senha=d['cpf']
+                    from datetime import datetime
+                    d['data_nascimento'] = datetime.strptime(str(d['data_nascimento']), '%d/%m/%Y')
 
-                #         info=dt_obj.strftime("%d-%m-%y")
-        if d['tipo_contratacao']=='PESSOA FÍSICA':
-            if d['cpf']=='NaN':
-                senha=d['cnpj']
-            else:
-                senha=d['cpf']
-                from datetime import datetime
-                d['data_nascimento'] = datetime.strptime(str(d['data_nascimento']), '%d/%m/%Y')
-
-            form=Form_Usuario(d)
-            if form.is_valid():
-                user = User.objects.create_user(
-                    username=d['email'], 
-                    email=d['email'], 
-                    password=senha
-                    )
-                user.first_name = d['nome']
-                user.set_password(senha)
-                user.save()
-                usuario = form.save()
-                usuario.user = user
-                usuario.save()
-                cont_usuarios_cadastrados+=1
-
-                form2=Form_Artista(d)
-                if form2.is_valid():
-                    obj=form2.save()
-                    obj.tipo_contratacao = TiposContratação.objects.get(id=1)
-                    obj.user_responsavel = user
-                    form2.save()
-                    cont_artista+=1
+                form=Form_Usuario(d)
+                if form.is_valid():
+                    user = User.objects.create_user(
+                        username=d['email'], 
+                        email=d['email'], 
+                        password=senha
+                        )
+                    user.first_name = d['nome']
+                    user.set_password(senha)
+                    user.save()
+                    usuario = form.save()
+                    usuario.user = user
+                    usuario.save()
+                    cont_usuarios_cadastrados+=1
+                    
+                    valores=d['area'].split(';')
+                    
+                    ids=[]
+                    for u in valores:   
+                        # print(u)          
+                        area=u.strip()    
+                        # print(area)      
+                        try:                       
+                            ids.append(Area_Atuacao.objects.get(area=area).id)
+                        except:
+                            ids.append('')
+                            error_area.append([d['cpf'], valores, area])
+                    
+                    d['area']=ids
+                    
+                    form2=Form_Artista(d)
+                    if form2.is_valid():
+                        obj=form2.save()
+                        obj.tipo_contratacao = TiposContratação.objects.get(id=1)
+                        obj.user_responsavel = user
+                        form2.save()
+                        cont_artista+=1
+                        
+                    else:
+                        print('Indice: '+str(i))
+                        print('Nome: '+str(d['nome']))
+                        print('CPF: '+str(d['cpf']))
+                        print('Telefone: '+str(d['telefone']))
+                        print('Erro no formulário do artista:')                    
+                        print(form2.errors)
+                        print('''-------------------------------------------------------------------------''')
+                        cont_erro_artista+=1                    
                 else:
                     print('Indice: '+str(i))
                     print('Nome: '+str(d['nome']))
                     print('CPF: '+str(d['cpf']))
                     print('Telefone: '+str(d['telefone']))
-                    print('Erro no formulário do artista:')                    
-                    print(form2.errors)
+                    print('Erro no formulário do usuário:')                
+                    print(form.errors)
                     print('''-------------------------------------------------------------------------''')
-                    cont_erro_artista+=1
+                    cont_erro_user+=1
+                cont_fisica+=1            
             else:
-                print('Indice: '+str(i))
-                print('Nome: '+str(d['nome']))
-                print('CPF: '+str(d['cpf']))
-                print('Telefone: '+str(d['telefone']))
-                print('Erro no formulário do usuário:')                
-                print(form.errors)
-                print('''-------------------------------------------------------------------------''')
-                cont_erro_user+=1
-            cont_fisica+=1            
-        else:
-            cont+=1
+                cont+=1
                             
     print('Erros ao cadastrar usuários: ',cont_erro_user)        
     print('PJ: ',cont)
     print('PF: ',cont_fisica)
     print('Artistas: ',cont_artista)
     print('Erros ao cadastrar artista: ',cont_erro_artista)        
+    print('Áreas que não conseguiu cadastrar: ', error_area)    
     context={
         # 'print': df_.loc[:, area_atuacao].to_html,
         'print': dados.to_html
