@@ -871,3 +871,5 @@ def auxiliar(request):
         'print': dados.to_html
     }
     return render(request, 'auxiliar.html', context)
+
+
