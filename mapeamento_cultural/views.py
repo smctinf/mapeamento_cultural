@@ -222,7 +222,9 @@ def cadastro_cpf(request):
 
 @login_required
 def editar_artista_b(request, id):
-    dados = Artista.objects.get(id=id, user_responsavel=request.user)
+    dados = Artista.objects.get(id=id)
+    if dados.user_responsavel != request.user:
+        raise PermissionDenied()  
     if dados.tipo_contratacao.id == 1:
         form = Form_Artista(instance=dados)
     else:
@@ -253,7 +255,9 @@ def editar_artista_b(request, id):
 
 @login_required
 def editar_artista_c(request, id):
-    dados = Artista.objects.get(id=id, user_responsavel=request.user)
+    dados = Artista.objects.get(id=id)
+    if dados.user_responsavel != request.user:
+        raise PermissionDenied()  
     form = Form_Artista2(instance=dados)
     if request.method == 'POST':
         form = Form_Artista2(request.POST, request.FILES, instance=dados)
@@ -435,7 +439,9 @@ def login_view(request):
 
 @login_required
 def cadastro_etapa_2(request, id):
-    artista=Artista.objects.get(id=id, user_responsavel=request.user)
+    artista=Artista.objects.get(id=id)
+    if artista.user_responsavel != request.user:
+        raise PermissionDenied()  
     id = artista.id
     if artista.tipo_contratacao.id==1:
         form = Form_InfoExtra_CPF(initial={'id_artista': id})
@@ -470,7 +476,9 @@ def admin_cadastros(request):
 
 @login_required
 def cadastro_etapa_3(request, id):
-    instance = Artista.objects.get(id=id, user_responsavel=request.user)
+    instance = Artista.objects.get(id=id)
+    if instance.user_responsavel != request.user:
+        raise PermissionDenied()    
     form = Form_Artista2(instance=instance)
     if request.method == 'POST':
         form = Form_Artista2(request.POST, request.FILES, instance=instance)
@@ -495,12 +503,15 @@ def cadastro_anexo(request, id):
     '''
 
     try:
-        instance = Artista.objects.get(id=id, user_responsavel=request.user)        
+        instance = Artista.objects.get(id=id)        
+        if instance.user_responsavel != request.user:
+            raise PermissionDenied()  
     except:
-        if request.user.is_superuser:
-            instance = Artista.objects.get(id=id)            
-        else:
-            raise PermissionDenied()
+        raise PermissionDenied()  
+        # if request.user.is_superuser:
+        #     instance = Artista.objects.get(id=id)            
+        # else:
+        #     raise PermissionDenied()
     
     try:
         recibos=Recibos.objects.filter(artista=instance)
@@ -632,7 +643,9 @@ def cadastro_anexo(request, id):
 
 @login_required
 def editar_etapa_2(request, id):
-    artista = Artista.objects.get(id=id, user_responsavel=request.user)
+    artista = Artista.objects.get(id=id)
+    if artista.user_responsavel != request.user:
+        raise PermissionDenied()  
     instance = InformacoesExtras.objects.get(id_artista=artista.id)
     if artista.tipo_contratacao.id==1:
         form = Form_InfoExtra_CPF(instance=instance)
