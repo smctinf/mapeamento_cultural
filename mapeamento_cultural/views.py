@@ -851,3 +851,18 @@ def auxiliar(request):
         'print': dados.to_html
     }
     return render(request, 'auxiliar.html', context)
+
+
+@login_required
+def indicadores(request):
+
+    context = {
+        'vagas': 0,
+        'balcao': 0,
+        'online': 0,
+        'balcao2': 0,
+        'online2': 0,
+        'buscar': 0
+    }
+
+    return render(request, 'indicadores.html', context)
