@@ -54,6 +54,7 @@ except:
 INSTALLED_APPS = [
     'mapeamento_cultural',
     'qr_code',
+    'editais',
     #APPS DE TERCEIROS
     'fontawesomefree',
     'bootstrap5',

@@ -1,0 +1,31 @@
+{% extends 'template.html' %}
+{% load static%}
+{% block title %}Edital - Cultura Planeja{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/mapeamento.css' %}">
+{% endblock %}
+{% block editais %}active{% endblock %}
+{% block main %}
+<div id="banner" class="row">
+    <div class="col d-flex">
+        <div class="container my-5 pb-5">
+            <h1 class="display-4 d-flex mt-3 p-4 mb-3 text-center" style="background-color: #547DCD;">
+                <span class="my-auto mx-auto">EDITAL</span>
+            </h1>
+            <div class="row">
+                <div class="col d-flex flex-column text-dark">
+                    <div class="mx-auto my-4">                        
+                        <img class="img-fluid" src="/static/images/editais/01.png" alt="">                                                
+                    </div>
+                    <div class="px-4 pb-5 text-justify m-auto" style="max-width: 800px; font-size: 16pt;">
+                        <p style="text-indent: 40px;">A Secretaria Municipal de Cultura, entendendo a necessidade de construção coletiva de um Plano Municipal de Cultura, lança o Edital “Cultura Planeja”.</p>                    
+                        <p style="text-indent: 40px;">O chamamento público tem como objetivo a contratação de uma pessoa jurídica com experiência na área de levantamento de dados, diálogo com a classe artística e elaboração de textos de planos municipais, cartas de direito culturais e afins, que possa conciliar demandas da sociedade civil e o poder público, em um único texto a ser enviado à Câmara Municipal.</p>
+                        <p style="text-indent: 40px;">O Edital estará aberto para inscrições do dia 07/11 ao 22/11 e terá o valor empenhado de R$ 20.000,00 , pagos com com recursos próprios do Município.</p>
+                        <p style="text-indent: 40px;">O sonho de ter completo o CPF Cultural (Conselho, Plano e Fundo Municipais) está cada vez mais próximo. Assim, garante-se à cultura friburguense, as principais ferramentas de desenvolvimento e democracia culturais.</p>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+{% endblock %}
