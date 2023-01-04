@@ -1,17 +1,11 @@
-from multiprocessing import context
-from urllib import request
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.contrib.auth.models import User, UserManager
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.contrib.auth.tokens import default_token_generator
-from django.template.loader import render_to_string
-from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 
 from .models import Area_Atuacao, Log_anexos, Recibos, Usuario
@@ -19,14 +13,42 @@ from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista
 
 
 from django.contrib import messages
-import os
 from cultura.settings import BASE_DIR
 from mapeamento_cultural.models import Artista, InformacoesExtras, TiposContratação
-from qr_code.qrcode.utils import QRCodeOptions
+from django.core.mail import EmailMessage,  EmailMultiAlternatives, send_mail
 
 # Create your views here.
 import numpy as np
 import pandas as pd
+
+
+def enviar_email(request):
+
+    csv_data = open('/home/hugo/Downloads/fazedores_de_cultura.csv')
+    header = next(csv_data).replace('\n', '').replace('\t', ',')
+
+    for row in csv_data:
+        row = row.replace('\n', '').replace('"', '').split(',')
+        print(f"nome: {row[0]}, {row[1]}, {row[2]}")
+        try:
+
+            subject= f'Cadastro Fazedor de Cultura Nova Friburgo'
+            from_email = settings.EMAIL_HOST_USER
+            to = [row[2]]
+            text_content = 'This is an important message.'
+            html_content = f"Olá, {row[0]}! <br/> As suas credencias do site de Mapeamento Cultural de Nova Friburgo estão prontas! Basta acessar o <a href='mapeamentocultural.pmnf.nlembroresto.rj'>mapeamentocultural.pmnf.nlembroresto.rj</a>  e fazer login com seu usuário e senha: <br/><br/> Usuário: {row[1]}<br/>Senha: seu número de cpf sem caracteres especiais!<br/><br/> Obrigado pela sua particação no projeto, tornando Nova Friburgo uma cidade mais diversa e artística!<br/>Secretaria de não sei o que"
+
+            msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+
+        except Exception as E:
+            print(E)
+            return HttpResponse(E)
+        else:
+            print('email enviado com sucesso!')
+            return HttpResponse('deu certo')
+
 
 def index(request):
     return render(request, 'index.html')
