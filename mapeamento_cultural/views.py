@@ -1,17 +1,11 @@
-from multiprocessing import context
-from urllib import request
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.contrib.auth.models import User, UserManager
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.contrib.auth.tokens import default_token_generator
-from django.template.loader import render_to_string
-from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 
 from .models import Area_Atuacao, Log_anexos, Recibos, Usuario
@@ -19,14 +13,57 @@ from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista
 
 
 from django.contrib import messages
-import os
 from cultura.settings import BASE_DIR
 from mapeamento_cultural.models import Artista, InformacoesExtras, TiposContratação
-from qr_code.qrcode.utils import QRCodeOptions
+from django.core.mail import EmailMessage,  EmailMultiAlternatives, send_mail
 
 # Create your views here.
 import numpy as np
 import pandas as pd
+
+
+@login_required
+def enviar_email(request):
+
+    # csv_data = open('/home/hugo/Downloads/fazedores_de_cultura.csv')
+    # header = next(csv_data).replace('\n', '').replace('\t', ',')
+    fazedores_de_cultura = Artista.objects.all()
+    for artista in fazedores_de_cultura:
+        #row = row.replace('\n', '').replace('"', '').split(',')
+        #print(f"nome: {row[0]}, {row[1]}, {row[2]}")
+        try:
+
+            subject= f'Cadastro Fazedor de Cultura Nova Friburgo'
+            from_email = settings.EMAIL_HOST_USER
+            to = [artista.user_responsavel.email]
+            text_content = 'This is an important message.'
+            html_content = f"""
+            
+            <b>Atenção artistas produtores culturais, profissionais de arte e cultura, queremos conhecer você!</b>
+
+            <p> A Secretaria Municipal de Cultura de Nova Friburgo realiza o cadastro de artistas dos mais variados segmentos. A ação faz parte de um mapeamento que a pasta está desenvolvendo para gerar dados e informações capazes de pensar as políticas públicas culturais. As inscrições são contínuas.</p>
+             
+            <p>Os artistas já cadastrados no mapeamento realizado para recebimento dos recursos da Lei Aldir Blanc poderão editar e atualizar suas informações. Pra realizar o primeiro acesso o usuário deverá inserir no campo 'usuário' o seu email de cadastro no mapeamento 2020 e sua senha é composta somente pelos números do seu CPF. Podem se cadastrar toda e qualquer pessoa física atuante na área cultural em Nova Friburgo. Se você conhece algum fazedor de cultura na cidade repasse essas informações para que consigamos atingir o maior número de artistas.</p>
+
+            <p>Qualquer dúvida pode ser encaminha para o email mapeamentoculturalnf@gmail.com ou mesmo pelo telofone (22) 2521-1558</p>
+            <br/><p> Atenciosamente, </p> <p>Equipe da Secretaria Municipal de Cultura</p>
+             </br>
+             <div>
+            <img src="https://culturanf.novafriburgo.rj.gov.br/static/images/logo_pmnf_cultura.png"/>
+             </div>
+             """
+
+            msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+
+        except Exception as E:
+            print(E)
+            return HttpResponse(E)
+        else:
+            print('email enviado com sucesso!')
+            return HttpResponse('deu certo')
+
 
 def index(request):
     return render(request, 'index.html')
