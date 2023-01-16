@@ -22,32 +22,43 @@ import numpy as np
 import pandas as pd
 
 
-def enviar_email(request):
+# @login_required
+# def enviar_email(request):
 
-    csv_data = open('/home/hugo/Downloads/fazedores_de_cultura.csv')
-    header = next(csv_data).replace('\n', '').replace('\t', ',')
+#     fazedores_de_cultura = Artista.objects.all()
+#     for artista in fazedores_de_cultura:
+#         try:
 
-    for row in csv_data:
-        row = row.replace('\n', '').replace('"', '').split(',')
-        print(f"nome: {row[0]}, {row[1]}, {row[2]}")
-        try:
+#             subject= f'Cadastro Fazedor de Cultura Nova Friburgo'
+#             from_email = settings.EMAIL_HOST_USER
+#             to = [artista.user_responsavel.email]
+#             text_content = 'This is an important message.'
+#             html_content = f"""
+            
+#             <b>Atenção artistas produtores culturais, profissionais de arte e cultura, queremos conhecer você!</b>
 
-            subject= f'Cadastro Fazedor de Cultura Nova Friburgo'
-            from_email = settings.EMAIL_HOST_USER
-            to = [row[2]]
-            text_content = 'This is an important message.'
-            html_content = f"Olá, {row[0]}! <br/> As suas credencias do site de Mapeamento Cultural de Nova Friburgo estão prontas! Basta acessar o <a href='mapeamentocultural.pmnf.nlembroresto.rj'>mapeamentocultural.pmnf.nlembroresto.rj</a>  e fazer login com seu usuário e senha: <br/><br/> Usuário: {row[1]}<br/>Senha: seu número de cpf sem caracteres especiais!<br/><br/> Obrigado pela sua particação no projeto, tornando Nova Friburgo uma cidade mais diversa e artística!<br/>Secretaria de não sei o que"
+#             <p> A Secretaria Municipal de Cultura de Nova Friburgo realiza o cadastro de artistas dos mais variados segmentos. A ação faz parte de um mapeamento que a pasta está desenvolvendo para gerar dados e informações capazes de pensar as políticas públicas culturais. As inscrições são contínuas.</p>
+             
+#             <p>Os artistas já cadastrados no mapeamento realizado para recebimento dos recursos da Lei Aldir Blanc poderão editar e atualizar suas informações. Pra realizar o primeiro acesso o usuário deverá inserir no campo 'usuário' o seu email de cadastro no mapeamento 2020 e sua senha é composta somente pelos números do seu CPF. Podem se cadastrar toda e qualquer pessoa física atuante na área cultural em Nova Friburgo. Se você conhece algum fazedor de cultura na cidade repasse essas informações para que consigamos atingir o maior número de artistas.</p>
 
-            msg = EmailMultiAlternatives(subject, text_content, from_email, to)
-            msg.attach_alternative(html_content, "text/html")
-            msg.send()
+#             <p>Qualquer dúvida pode ser encaminha para o email mapeamentoculturalnf@gmail.com ou mesmo pelo telofone (22) 2521-1558</p>
+#             <br/><p> Atenciosamente, </p> <p>Equipe da Secretaria Municipal de Cultura</p>
+#              </br>
+#              <div>
+#             <img src="https://culturanf.novafriburgo.rj.gov.br/static/images/logo_pmnf_cultura.png"/>
+#              </div>
+#              """
 
-        except Exception as E:
-            print(E)
-            return HttpResponse(E)
-        else:
-            print('email enviado com sucesso!')
-            return HttpResponse('deu certo')
+#             msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+#             msg.attach_alternative(html_content, "text/html")
+#             msg.send()
+
+#         except Exception as E:
+#             print(E)
+#             return HttpResponse(E)
+#         else:
+#             print('email enviado com sucesso!')
+#     return HttpResponse('deu certo')
 
 
 def index(request):
@@ -393,6 +404,8 @@ def cadastro_map_cultural_cpf(request, id):
     except:
         info = []
         complemento = False
+
+    print(request.user)
     context = {
         'cadastro': artista,
         'info': info,
@@ -908,3 +921,16 @@ def auxiliar(request):
     return render(request, 'auxiliar.html', context)
 
 
+@login_required
+def indicadores(request):
+
+    context = {
+        'vagas': 0,
+        'balcao': 0,
+        'online': 0,
+        'balcao2': 0,
+        'online2': 0,
+        'buscar': 0
+    }
+
+    return render(request, 'indicadores.html', context)

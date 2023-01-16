@@ -39,6 +39,8 @@ urlpatterns = [
 
     path('mapeamento-cultural/cadastrar/etapa-3/<id>', views.cadastro_etapa_3, name='cad_cult_etapa3'),
     
-    path('email', views.enviar_email)
+    # Indicadores
+    path('indicadores', views.indicadores, name='indicadores'),
+    # path('email', views.enviar_email)
     # path('teste/', views.qr_code)
 ]
