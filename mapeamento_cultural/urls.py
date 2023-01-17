@@ -41,6 +41,6 @@ urlpatterns = [
     
     # Indicadores
     path('indicadores', views.indicadores, name='indicadores'),
-    # path('email', views.enviar_email)
+    path('email', views.enviar_email)
     # path('teste/', views.qr_code)
 ]
