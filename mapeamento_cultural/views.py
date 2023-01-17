@@ -25,14 +25,13 @@ import pandas as pd
 @login_required
 def enviar_email(request):
 
-    # fazedores_de_cultura = Artista.objects.all()
-    # for artista in fazedores_de_cultura:
-    for artista in range(1):
+    fazedores_de_cultura = Artista.objects.all()
+    for artista in fazedores_de_cultura:
         try:
 
             subject= f'Cadastro Fazedor de Cultura Nova Friburgo'
             from_email = settings.EMAIL_HOST_USER
-            to = ['eduardo.pmnf@gmail.com']
+            to = [artista.user_responsavel.email]
             text_content = 'This is an important message.'
             html_content = f"""
             
