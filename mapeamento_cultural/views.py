@@ -34,19 +34,22 @@ def enviar_email(request):
             to = [artista.user_responsavel.email]
             text_content = 'This is an important message.'
             html_content = f"""
-            
-            <b>Atenção artistas produtores culturais, profissionais de arte e cultura, queremos conhecer você!</b>
+            <b>Bom dia, fazedores de cultura.</b>
 
-            <p> A Secretaria Municipal de Cultura de Nova Friburgo realiza o cadastro de artistas dos mais variados segmentos. A ação faz parte de um mapeamento que a pasta está desenvolvendo para gerar dados e informações capazes de pensar as políticas públicas culturais. As inscrições são contínuas.</p>
+            <p>A Secretaria Municipal de Cultura tem o prazer de convidá-los para a segunda edição do Fórum Democrático de Políticas Culturais. Ele ocorrerá neste sábado, dia 04/02, de 10h às 17h, no auditório do SEBRAE, localizado no Espaço Arp, Av. Julius Arp, 80, Bloco 2.</p>
              
-            <p>Os artistas já cadastrados no mapeamento realizado para recebimento dos recursos da Lei Aldir Blanc poderão editar e atualizar suas informações. Pra realizar o primeiro acesso o usuário deverá acessar o site <a href="https://culturanf.novafriburgo.rj.gov.br/">https://culturanf.novafriburgo.rj.gov.br/</a> e inserir no campo 'usuário' o seu email de cadastro no mapeamento 2020 e sua senha é composta somente pelos números do seu CPF. Podem se cadastrar toda e qualquer pessoa física atuante na área cultural em Nova Friburgo. Se você conhece algum fazedor de cultura na cidade repasse essas informações para que consigamos atingir o maior número de artistas.</p>
+            <p>Esta edição será marcada pela composição dos Grupos de Trabalho nas áreas de: Equipamentos culturais, Editais próprios, Lei Paulo Gustavo e Lei Aldir Blanc 2, mapeamento e gestão de dados e descentralização de arte-educação. Os grupos serão montados no dia do Fórum, mas você pode se adiantar e se inscrever em um deles através do link: https://docs.google.com/forms/d/e/1FAIpQLSek31_U4GKpcYxIM-OCyjoBYN1xAUweiS9cZdOIIIkg3IvE3A/viewform</p>
 
-            <p>Qualquer dúvida pode ser encaminha para o email mapeamentoculturalnf@gmail.com ou mesmo pelo telofone (22) 2521-1558</p>
-            <br/><p> Atenciosamente, </p> <p>Equipe da Secretaria Municipal de Cultura</p>
-             </br>
-             <div>
-            <img src="https://culturanf.novafriburgo.rj.gov.br/static/images/logo_pmnf_cultura.png"/>
-             </div>
+            <p>Contamos com sua presença e participação nesta ferramenta de construção conjunta de um setor cultural cada vez mais forte.</p>
+            
+            <br/>
+            
+            <p> Atenciosamente, </p> <p>Equipe da Secretaria Municipal de Cultura</p>
+            </br>
+             
+            <div>
+                <img src="https://culturanf.novafriburgo.rj.gov.br/static/images/logo_pmnf_cultura.png"/>
+            </div>
              """
 
             msg = EmailMultiAlternatives(subject, text_content, from_email, to)
