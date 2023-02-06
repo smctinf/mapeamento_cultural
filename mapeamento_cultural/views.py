@@ -1,3 +1,4 @@
+from datetime import date, timezone
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
@@ -7,6 +8,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.http import HttpResponse
+from django.db.models import Count
 
 from .models import Area_Atuacao, Log_anexos, Recibos, Usuario
 from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra_CPF, Form_InfoExtra_CNPJ, Form_Recibos, Form_Usuario, Form_Validade_Anexo_Artista_CNPJ, Form_Validade_Anexo_Artista_CPF
@@ -29,7 +31,7 @@ def enviar_email(request):
     for artista in fazedores_de_cultura:
         try:
 
-            subject= f'Cadastro Fazedor de Cultura Nova Friburgo'
+            subject = f'Cadastro Fazedor de Cultura Nova Friburgo'
             from_email = settings.EMAIL_HOST_USER
             to = [artista.user_responsavel.email]
             text_content = 'This is an important message.'
@@ -69,11 +71,11 @@ def index(request):
 
 
 def mapeamento_listagem(request):
-    busca=False    
-    filtro_template={}
-    area_atuacao=Area_Atuacao.objects.all()
-    if request.method=='POST':
-        filtro=[]        
+    busca = False
+    filtro_template = {}
+    area_atuacao = Area_Atuacao.objects.all()
+    if request.method == 'POST':
+        filtro = []
         # print(request.POST)
         # if request.POST['ordem_area']!='':
         #     if request.POST['ordem_area']=='Artes Cênicas' and request.POST['ordem']=='crescente':
@@ -83,28 +85,32 @@ def mapeamento_listagem(request):
         # else:
         #     ordem='id'
         for i in request.POST:
-            if request.POST[i]!='' and i!='csrfmiddlewaretoken' and i!='ordem':                
-                busca=True
-                filtro.append([i,request.POST[i]])
-                filtro_template[i]=True
+            if request.POST[i] != '' and i != 'csrfmiddlewaretoken' and i != 'ordem':
+                busca = True
+                filtro.append([i, request.POST[i]])
+                filtro_template[i] = True
         if busca:
-            if request.POST['area_atuacao']!='' and request.POST['tipo_inscricao']!='':            
-                artista=Artista.objects.filter(area=request.POST['area_atuacao'], tipo_contratacao=request.POST['tipo_inscricao'])
-            elif request.POST['area_atuacao']!='' and request.POST['tipo_inscricao']=='':      
-                artista=Artista.objects.filter(area=request.POST['area_atuacao'])
-            elif request.POST['area_atuacao']=='' and request.POST['tipo_inscricao']!='':      
-                artista=Artista.objects.filter(tipo_contratacao=request.POST['tipo_inscricao'])
+            if request.POST['area_atuacao'] != '' and request.POST['tipo_inscricao'] != '':
+                artista = Artista.objects.filter(
+                    area=request.POST['area_atuacao'], tipo_contratacao=request.POST['tipo_inscricao'])
+            elif request.POST['area_atuacao'] != '' and request.POST['tipo_inscricao'] == '':
+                artista = Artista.objects.filter(
+                    area=request.POST['area_atuacao'])
+            elif request.POST['area_atuacao'] == '' and request.POST['tipo_inscricao'] != '':
+                artista = Artista.objects.filter(
+                    tipo_contratacao=request.POST['tipo_inscricao'])
         else:
-            busca=True
-            artista=Artista.objects.all()    
+            busca = True
+            artista = Artista.objects.all()
     else:
-        artista=Artista.objects.all()
-    context={
+        artista = Artista.objects.all()
+    context = {
         'algo': artista,
         'busca': busca,
-        'area_atuacao':area_atuacao,
+        'area_atuacao': area_atuacao,
     }
     return render(request, 'mapeamento_listagem.html', context)
+
 
 def mapeamento_cultural(request):
     context = {
@@ -115,8 +121,8 @@ def mapeamento_cultural(request):
         artista = Artista.objects.filter(user_responsavel=request.user)
     except:
         artista = []
-    
-    if len(artista) > 0:    
+
+    if len(artista) > 0:
         context = {
             "artista": True
         }
@@ -166,10 +172,11 @@ def cadastro_usuario(request):
     }
     return render(request, 'admin/cadastrar-se.html', context)
 
+
 @login_required
 def cadastro_etapa_1(request):
     context = {
-    "artista": False 
+        "artista": False
     }
 
     try:
@@ -204,14 +211,15 @@ def cadastro_etapa_1(request):
             messages.add_message(request, messages.ERROR, form.errors)
     return render(request, 'cadastro_cultural/mapeamento_cadastro_inicial.html', context)
 
+
 @login_required
 def cadastro_cnpj(request):
     context = {
-    "artista": False,
-    'form': Form_ArtistaCNPJ(),
+        "artista": False,
+        'form': Form_ArtistaCNPJ(),
     }
 
-    if request.method == 'POST':                
+    if request.method == 'POST':
         form = Form_ArtistaCNPJ(request.POST, request.FILES)
         if form.is_valid():
             try:
@@ -230,15 +238,16 @@ def cadastro_cnpj(request):
             messages.add_message(request, messages.ERROR, form.errors)
     return render(request, 'cadastro_cultural/mapeamento_cadastro.html', context)
 
+
 @login_required
 def cadastro_cpf(request):
     context = {
-    "artista": False,
-    'form': Form_Artista(),
-    'tipo_cadastro': 1
+        "artista": False,
+        'form': Form_Artista(),
+        'tipo_cadastro': 1
     }
 
-    if request.method == 'POST':                
+    if request.method == 'POST':
         form = Form_Artista(request.POST, request.FILES)
         if form.is_valid():
             try:
@@ -256,11 +265,12 @@ def cadastro_cpf(request):
             messages.add_message(request, messages.ERROR, form.errors)
     return render(request, 'cadastro_cultural/mapeamento_cadastro.html', context)
 
+
 @login_required
 def editar_artista_b(request, id):
     dados = Artista.objects.get(id=id)
     if dados.user_responsavel != request.user:
-        raise PermissionDenied()  
+        raise PermissionDenied()
     if dados.tipo_contratacao.id == 1:
         form = Form_Artista(instance=dados)
     else:
@@ -293,7 +303,7 @@ def editar_artista_b(request, id):
 def editar_artista_c(request, id):
     dados = Artista.objects.get(id=id)
     if dados.user_responsavel != request.user:
-        raise PermissionDenied()  
+        raise PermissionDenied()
     form = Form_Artista2(instance=dados)
     if request.method == 'POST':
         form = Form_Artista2(request.POST, request.FILES, instance=dados)
@@ -366,12 +376,14 @@ def get_form_cnpj(request):
 @login_required
 def meus_cadastros(request):
     print(request.user)
-    cad_cpf=Artista.objects.filter(user_responsavel=request.user, tipo_contratacao__nome='Contratação por CPF')
-    cad_cnpj=Artista.objects.filter(user_responsavel=request.user, tipo_contratacao__nome='Contratação por CNPJ')
-    if len(cad_cpf)==0:
-        cadastrar_cpf=True
-    else: 
-        cadastrar_cpf=False
+    cad_cpf = Artista.objects.filter(
+        user_responsavel=request.user, tipo_contratacao__nome='Contratação por CPF')
+    cad_cnpj = Artista.objects.filter(
+        user_responsavel=request.user, tipo_contratacao__nome='Contratação por CNPJ')
+    if len(cad_cpf) == 0:
+        cadastrar_cpf = True
+    else:
+        cadastrar_cpf = False
     context = {
         'cadastros_map_cultural_cpf': cad_cpf,
         'cadastros_map_cultural_cnpj': cad_cnpj,
@@ -418,17 +430,21 @@ def cadastro_map_cultural_cpf(request, id):
     }
     return render(request, 'meus_cadastros_detalhes_cpf.html', context)
 
+
 @login_required
 def excluir_map_cultural(request, id):
     try:
         artista = Artista.objects.get(id=id, user_responsavel=request.user)
         artista.delete()
-        messages.add_message(request, messages.SUCCESS, "<b class='text-success'>Cadastro excluído com sucesso.</b>")
+        messages.add_message(request, messages.SUCCESS,
+                             "<b class='text-success'>Cadastro excluído com sucesso.</b>")
         return redirect('acc_meus_cadastros')
     except Exception as E:
         print(E)
-        messages.add_message(request, messages.ERROR, "<b class='text-danger'>Erro ao excluir cadastro.</b>")
+        messages.add_message(
+            request, messages.ERROR, "<b class='text-danger'>Erro ao excluir cadastro.</b>")
         return redirect('acc_meus_cadastros')
+
 
 @login_required
 def cadastro_map_cultural_cnpj(request, id):
@@ -477,18 +493,18 @@ def login_view(request):
 
 @login_required
 def cadastro_etapa_2(request, id):
-    artista=Artista.objects.get(id=id)
+    artista = Artista.objects.get(id=id)
     if artista.user_responsavel != request.user:
-        raise PermissionDenied()  
+        raise PermissionDenied()
     id = artista.id
-    if artista.tipo_contratacao.id==1:
+    if artista.tipo_contratacao.id == 1:
         form = Form_InfoExtra_CPF(initial={'id_artista': id})
-    elif artista.tipo_contratacao.id==2:
+    elif artista.tipo_contratacao.id == 2:
         form = Form_InfoExtra_CNPJ(initial={'id_artista': id})
     if request.method == 'POST':
-        if artista.tipo_contratacao.id==1:
+        if artista.tipo_contratacao.id == 1:
             form = Form_InfoExtra_CPF(request.POST)
-        elif artista.tipo_contratacao.id==2:
+        elif artista.tipo_contratacao.id == 2:
             form = Form_InfoExtra_CNPJ(request.POST)
         if form.is_valid():
             obj = form.save()
@@ -516,7 +532,7 @@ def admin_cadastros(request):
 def cadastro_etapa_3(request, id):
     instance = Artista.objects.get(id=id)
     if instance.user_responsavel != request.user:
-        raise PermissionDenied()    
+        raise PermissionDenied()
     form = Form_Artista2(instance=instance)
     if request.method == 'POST':
         form = Form_Artista2(request.POST, request.FILES, instance=instance)
@@ -541,20 +557,20 @@ def cadastro_anexo(request, id):
     '''
 
     try:
-        instance = Artista.objects.get(id=id)        
+        instance = Artista.objects.get(id=id)
         if instance.user_responsavel != request.user:
-            raise PermissionDenied()  
+            raise PermissionDenied()
     except:
-        raise PermissionDenied()  
+        raise PermissionDenied()
         # if request.user.is_superuser:
-        #     instance = Artista.objects.get(id=id)            
+        #     instance = Artista.objects.get(id=id)
         # else:
         #     raise PermissionDenied()
-    
+
     try:
-        recibos=Recibos.objects.filter(artista=instance)
+        recibos = Recibos.objects.filter(artista=instance)
     except:
-        recibos=[]
+        recibos = []
     if instance.tipo_contratacao.id == 1:
         form = Form_Anexo_Artista_CPF(instance=instance)
         anexos = [
@@ -566,7 +582,7 @@ def cadastro_anexo(request, id):
             'comprovante_iss',
             'portfolio',
             'rg'
-            
+
         ]
     else:
         form = Form_Anexo_Artista_CNPJ(instance=instance)
@@ -576,7 +592,7 @@ def cadastro_anexo(request, id):
             'file_pis',
             'comprovante_de_cc',
             'declaracao_n_viculo',
-            'comprovante_iss',            
+            'comprovante_iss',
             'certidao_negativa_debitos_relativos',
             'certidao_regularidade_icms',
             'certidao_regularidade_iss',
@@ -588,8 +604,8 @@ def cadastro_anexo(request, id):
             'rg'
         ]
     lista = []
-    form_recibos=Form_Recibos()
-    form_validade=""
+    form_recibos = Form_Recibos()
+    form_validade = ""
 
     if instance.tipo_contratacao.id == 1:
         form_validade = Form_Validade_Anexo_Artista_CPF(instance=instance)
@@ -598,24 +614,27 @@ def cadastro_anexo(request, id):
     if request.method == 'POST':
         if request.user == instance.user_responsavel:
             if instance.tipo_contratacao.id == 1:
-                form = Form_Anexo_Artista_CPF(request.POST, request.FILES, instance=instance)
+                form = Form_Anexo_Artista_CPF(
+                    request.POST, request.FILES, instance=instance)
             else:
-                form = Form_Anexo_Artista_CNPJ(request.POST, request.FILES, instance=instance)
-            
-            keys=request.FILES.keys()
+                form = Form_Anexo_Artista_CNPJ(
+                    request.POST, request.FILES, instance=instance)
+
+            keys = request.FILES.keys()
             if 'comprovante' in keys:
-                form_recibos=Form_Recibos(request.POST, request.FILES)
+                form_recibos = Form_Recibos(request.POST, request.FILES)
                 if form_recibos.is_valid():
                     obj = form_recibos.save()
                     obj.artista = instance
-                    obj.save() 
+                    obj.save()
                     if instance.tipo_contratacao.id == 1:
-                        form = Form_Anexo_Artista_CPF(instance=instance)     
+                        form = Form_Anexo_Artista_CPF(instance=instance)
                     else:
                         form = Form_Anexo_Artista_CNPJ(instance=instance)
                     for a in anexos:
                         lista.append([a, instance.__dict__[a].name != ''])
-                    log=Log_anexos(artista=instance, anexo='comprovante',filename=request.FILES['comprovante'].name, user_responsavel=request.user)
+                    log = Log_anexos(artista=instance, anexo='comprovante',
+                                     filename=request.FILES['comprovante'].name, user_responsavel=request.user)
                     log.save()
                     context = {
                         'form': form,
@@ -623,30 +642,32 @@ def cadastro_anexo(request, id):
                         'success': ['bg-success', 'Anexo enviado com sucesso!'],
                         'id': id,
                         'recibos': recibos,
-                        'bg_recibos': '[SEM ANEXO]' if len(recibos)==0 else '[ANEXADO]',
+                        'bg_recibos': '[SEM ANEXO]' if len(recibos) == 0 else '[ANEXADO]',
                         'form_recibos': form_recibos,
-                        'validade':form_validade
-                        
-                    }                
-        
-                
+                        'validade': form_validade
+
+                    }
+
             if form.is_valid():
                 instance = form.save()
-                if instance.tipo_contratacao.id ==1:
-                    form_validade = Form_Validade_Anexo_Artista_CPF(request.POST, instance=instance)
+                if instance.tipo_contratacao.id == 1:
+                    form_validade = Form_Validade_Anexo_Artista_CPF(
+                        request.POST, instance=instance)
                 else:
-                    form_validade = Form_Validade_Anexo_Artista_CNPJ(request.POST, instance=instance)
+                    form_validade = Form_Validade_Anexo_Artista_CNPJ(
+                        request.POST, instance=instance)
                 if form_validade.is_valid():
 
                     if instance.tipo_contratacao.id == 1:
-                        form = Form_Anexo_Artista_CPF(instance=instance)     
+                        form = Form_Anexo_Artista_CPF(instance=instance)
                     else:
-                        form = Form_Anexo_Artista_CNPJ(instance=instance)            
+                        form = Form_Anexo_Artista_CNPJ(instance=instance)
                     for a in anexos:
                         lista.append([a, instance.__dict__[a].name != ''])
-                    
+
                     for i in keys:
-                        log=Log_anexos(artista=instance, anexo=i, filename=request.FILES[i].name, user_responsavel=request.user)
+                        log = Log_anexos(
+                            artista=instance, anexo=i, filename=request.FILES[i].name, user_responsavel=request.user)
                         log.save()
                     form_validade.save()
                     context = {
@@ -655,9 +676,9 @@ def cadastro_anexo(request, id):
                         'success': ['bg-success', 'Anexo enviado com sucesso!'],
                         'id': id,
                         'recibos': recibos,
-                        'bg_recibos': '[SEM ANEXO]' if len(recibos)==0 else '[ANEXADO]',
+                        'bg_recibos': '[SEM ANEXO]' if len(recibos) == 0 else '[ANEXADO]',
                         'form_recibos': form_recibos,
-                        'validade':form_validade
+                        'validade': form_validade
                     }
         else:
             raise PermissionDenied()
@@ -672,7 +693,7 @@ def cadastro_anexo(request, id):
             'id': id,
             'recibos': recibos,
             'form_recibos': form_recibos,
-            'bg_recibos': '[SEM ANEXO]' if len(recibos)==0 else '[ANEXADO]',
+            'bg_recibos': '[SEM ANEXO]' if len(recibos) == 0 else '[ANEXADO]',
             'log': Log_anexos.objects.filter(artista=instance),
             'validade':  form_validade
         }
@@ -683,16 +704,16 @@ def cadastro_anexo(request, id):
 def editar_etapa_2(request, id):
     artista = Artista.objects.get(id=id)
     if artista.user_responsavel != request.user:
-        raise PermissionDenied()  
+        raise PermissionDenied()
     instance = InformacoesExtras.objects.get(id_artista=artista.id)
-    if artista.tipo_contratacao.id==1:
+    if artista.tipo_contratacao.id == 1:
         form = Form_InfoExtra_CPF(instance=instance)
-    elif artista.tipo_contratacao.id==2:
+    elif artista.tipo_contratacao.id == 2:
         form = Form_InfoExtra_CNPJ(instance=instance)
     if request.method == 'POST':
-        if artista.tipo_contratacao.id==1:
+        if artista.tipo_contratacao.id == 1:
             form = Form_InfoExtra_CPF(request.POST, instance=instance)
-        elif artista.tipo_contratacao.id==2:
+        elif artista.tipo_contratacao.id == 2:
             form = Form_InfoExtra_CNPJ(request.POST, instance=instance)
         if form.is_valid():
             obj = form.save()
@@ -748,35 +769,36 @@ def alterar_meus_dados(request):
 
     return render(request, 'alterar_meus_dados.html', context)
 
+
 @login_required
 def deletar_anexo(request, id):
-    
+
     if request.method == 'POST':
-        recibo=Recibos.objects.get(id=id)
-        if request.user==recibo.artista.user_responsavel:
+        recibo = Recibos.objects.get(id=id)
+        if request.user == recibo.artista.user_responsavel:
             recibo.delete()
         else:
             raise PermissionDenied()
-    return HttpResponse(status=200)  
+    return HttpResponse(status=200)
 
 
 @login_required
 def auxiliar(request):
-    url=str(BASE_DIR) +'/cultura/static/dados.csv'
+    url = str(BASE_DIR) + '/cultura/static/dados.csv'
 
-    colunas_de_interesse={
+    colunas_de_interesse = {
         'dt_inclusao': 'Carimbo de data/hora',
-        #user
+        # user
         'nome': 'NOME COMPLETO:',
         'cpf': 'CPF:',
-        'data_nascimento' : 'DATA DE NASCIMENTO:',
+        'data_nascimento': 'DATA DE NASCIMENTO:',
         'email': 'Endereço de e-mail',
         # 'endereco',
-        # 'bairro',        
-        #informacoes extras
+        # 'bairro',
+        # informacoes extras
         'descricao': 'FAÇA UM BREVE HISTÓRICO DE SUAS ATIVIDADES CULTURAIS DESENVOLVIDAS NOS ÚLTIMOS ANOS (2018, 2019, 2020)',
-        #'endereco',
-        #artista
+        # 'endereco',
+        # artista
         'tipo_contratacao': 'Desejo fazer cadastro de:',
         'fazedor_cultura': 'NOME ARTÍSTICO:',
         'telefone': 'TELEFONE celular/WhatsApp:',
@@ -786,21 +808,21 @@ def auxiliar(request):
         'area': 'EM QUAL SEGMENTO, GRUPO, CATEGORIA E/OU LINGUAGEM ARTÍSTICA VOCÊ ESTÁ INSERIDO?'
     }
 
-    area_atuacao=[
+    area_atuacao = [
         'EM QUAL SEGMENTO, GRUPO, CATEGORIA E/OU LINGUAGEM ARTÍSTICA VOCÊ ESTÁ INSERIDO?',
     ]
-    lista_colunas_de_interesse=[
+    lista_colunas_de_interesse = [
         'Carimbo de data/hora',
         'NOME COMPLETO:',
         'CPF:',
         'DATA DE NASCIMENTO:',
         'Endereço de e-mail',
         # 'endereco',
-        # 'bairro',        
-        #informacoes extras
+        # 'bairro',
+        # informacoes extras
         'FAÇA UM BREVE HISTÓRICO DE SUAS ATIVIDADES CULTURAIS DESENVOLVIDAS NOS ÚLTIMOS ANOS (2018, 2019, 2020)',
-        #'endereco',
-        #artista
+        # 'endereco',
+        # artista
         'Desejo fazer cadastro de:',
         'NOME ARTÍSTICO:',
         'TELEFONE celular/WhatsApp:',
@@ -810,114 +832,119 @@ def auxiliar(request):
         'EM QUAL SEGMENTO, GRUPO, CATEGORIA E/OU LINGUAGEM ARTÍSTICA VOCÊ ESTÁ INSERIDO?'
     ]
 
-    df=pd.read_csv(url)
+    df = pd.read_csv(url)
     df.drop('Unnamed: 2', inplace=True, axis=1)
     df.drop('VOCÊ É TITULAR DE BENEFÍCIO PREVIDENCIÁRIO, ASSISTENCIAL, DE SEGURO DESEMPREGO, DO AUXÍLIO EMERGENCIAL PREVISTO PELA LEI 13982 DE 2/4/2020 OU PROGRAMA DE TRANSFERÊNCIA DE RENDA FEDERAL (RESSALVADO O PROGRAMA BOLSA FAMÍLIA)?', inplace=True, axis=1)
     df.drop('SUA RENDA FAMILIAR MENSAL POR PESSOA É DE ATÉ MEIO SALÁRIO MÍNIMO (R$ 552,50)? (De acordo com Art. 6º, inciso IV da Lei 14.017, 29 de junho de 2020)', inplace=True, axis=1)
     df.drop('SUA RENDA FAMILIAR MENSAL TOTAL, OU SEJA, SOMANDO O SALÁRIO DE TODOS DA RESIDÊNCIA É DE ATÉ 03 (TRÊS) SALÁRIOS MÍNIMOS (R$3.135,00)? (De acordo com Art. 6º, inciso IV da Lei 14.017, 29 de junho de 2020)', inplace=True, axis=1)
     df.drop('VOCÊ REALIZOU DECLARAÇÃO DE IMPOSTO DE RENDA, EM 2018, INFORMANDO RENDA SUPERIOR A R$: 28.559,70 (vinte e oito mil, quinhentos e cinquenta e nove reais e setenta centavos)? (De acordo com Art. 6º, inciso V daLei 14.017, 29 de junho de 2020)', inplace=True, axis=1)
     # df_=df.drop_duplicates(area_atuacao[0])
-    df_=df.sort_values(by=[area_atuacao[0]])
-    df_=df_.drop_duplicates(area_atuacao[0])
-    
-    dados=df.loc[:, lista_colunas_de_interesse]
-    # dados=df
-    #área de atuação
-    dados_area_atuacao=df_.loc[:, area_atuacao]   
-    # for dado_atuacao in dados_area_atuacao[dados_area_atuacao.columns[0]]:
-            # print(dado_atuacao)
+    df_ = df.sort_values(by=[area_atuacao[0]])
+    df_ = df_.drop_duplicates(area_atuacao[0])
 
-    cont=0
-    cont_fisica=0
-    cont_artista=0
-    cont_erro_artista=0
-    cont_erro_user=0
-    cont_usuarios_cadastrados=0
-    error_area=[]
+    dados = df.loc[:, lista_colunas_de_interesse]
+    # dados=df
+    # área de atuação
+    dados_area_atuacao = df_.loc[:, area_atuacao]
+    # for dado_atuacao in dados_area_atuacao[dados_area_atuacao.columns[0]]:
+    # print(dado_atuacao)
+
+    cont = 0
+    cont_fisica = 0
+    cont_artista = 0
+    cont_erro_artista = 0
+    cont_erro_user = 0
+    cont_usuarios_cadastrados = 0
+    error_area = []
     if True:
         for i in range(357):
-            d={'endereco': 'NaN', 'bairro': 'NaN'}
+            d = {'endereco': 'NaN', 'bairro': 'NaN'}
             for j in colunas_de_interesse:
-                if j!='dt_inclusao':
-                    d[j]=dados.loc[i, lista_colunas_de_interesse][colunas_de_interesse[j]]                
-                # print(j+': ', dados.loc[i, lista_colunas_de_interesse][colunas_de_interesse[j]])        
+                if j != 'dt_inclusao':
+                    d[j] = dados.loc[i,
+                                     lista_colunas_de_interesse][colunas_de_interesse[j]]
+                # print(j+': ', dados.loc[i, lista_colunas_de_interesse][colunas_de_interesse[j]])
 
                     #         info=dt_obj.strftime("%d-%m-%y")
-            if d['tipo_contratacao']=='PESSOA FÍSICA':
-                if d['cpf']=='NaN':
-                    senha=d['cnpj']
+            if d['tipo_contratacao'] == 'PESSOA FÍSICA':
+                if d['cpf'] == 'NaN':
+                    senha = d['cnpj']
                 else:
-                    senha=d['cpf']
+                    senha = d['cpf']
                     from datetime import datetime
-                    d['data_nascimento'] = datetime.strptime(str(d['data_nascimento']), '%d/%m/%Y')
+                    d['data_nascimento'] = datetime.strptime(
+                        str(d['data_nascimento']), '%d/%m/%Y')
 
-                form=Form_Usuario(d)
+                form = Form_Usuario(d)
                 if form.is_valid():
                     user = User.objects.create_user(
-                        username=d['email'], 
-                        email=d['email'], 
+                        username=d['email'],
+                        email=d['email'],
                         password=senha
-                        )
+                    )
                     user.first_name = d['nome']
                     user.set_password(senha)
                     user.save()
                     usuario = form.save()
                     usuario.user = user
                     usuario.save()
-                    cont_usuarios_cadastrados+=1
-                    
-                    valores=d['area'].split(';')
-                    
-                    ids=[]
-                    for u in valores:   
-                        # print(u)          
-                        area=u.strip()    
-                        # print(area)      
-                        try:                       
+                    cont_usuarios_cadastrados += 1
+
+                    valores = d['area'].split(';')
+
+                    ids = []
+                    for u in valores:
+                        # print(u)
+                        area = u.strip()
+                        # print(area)
+                        try:
                             ids.append(Area_Atuacao.objects.get(area=area).id)
                         except:
                             ids.append('')
                             error_area.append([d['cpf'], valores, area])
-                    
-                    d['area']=ids
-                    
-                    form2=Form_Artista(d)
+
+                    d['area'] = ids
+
+                    form2 = Form_Artista(d)
                     if form2.is_valid():
-                        obj=form2.save()
-                        obj.tipo_contratacao = TiposContratação.objects.get(id=1)
+                        obj = form2.save()
+                        obj.tipo_contratacao = TiposContratação.objects.get(
+                            id=1)
                         obj.user_responsavel = user
                         form2.save()
-                        cont_artista+=1
-                        
+                        cont_artista += 1
+
                     else:
                         print('Indice: '+str(i))
                         print('Nome: '+str(d['nome']))
                         print('CPF: '+str(d['cpf']))
                         print('Telefone: '+str(d['telefone']))
-                        print('Erro no formulário do artista:')                    
+                        print('Erro no formulário do artista:')
                         print(form2.errors)
-                        print('''-------------------------------------------------------------------------''')
-                        cont_erro_artista+=1                    
+                        print(
+                            '''-------------------------------------------------------------------------''')
+                        cont_erro_artista += 1
                 else:
                     print('Indice: '+str(i))
                     print('Nome: '+str(d['nome']))
                     print('CPF: '+str(d['cpf']))
                     print('Telefone: '+str(d['telefone']))
-                    print('Erro no formulário do usuário:')                
+                    print('Erro no formulário do usuário:')
                     print(form.errors)
-                    print('''-------------------------------------------------------------------------''')
-                    cont_erro_user+=1
-                cont_fisica+=1            
+                    print(
+                        '''-------------------------------------------------------------------------''')
+                    cont_erro_user += 1
+                cont_fisica += 1
             else:
-                cont+=1
-                            
-    print('Erros ao cadastrar usuários: ',cont_erro_user)        
-    print('PJ: ',cont)
-    print('PF: ',cont_fisica)
-    print('Artistas: ',cont_artista)
-    print('Erros ao cadastrar artista: ',cont_erro_artista)        
-    print('Áreas que não conseguiu cadastrar: ', error_area)    
-    context={
+                cont += 1
+
+    print('Erros ao cadastrar usuários: ', cont_erro_user)
+    print('PJ: ', cont)
+    print('PF: ', cont_fisica)
+    print('Artistas: ', cont_artista)
+    print('Erros ao cadastrar artista: ', cont_erro_artista)
+    print('Áreas que não conseguiu cadastrar: ', error_area)
+    context = {
         # 'print': df_.loc[:, area_atuacao].to_html,
         'print': dados.to_html
     }
@@ -927,13 +954,36 @@ def auxiliar(request):
 @login_required
 def indicadores(request):
 
+    if not request.user.is_staff:
+        return redirect('index')
+    
+    top_x = 10
+
+    # -------------------- #
+
+    artistas = Artista.objects.all()
+    artistas_pessoa_fisica = artistas.filter(tipo_contratacao__nome = "Contratação por CPF")
+    artistas_pessoa_juridica = artistas.filter(tipo_contratacao__nome = "Contratação por CNPJ")
+
+
+    # -------------------- #
+
+    area_atuacao_ranking = []
+    fisica_vs_juridica = [
+        {'nome': 'CPF', 'total': artistas_pessoa_fisica.count()},
+        {'nome': 'CNPJ', 'total': artistas_pessoa_juridica.count()},
+    ]
+
+    # -------------------- #
+
+    area_atuacao_ranking = Area_Atuacao.objects.all().annotate(article_count=Count('artista'))
+
+    # ------------------------- #
+
     context = {
-        'vagas': 0,
-        'balcao': 0,
-        'online': 0,
-        'balcao2': 0,
-        'online2': 0,
-        'buscar': 0
+        'top_x': top_x,
+        'area_atuacao_ranking': area_atuacao_ranking,
+        'fisica_vs_juridica': fisica_vs_juridica
     }
 
     return render(request, 'indicadores.html', context)

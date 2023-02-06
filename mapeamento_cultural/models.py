@@ -117,9 +117,9 @@ class InformacoesExtras(models.Model):
     
     id_artista=models.CharField(max_length=20, blank=True)    
     descricao=models.TextField(verbose_name='Descrição resumida da atividade artística/culturais desenvolvidas', blank=True, null=True)    
-    publico=models.ManyToManyField(Publico_Atuacao, blank=True, verbose_name='Públicos que participam das ações')
-    enquadramento=models.ManyToManyField(Enquadramento_Atuacao, blank=True, verbose_name='Enquadramento da instituição/entidade/coletivo/grupo')
-    forma_atuacao=models.ManyToManyField(Forma_insercao_Atuacao, blank=True, verbose_name='Forma de inserção da atividade artístico-cultural')
+    publico=models.ManyToManyField(Publico_Atuacao, verbose_name='Públicos que participam das ações')
+    enquadramento=models.ManyToManyField(Enquadramento_Atuacao, verbose_name='Enquadramento da instituição/entidade/coletivo/grupo')
+    forma_atuacao=models.ManyToManyField(Forma_insercao_Atuacao, verbose_name='Forma de inserção da atividade artístico-cultural')
     endereco=models.CharField(max_length=150, blank=True, verbose_name='Endereço')
     qnt=models.CharField(max_length=1, choices=QNT_CHOICES, blank=True, null=True, verbose_name='Quantidade de pessoas que fazem parte da instituição')
     status=models.CharField(max_length=1, choices=STATUS_CHOICES, blank=True, verbose_name='Status da atividade')
@@ -145,7 +145,7 @@ class Artista(models.Model):
 
 
     fazedor_cultura=models.CharField(max_length=100, verbose_name='Nome artístico', blank=True, null=True)    
-    area=models.ManyToManyField(Area_Atuacao, verbose_name='Área(s) de atuação', blank=True, null=True)
+    area=models.ManyToManyField(Area_Atuacao, verbose_name='Área(s) de atuação')
     
     # email=models.EmailField()
     telefone=models.CharField(max_length=15, validators=[validate_TELEFONE])    
@@ -170,7 +170,6 @@ class Artista(models.Model):
     cadastro_completo=models.BooleanField(default=False)
     fazedor_cultura_cnpj=models.CharField(max_length=100, verbose_name='Nome fantasia', blank=True, null=True)
     cnpj=models.CharField(max_length=18, verbose_name='CNPJ', validators=[validate_CNPJ], null=True, unique=True)  
-    # cpf_responsavel=models.CharField(max_length=14, verbose_name='CPF do responsável', validators=[validate_CPF], blank=True, null=True)
     file_cnpj=models.FileField(upload_to='file_cnpj', verbose_name='CNPJ - Documento scaneado evidenciando cadastro em atividades da àrea cultural', blank=True, null=True)
     prova_inscricao_PJ_nacional=models.FileField(upload_to='prova_inscricao_PJ_nacional', verbose_name='Prova de inscrição no Cadastro Nacional de Pessoa Jurídica', blank=True, null=True)
     prova_inscricao_PJ_nacional_validade=models.DateField(verbose_name='Validade da Prova de inscrição no Cadastro Nacional de Pessoa Jurídica', null=True, blank=True)
