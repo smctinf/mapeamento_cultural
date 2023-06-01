@@ -25,6 +25,7 @@ SECRET_KEY = env_vars['django_secret_key']
 debug_mode = env_vars['debug_mode']
 email_user = env_vars['email_sistema']
 email_pass = env_vars['email_pw']
+sqlite_mode = env_vars['sqlite_mode']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = debug_mode
@@ -53,7 +54,7 @@ except:
 
 INSTALLED_APPS = [
     'mapeamento_cultural',
-    'qr_code',
+    # 'qr_code',
     'editais',
     #APPS DE TERCEIROS
     'fontawesomefree',
@@ -103,19 +104,26 @@ WSGI_APPLICATION = 'cultura.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-
-        'NAME': db_name,
-        'PORT': '',
-
-        'USER': db_user,
-        'PASSWORD': db_passwd,
-        'HOST': db_host,
+if sqlite_mode:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(PROJECT_ROOT, 'yourdatabasename.db'),
+        }    
     }
-}
+else:
+    DATABASES = {
+        'default': {
+                'ENGINE': 'django.db.backends.mysql',
 
+                'NAME': db_name,
+                'PORT': '',
+
+                'USER': db_user,
+                'PASSWORD': db_passwd,
+                'HOST': db_host,
+            }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

@@ -20,8 +20,8 @@ from mapeamento_cultural.models import Artista, InformacoesExtras, TiposContrata
 from django.core.mail import EmailMessage,  EmailMultiAlternatives, send_mail
 
 # Create your views here.
-import numpy as np
-import pandas as pd
+# import numpy as np
+# import pandas as pd
 
 
 @login_required
