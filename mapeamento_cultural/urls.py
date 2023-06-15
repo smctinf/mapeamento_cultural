@@ -1,12 +1,16 @@
 from django.contrib import admin
 from django.urls import path
 from . import views
- 
+from django.contrib.auth.views import PasswordResetConfirmView
+
 urlpatterns = [
     
     path('', views.index, name="index"),    
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
+
+    path('passwd_reset/', views.passwd_reset, name='passwd_reset'),
+    path('passwd_reset_confirm/<uidb64>/<token>', PasswordResetConfirmView.as_view(), name='passwd_reset_confirm'),
     
     path('cadastrar-se', views.cadastro_usuario, name='cadastrar_usuario'),
     
@@ -42,5 +46,5 @@ urlpatterns = [
     # Indicadores
     path('indicadores', views.indicadores, name='indicadores'),
     path('email', views.enviar_email)
-    # path('teste/', views.qr_code)
+
 ]

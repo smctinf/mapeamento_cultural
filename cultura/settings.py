@@ -25,6 +25,7 @@ SECRET_KEY = env_vars['django_secret_key']
 debug_mode = env_vars['debug_mode']
 email_user = env_vars['email_sistema']
 email_pass = env_vars['email_pw']
+sqlite_mode = env_vars['sqlite_mode']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = debug_mode
@@ -53,7 +54,6 @@ except:
 
 INSTALLED_APPS = [
     'mapeamento_cultural',
-    'qr_code',
     'editais',
     #APPS DE TERCEIROS
     'fontawesomefree',
@@ -66,7 +66,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-SERVE_QR_CODE_IMAGE_PATH = 'qr-code-image/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

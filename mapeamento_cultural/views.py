@@ -10,6 +10,12 @@ from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.http import HttpResponse
 from django.db.models import Count
 
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.template.loader import render_to_string
+from django.core.mail import send_mail, BadHeaderError
+
 from .models import Area_Atuacao, Log_anexos, Recibos, Usuario
 from mapeamento_cultural.forms import Form_Anexo_Artista_CPF, Form_Anexo_Artista_CNPJ, Form_Artista, Form_Artista2, Form_ArtistaCNPJ, Form_ArtistaEmpresa, Form_InfoExtra_CPF, Form_InfoExtra_CNPJ, Form_Recibos, Form_Usuario, Form_Validade_Anexo_Artista_CNPJ, Form_Validade_Anexo_Artista_CPF
 
@@ -20,8 +26,8 @@ from mapeamento_cultural.models import Artista, InformacoesExtras, TiposContrata
 from django.core.mail import EmailMessage,  EmailMultiAlternatives, send_mail
 
 # Create your views here.
-import numpy as np
-import pandas as pd
+
+
 
 
 @login_required
@@ -747,6 +753,42 @@ def change_password(request):
     }
     return render(request, 'change_password.html', context)
 
+def passwd_reset(request):
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(email=data)
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Alteração de Senha do Sistema de Senhas da Secretária Municipal de Turismo de Nova Friburgo"
+                    email_template_name = "admin/email_passwd_reset.txt"
+                    c = {
+                        "email": user.email,
+                        'domain': '127.0.0.1:8000',
+                        'site_name': 'Website',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, user.email, [
+                                  user.email], fail_silently=False)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect("passwd_reset_enviado")
+    password_reset_form = PasswordResetForm()
+    return render(request=request, template_name="admin/passwd_reset.html", context={"password_reset_form": password_reset_form})
+
+# def passwd_reset_confirm(request, uidb64, token):
+#     context = {
+#         'uidb64': uidb64,
+#         'token': token,
+#     }
+
+#     render(request, "admin/passwd_reset_confirm.html", context)
 
 @login_required
 def alterar_meus_dados(request):
