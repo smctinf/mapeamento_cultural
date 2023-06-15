@@ -27,7 +27,7 @@ from django.core.mail import EmailMessage,  EmailMultiAlternatives, send_mail
 
 # Create your views here.
 
-
+import pandas as pd
 
 
 @login_required

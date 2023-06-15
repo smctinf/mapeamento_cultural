@@ -102,19 +102,26 @@ WSGI_APPLICATION = 'cultura.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-
-        'NAME': db_name,
-        'PORT': '',
-
-        'USER': db_user,
-        'PASSWORD': db_passwd,
-        'HOST': db_host,
+if sqlite_mode:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(PROJECT_ROOT, 'yourdatabasename.db'),
+        }    
     }
-}
+else:
+    DATABASES = {
+        'default': {
+                'ENGINE': 'django.db.backends.mysql',
 
+                'NAME': db_name,
+                'PORT': '',
+
+                'USER': db_user,
+                'PASSWORD': db_passwd,
+                'HOST': db_host,
+            }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
