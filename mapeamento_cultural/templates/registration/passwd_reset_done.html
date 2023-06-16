@@ -26,8 +26,8 @@
         </div>
     </div>
     <div class="col-4 d-flex">
-        <div class="m-auto">
-            <a href="/">
+        <div class="m-auto d-flex flex-column">
+            <a href="/" class="mx-auto">
                 <img class="mb-5" src="{% static 'images/logo_cultura.png' %}" alt="">                
             </a>
             {% if messages %}
@@ -43,16 +43,18 @@
             </style>
             {% endif %}
 
+            <h2 class="font-weight-bold mt-3 text-center">Email enviado para <br> troca de senha</h2>
 
-            <h2 class="font-weight-bold mt-3 ">Gerar nova senha</h2>
-            <hr>
-            <p class="text-justify"> Entre com a nova senha </p>
+            <p class="text-justify px-5">Enviamos as instruções para a troca da senha. Caso não receba o email, confirme o email informado, ou cheque a caixa de spam.</p>
             
-            <form class="pt-3" method="POST">
-                {% csrf_token %}
-                {{ form }}
-                <button type="submit" class="btn btn-primary">Trocar Senha</button>               
-            </form>
+            <a href="{% url 'login' %}" class="mx-5">
+                <small>Voltar</small>
+            </a>     
+            <style>
+                p{
+                    margin-top: 15px;
+                }
+            </style>           
         </div>
     </div>
 </div>

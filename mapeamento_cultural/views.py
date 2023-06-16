@@ -27,7 +27,7 @@ from django.core.mail import EmailMessage,  EmailMultiAlternatives, send_mail
 
 # Create your views here.
 
-import pandas as pd
+# import pandas as pd
 
 
 @login_required
@@ -778,7 +778,7 @@ def passwd_reset(request):
                                   user.email], fail_silently=False)
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
-                    return redirect("passwd_reset_enviado")
+                    return redirect("passwd_reset_done")
     password_reset_form = PasswordResetForm()
     return render(request=request, template_name="admin/passwd_reset.html", context={"password_reset_form": password_reset_form})
 

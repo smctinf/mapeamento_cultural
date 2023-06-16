@@ -43,28 +43,19 @@
             </style>
             {% endif %}
 
-            {% if error %}
-            <div class="form-group p-3 mb-2 bg-danger text-white rounded">
-            Por favor, entre com um usuário e senha corretos. Note que ambos os campos diferenciam maiúsculas e minúsculas.                    
-            </div>
-            {% endif %}
-            <h2 class="font-weight-bold mt-3 ">Gerar Nova Senha</h2>
 
-            <p class="text-justify mt-3">Esqueceu sua senha? Entre com seu e-mail abaixo, <br> para enviarmos instruções para criar a nova senha.</p>
+            <h2 class="font-weight-bold mt-3 text-center">Gerar nova senha</h2>
             
-            <form class="pt-3" method="POST">
+            <form class="pt-3 px-5" method="POST">
                 {% csrf_token %}
-                {% bootstrap_form password_reset_form %}
-                <!-- <div class="mb-3 form-check">
-                  <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                  <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                </div> -->
-                <button type="submit" class="btn btn-primary w-100 mb-3">Enviar Email</button>
-                      
-                <br>                        
-                <a href="{% url 'login' %}">
-                    <small>Voltar</small>
-                </a>                
+                {% bootstrap_form form %}
+                <button type="submit" class="btn btn-primary">Trocar Senha</button>   
+                <style>
+                    ul{
+                        margin-top: 20px;
+                        margin-bottom: 10px;
+                    }
+                </style>            
             </form>
         </div>
     </div>
