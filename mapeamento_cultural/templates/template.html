@@ -92,7 +92,7 @@
                         <ul id="menu-perfil" class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                           {% if request.user.is_staff %}
                           <li><a class="dropdown-item py-2 text-center" href="/admin/">Administração</a></li>
-                          <li><a class="dropdown-item py-2 text-center" href="/indicadores/">Indicadores</a></li>
+                          <li><a class="dropdown-item py-2 text-center" href="{% url 'indicadores' %}">Indicadores</a></li>
                           {% endif %}
                           <li><a class="dropdown-item py-2 text-center" href="{% url 'acc_meu_perfil' %}">Meu perfil</a></li>
                           <!-- <li><a class="dropdown-item py-2" href="{% url 'acc_meus_cadastros' %}">Meu perfil</a></li> -->
