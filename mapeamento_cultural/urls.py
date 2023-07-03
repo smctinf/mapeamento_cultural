@@ -47,6 +47,7 @@ urlpatterns = [
     
     # Indicadores
     path('indicadores', views.indicadores, name='indicadores'),
+    path('mapeamento-cultural/listagem/baixar-dados/<tipo>', views.baixar_excel, name='baixar_excel'),
     path('email', views.enviar_email)
 
 ]

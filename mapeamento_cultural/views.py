@@ -25,6 +25,9 @@ from cultura.settings import BASE_DIR
 from mapeamento_cultural.models import Artista, InformacoesExtras, TiposContratação
 from django.core.mail import EmailMessage,  EmailMultiAlternatives, send_mail
 
+from django.http import HttpResponse
+from openpyxl import Workbook
+from datetime import datetime
 # Create your views here.
 
 # import pandas as pd
@@ -431,7 +434,7 @@ def cadastro_map_cultural_cpf(request, id):
         'cadastro': artista,
         'info': info,
         'complemento': complemento,
-        'usuario': Usuario.objects.get(user=request.user),
+        'usuario': Usuario.objects.get(user=artista.user_responsavel),
         'tipo': tipo
     }
     return render(request, 'meus_cadastros_detalhes_cpf.html', context)
@@ -1029,3 +1032,53 @@ def indicadores(request):
     }
 
     return render(request, 'indicadores.html', context)
+
+def baixar_excel(request, tipo):
+
+    if tipo=='cpf':
+        data=Artista.objects.filter(tipo_contratacao=1)
+        nome_mapeamento='por_cpf'
+    elif tipo=='cnpj':
+        data=Artista.objects.filter(tipo_contratacao=2)
+        nome_mapeamento='por_cnpj'
+    elif tipo=='todos':
+        data=Artista.objects.all()
+        nome_mapeamento='todos'
+    else:
+        return redirect('/')
+
+    workbook = Workbook()
+
+    planilha = workbook.active
+    planilha.title = 'Fazedores de Cultura - '+str(tipo)
+    # Adicione os cabeçalhos das colunas
+    planilha['A1'] = 'Responsável'
+    planilha['B1'] = 'Nome Artístico/Fantasia'
+    planilha['C1'] = 'Área de atuação'
+    planilha['D1'] = 'Públicos que participam das ações'
+    planilha['E1'] = 'Descrição da atividade'
+
+    # Preencha os dados
+    for index, item in enumerate(data, start=2):        
+        info = InformacoesExtras.objects.filter(id_artista=item.id).first()
+        
+        if item.user_responsavel is not None:
+            planilha.cell(row=index, column=1, value=str(item.user_responsavel.first_name))        
+        if item.fazedor_cultura is not None:
+            planilha.cell(row=index, column=2, value=str(item.fazedor_cultura))
+        else:
+            planilha.cell(row=index, column=2, value=str(item.fazedor_cultura_cnpj))
+        planilha.cell(row=index, column=3, value=', '.join(item.area.values_list('area', flat=True)))
+
+        if info is not None:
+            publicos = info.publico.values_list('publico', flat=True)
+            planilha.cell(row=index, column=4, value=', '.join(publicos))
+            planilha.cell(row=index, column=5, value=info.descricao)
+        
+
+    data_atual = datetime.now()
+    data_formatada = data_atual.strftime("%d-%m-%y")
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename=mapeamento_cultural_{nome_mapeamento}_{data_formatada}.xlsx'        
+    workbook.save(response)
+    return response
