@@ -30,7 +30,7 @@ from openpyxl import Workbook
 from datetime import datetime
 # Create your views here.
 
-# import pandas as pd
+import pandas as pd
 
 
 @login_required
@@ -764,7 +764,7 @@ def passwd_reset(request):
             associated_users = User.objects.filter(email=data)
             if associated_users.exists():
                 for user in associated_users:
-                    subject = "Alteração de Senha do Sistema de Senhas da Secretária Municipal de Turismo de Nova Friburgo"
+                    subject = "Alteração de Senha do Sistema de Senhas da Secretária Municipal de Cultura de Nova Friburgo"
                     email_template_name = "admin/email_passwd_reset.txt"
                     c = {
                         "email": user.email,

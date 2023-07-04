@@ -12,7 +12,7 @@ urlpatterns = [
     path('passwd_reset/', views.passwd_reset, name='passwd_reset'),
     path('passwd_reset_confirm/<uidb64>/<token>', PasswordResetConfirmView.as_view(), name='passwd_reset_confirm'),
     path('passwd_reset_done/', PasswordResetDoneView.as_view(), name='passwd_reset_done'),
-    path('passwd_reset_complete/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    path('passwd_reset_complete/', PasswordResetCompleteView.as_view(), name='passwd_reset_complete'),
     
     path('cadastrar-se', views.cadastro_usuario, name='cadastrar_usuario'),
     
