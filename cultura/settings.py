@@ -53,17 +53,17 @@ except:
     SOCIAL_AUTH_FACEBOOK_SECRET = ''
 
 INSTALLED_APPS = [
+    'mapeamento_cultural',
+    'editais',
+    #APPS DE TERCEIROS
+    'fontawesomefree',
+    'bootstrap5',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #APPS DE TERCEIROS
-    'fontawesomefree',
-    'bootstrap5',
-    'mapeamento_cultural',
-    'editais',
 ]
 
 
