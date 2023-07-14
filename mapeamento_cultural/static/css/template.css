@@ -33,6 +33,20 @@ footer{
         padding: 20px 40px;
     }
 }
+@media(max-width: 896px){
+    h1{
+        text-align: center;
+    }
+}
+@media(max-width: 480px){
+    .mobile_size{
+        padding-right: 1vw !important;
+        padding-left: 1vw !important;
+    }
+    h1{
+        width: 470px !important;
+    }
+}
 
 .btn{
     border-radius: 0 !important;

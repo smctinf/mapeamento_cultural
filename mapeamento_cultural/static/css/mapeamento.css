@@ -5,3 +5,54 @@
     background-color: white;
     color: white;
 }
+@media(max-width: 480px){
+    h1{
+        width: auto !important;
+    }
+    .input_mobile{
+        width: auto !important;
+    }
+    .button_mobile{
+        margin-bottom: 10% !important;
+    }
+    .a_mobile{
+        padding-top: 4% !important;
+    }
+    .img_mobile{
+        display: none !important;
+    }
+    .a_map_mobile{
+        margin-bottom: 0px !important;
+    }
+    .h3_insc_mobile{
+        padding: 0% !important;
+    }
+    #table_insc_mobile{
+        justify-content: center !important;
+        padding-left: 5% !important;
+    }
+    #insc_mobile{
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+    #h3_detail_cpf_mobile{
+        padding-left: 5% !important;
+    }
+    #btn_del_cpf_mobile{
+        margin-left: 6vw !important;
+    }
+    #table_detail_cpf_mobile{
+        padding: 0% !important;
+    }
+    #table_detail_cpf_mobile{
+        width: 380px !important;
+        margin-top: 5vw !important;
+        margin-left: 0% !important;
+    }
+    .table_mobile{
+        width: 100% !important;
+    }
+    .td_mobile{
+        width: 180px !important;
+    }
+}

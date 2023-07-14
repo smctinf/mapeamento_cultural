@@ -32,10 +32,10 @@
                   <a class="navbar-brand" href="/">
                     <img class="img-fluid logo" src="{% static '/images/logo_pmnf_cultura.png' %}" alt="">
                   </a>
-                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <button class="navbar-toggler" id="links_drop" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                   </button>
-                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <div class="collapse navbar-collapse nav_link" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                       <!-- <li class="nav-item">
                         <a class="nav-link {% block index %}{% endblock %}" aria-current="page" href="#">Home</a>
@@ -69,12 +69,12 @@
                         </ul>
                       </li>-->                    
                       <li class="nav-item">                        
-                        <a class="nav-link {% block mapeamento %}{% endblock %}" href="{% url 'mapeamento' %}">
+                        <a class="nav-link {% block mapeamento %}{% endblock %} item_nav" href="{% url 'mapeamento' %}">
                           Mapeamento Cultural
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="https://oficinaescoladeartes.novafriburgo.rj.gov.br/">
+                        <a class="nav-link item_nav" href="https://oficinaescoladeartes.novafriburgo.rj.gov.br/">
                           Oficina Escola de Artes
                         </a>
                       </li>

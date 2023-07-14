@@ -25,8 +25,8 @@
         {% endif %}
                         <div class="row">
                             <div class="col d-flex">
-                                <h3 style="display: inline;" class="px-5 text-uppercase">MINHAS INSCRIÇÕES</h3>
-                                <div class="d-flex ms-auto">     
+                                <h3 style="display: inline;" class="px-5 text-uppercase h3_insc_mobile">MINHAS INSCRIÇÕES</h3>
+                                <div class="d-flex ms-auto" id="insc_mobile">     
                                     {% if cpf %}                               
                                     <a href="{% url 'cad_artista_cpf' %}" class="btn bg-main text-white mx-auto mb-auto" style="width: 200px;">
                                         Inscrever-se com CPF
@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="py-4 px-5">
+                        <div class="py-4 px-5" id="table_insc_mobile">
                             <table class="table table-hover">
                                 <thead>
                                   <tr>      

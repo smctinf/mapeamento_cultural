@@ -24,11 +24,11 @@
                             {% endfor %}
                         </ul>
                         {% endif %}   
-                        <h3 class="px-5 text-uppercase d-flex ">SEU CADASTRO {{tipo}}
+                        <h3 class="px-5 text-uppercase d-flex" id="h3_detail_cpf_mobile">SEU CADASTRO {{tipo}}
                           <!-- <span class="ms-2 my-auto" style="font-size: 14pt; text-transform: lowercase;">(id: {{cadastro.id}})</span>                                                     -->
                           <button class="btn btn-danger ms-auto"
                           data-bs-toggle="modal"
-                          data-bs-target="#myModal">
+                          data-bs-target="#myModal" id="btn_del_cpf_mobile">
                             <i class="fa-solid fa-trash"
                               data-bs-toggle="tooltip" 
                             data-bs-placement="top"
@@ -44,15 +44,15 @@
                             Voltar
                           </a>           
                         </h3>
-                        <div class="py-4 px-5">
-                            <table class="table">                                
+                        <div class="py-4 px-5" id="table_detail_cpf_mobile">
+                            <table class="table table_mobile">                                
                                 <tbody>   
                                   <tr>
-                                    <td colspan='4' class="bg-dark text-white">
+                                    <td colspan='3' class="bg-dark text-white">
                                       <div class="row py-0">
                                         <div class="col d-flex py-0">
                                           <h5 class="text-uppercase my-auto pt-2 px-3">Dados Básicos</h5>
-                                          <a href="{% url 'acc_editar_map_b' cadastro.id %}" class="btn btn-light ms-auto me-3 mt-2">
+                                          <a href="{% url 'acc_editar_map_b' cadastro.id %}" class="btn btn-light ms-auto me-3 mt-2" id="a_detail_cpf_mobile">
                                             <i class="fa-solid fa-pen-to-square me-2"></i>
                                             Editar
                                           </a>
@@ -60,7 +60,7 @@
                                       </div>
                                     </td>
                                   </tr>                                                               
-                                  <tr>                                                                     
+                                  <tr class="tr_mobile">                                                                     
                                     <td scope="row">
                                       {% if cadastro.fazedor_cultura %}
                                       <b>Nome artístico:</b><br>
@@ -70,7 +70,7 @@
                                       {{cadastro.fazedor_cultura_cnpj}}
                                       {% endif %}
                                     </td>                                    
-                                    <td>
+                                    <td  class="td_mobile">
                                       {% if cadastro.fazedor_cultura %}
                                       <b>CPF do proponente:</b><br>
                                       <span id="cpf">
@@ -92,9 +92,9 @@
                                       <span id="cpf">{{usuario.cpf}}</span>                                      
                                       {% endif %}
                                     </td>
-                                    <td colspan="2">
+                                    <!-- <td colspan="2">
                                                                      
-                                    </td>
+                                    </td> -->
                                   </tr>                                    
                                   <tr>    
                                     <td>
@@ -116,17 +116,18 @@
                                         {{cadastro.telefone}}
                                       </span>
                                     </td>                                    
-                                    <td>
-                                      <b>Data do cadastro:</b><br>
-                                      {{cadastro.dt_inclusao|date:"SHORT_DATE_FORMAT"}}
-                                    </td>                   
+                                                       
                                   </tr> 
                                   <tr>
-                                    <td colspan="4">
+                                    <td>
                                       <b>Área(s) de atuação</b><br>
                                       {% for i in cadastro.area.all %}
                                       {{i}} <br>
                                       {% endfor %}
+                                    </td>
+                                    <td>
+                                      <b>Data do cadastro:</b><br>
+                                      {{cadastro.dt_inclusao|date:"SHORT_DATE_FORMAT"}}
                                     </td>
                                   </tr>
                                 </tbody>
@@ -138,7 +139,8 @@
                                     <td colspan='4' class="bg-dark text-white">
                                       <div class="row py-0">
                                         <div class="col d-flex py-0">
-                                          <h5 class="text-uppercase my-auto pt-2 px-3">Dados complementares</h5>
+                                          <h5 class="text-uppercase my-auto pt-2 px-3 pe-2">Dados </h5>
+                                          <h5 class="text-uppercase my-auto pt-2 pe-3"> complementares</h5>
                                           <a href="{% url 'acc_editar_map_cmp' cadastro.id %}" class="btn btn-light ms-auto me-3 mt-2">
                                             <i class="fa-solid fa-pen-to-square me-2"></i>
                                             Editar
@@ -292,7 +294,9 @@
                                     <td colspan='4' class="bg-dark text-white">
                                       <div class="row py-0">
                                         <div class="col d-flex py-0">
-                                          <h5 class="text-uppercase my-auto pt-2 px-3">Dados para contratação</h5>
+                                          <h5 class="text-uppercase my-auto pt-2 px-1">Dados</h5>
+                                          <h5 class="text-uppercase my-auto pt-2 px-2"> para</h5>
+                                          <h5 class="text-uppercase my-auto pt-2 px-2"> contratação</h5>
                                           <a href="{% url 'acc_editar_map_c' cadastro.id %}" class="btn btn-light ms-auto me-3 mt-2">
                                             <i class="fa-solid fa-pen-to-square me-2"></i>
                                             Editar
