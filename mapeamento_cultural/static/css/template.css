@@ -47,6 +47,12 @@ footer{
         width: 470px !important;
     }
 }
+/* @media(max-width: 320px){
+    h1{
+        width: 200px !important;
+        padding: 10px !important;
+    }
+} */
 
 .btn{
     border-radius: 0 !important;

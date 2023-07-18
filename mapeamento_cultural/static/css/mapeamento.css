@@ -55,4 +55,24 @@
     .td_mobile{
         width: 180px !important;
     }
+    .i_hidden{
+        display: none;
+    }
+}
+@media(max-width: 321px){
+    .div_mobile_s{
+        margin: auto !important;
+        padding: 1px !important;
+    }
+    
+    .div_mobile_block_s{
+        display: block !important;
+    }
+    #insc_mobile{
+        margin-top: 3vw !important;
+    }
+    
+    .i_hidden{
+        display: none;
+    }
 }

@@ -16,7 +16,7 @@
                 <div class="col d-flex img_mobile">                                        
                         <img class="img-fluid m-auto" src="/static/images/mapeamento/botao_cadastro.png" alt="">                    
                 </div>
-                <div class="col  mx-3">
+                <div class="col mx-3 div_mobile_s">
                     <div class="mx-5 mt-5 d-flex flex-column h-100">
                         <p class="text-justify text-dark" style="text-indent: 20px;">
                             O Mapeamento Cultural de Nova Friburgo é uma plataforma para levantamento de dados para direcionamento das ações de políticas públicas.
@@ -28,7 +28,7 @@
 
                         {% if artista %}
                         <a style="width: 100%;" href="{% url 'acc_meus_cadastros' %}" class="btn btn-outline-primary mx-auto mt-4 px-5 py-3">
-                            <i class="fa-sharp fa-solid fa-address-card me-1"></i>
+                            <i class="fa-sharp fa-solid fa-address-card me-1 i_hidden"></i>
                             VISUALIZAR MEUS CADASTROS
                         </a>                        
                         {% else %}
@@ -38,7 +38,7 @@
                         {% endif %}
                         {% if request.user.is_staff %}
                         <a style="width: 100%;" href="{% url 'mapeamento_listagem' %}" class="btn btn-outline-primary mx-auto mt-4 px-5 py-3">
-                            <i class="fa-solid fa-map me-1"></i>
+                            <i class="fa-solid fa-map me-1 i_hidden"></i>
                             ACESSAR SISTEMA DE MAPEAMENTO 
                         </a>
                         {% endif %}

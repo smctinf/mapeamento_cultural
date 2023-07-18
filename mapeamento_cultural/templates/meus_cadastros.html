@@ -24,7 +24,7 @@
         </ul>
         {% endif %}
                         <div class="row">
-                            <div class="col d-flex">
+                            <div class="col d-flex div_mobile_block_s">
                                 <h3 style="display: inline;" class="px-5 text-uppercase h3_insc_mobile">MINHAS INSCRIÇÕES</h3>
                                 <div class="d-flex ms-auto" id="insc_mobile">     
                                     {% if cpf %}                               
@@ -53,7 +53,7 @@
                                   <tr>  
                                     <td>
                                         <a href="{% url 'acc_meus_cadastros_map' i.id %}" style="text-decoration: none;">
-                                            <i class="fa-solid fa-eye me-2"></i>
+                                            <i class="fa-solid fa-eye me-2 i_hidden"></i>
                                             Visualizar inscrição
                                         </a>
                                     </td>       
