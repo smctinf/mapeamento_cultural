@@ -59,6 +59,34 @@
         display: none;
     }
 }
+@media(max-width:426px){
+    .span_mobile_size{
+        width: 60vw !important;
+        font-size: 30pt;
+    }
+    .div_map_m{
+        margin-right: 28px !important;
+        margin-left: 28px !important;
+    }
+    .div_mobile_block_s{
+        display: block !important;
+    }
+    #insc_mobile{
+        margin-top: 10px !important;
+    }
+    #h3_detail_cpf_mobile{
+        padding-left: 5% !important;
+        font-size: 15pt !important;
+    }
+    #btn_del_cpf_mobile{
+        margin-left: 3vw !important;
+    }
+    .a_mobile {
+        padding-top: 4% !important;
+        width: 75px !important;
+        font-size: 10pt;
+    }
+}
 @media(max-width: 321px){
     .div_mobile_s{
         margin: auto !important;
